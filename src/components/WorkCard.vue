@@ -3,29 +3,32 @@ import type { Work } from '../data/works';
 import { categoryLabels } from '../data/works';
 
 defineProps<{ work: Work }>();
+defineEmits<{ (e: 'open-skill', work: Work): void }>();
 </script>
 
 <template>
-  <a
-    class="card"
-    :class="{ 'is-planned': work.status === 'planned' }"
-    :href="work.status === 'shipped' ? `/works/${work.slug}/index.html` : undefined"
-    :target="work.status === 'shipped' ? '_blank' : undefined"
-    :rel="work.status === 'shipped' ? 'noopener' : undefined"
-  >
-    <div class="thumb">
-      <img
-        v-if="work.status === 'shipped'"
-        :src="`/works/${work.slug}/thumb.webp`"
-        :alt="`${work.name.zh} 縮圖`"
-        loading="lazy"
-        decoding="async"
-      />
-      <div v-else class="placeholder">
-        <span class="placeholder-label">即將上線</span>
+  <article class="card" :class="{ 'is-planned': work.status === 'planned' }">
+    <a
+      class="thumb-link"
+      :href="work.status === 'shipped' ? `/works/${work.slug}/index.html` : undefined"
+      :target="work.status === 'shipped' ? '_blank' : undefined"
+      :rel="work.status === 'shipped' ? 'noopener' : undefined"
+      :aria-label="`開啟 ${work.name.zh} 作品`"
+    >
+      <div class="thumb">
+        <img
+          v-if="work.status === 'shipped'"
+          :src="`/works/${work.slug}/thumb.webp`"
+          :alt="`${work.name.zh} 縮圖`"
+          loading="lazy"
+          decoding="async"
+        />
+        <div v-else class="placeholder">
+          <span class="placeholder-label">即將上線</span>
+        </div>
+        <span class="category-chip">{{ categoryLabels[work.category] }}</span>
       </div>
-      <span class="category-chip">{{ categoryLabels[work.category] }}</span>
-    </div>
+    </a>
 
     <div class="meta">
       <div class="title-row">
@@ -36,8 +39,28 @@ defineProps<{ work: Work }>();
       <ul class="tags">
         <li v-for="tag in work.tags" :key="tag">#{{ tag }}</li>
       </ul>
+      <div class="actions">
+        <button
+          class="action skill"
+          :disabled="work.status !== 'shipped'"
+          @click="$emit('open-skill', work)"
+        >
+          <span class="icon">📄</span>
+          <span>查看 Skill</span>
+        </button>
+        <a
+          class="action open"
+          :href="work.status === 'shipped' ? `/works/${work.slug}/index.html` : undefined"
+          :target="work.status === 'shipped' ? '_blank' : undefined"
+          :rel="work.status === 'shipped' ? 'noopener' : undefined"
+          :aria-disabled="work.status !== 'shipped'"
+        >
+          <span>開啟作品</span>
+          <span class="icon">↗</span>
+        </a>
+      </div>
     </div>
-  </a>
+  </article>
 </template>
 
 <style scoped>
@@ -47,8 +70,6 @@ defineProps<{ work: Work }>();
   background: #ffffff;
   border-radius: 14px;
   overflow: hidden;
-  text-decoration: none;
-  color: inherit;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 18px rgba(15, 23, 42, 0.05);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   border: 1px solid rgba(15, 23, 42, 0.06);
@@ -58,11 +79,16 @@ defineProps<{ work: Work }>();
   box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06), 0 18px 40px rgba(15, 23, 42, 0.1);
 }
 .card.is-planned {
-  cursor: default;
   opacity: 0.62;
 }
 .card.is-planned:hover {
   transform: none;
+}
+
+.thumb-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .thumb {
@@ -106,7 +132,7 @@ defineProps<{ work: Work }>();
 }
 
 .meta {
-  padding: 18px 18px 20px;
+  padding: 18px 18px 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -151,5 +177,54 @@ defineProps<{ work: Work }>();
   padding: 3px 8px;
   border-radius: 6px;
   letter-spacing: 0.04em;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+.action {
+  appearance: none;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+.action:hover:not(:disabled):not([aria-disabled='true']) {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.28);
+}
+.action:disabled,
+.action[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.action.skill {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+.action.skill:hover:not(:disabled) {
+  background: #1e293b;
+}
+.action .icon {
+  font-size: 13px;
+  line-height: 1;
 }
 </style>

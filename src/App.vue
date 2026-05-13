@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { works, type Category } from './data/works';
+import { works, type Category, type Work } from './data/works';
 import WorkCard from './components/WorkCard.vue';
 import FilterBar from './components/FilterBar.vue';
+import SkillDrawer from './components/SkillDrawer.vue';
 
 const active = ref<Category | 'all'>('all');
+const activeWork = ref<Work | null>(null);
 
 const counts = computed(() => {
   const c: Record<Category | 'all', number> = {
@@ -56,7 +58,12 @@ const filtered = computed(() => {
       </section>
 
       <section class="grid" aria-label="作品列表">
-        <WorkCard v-for="work in filtered" :key="work.slug" :work="work" />
+        <WorkCard
+          v-for="work in filtered"
+          :key="work.slug"
+          :work="work"
+          @open-skill="(w) => (activeWork = w)"
+        />
       </section>
     </main>
 
@@ -82,6 +89,8 @@ const filtered = computed(() => {
         </div>
       </div>
     </footer>
+
+    <SkillDrawer :work="activeWork" @close="activeWork = null" />
   </div>
 </template>
 
