@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 import type { Work } from '../data/works';
 import { categoryLabels, motionTypeLabels } from '../data/works';
 
 const props = defineProps<{ work: Work }>();
 defineEmits<{ (e: 'open-skill', work: Work): void }>();
+
+const BASE = import.meta.env.BASE_URL;
+const workPath = computed(() => `${BASE}works/${props.work.slug}/index.html`);
+const thumbPath = computed(() => `${BASE}works/${props.work.slug}/thumb.webp`);
+const videoPath = computed(() => `${BASE}works/${props.work.slug}/thumb.webm`);
 
 const videoRef = useTemplateRef<HTMLVideoElement>('video');
 const showVideo = ref(false);
@@ -15,7 +20,7 @@ function onEnter() {
   showVideo.value = true;
   // 第一次 hover 才設 src 觸發載入
   if (videoRef.value && !videoLoaded.value) {
-    videoRef.value.src = `/works/${props.work.slug}/thumb.webm`;
+    videoRef.value.src = videoPath.value;
     videoLoaded.value = true;
   }
   // 已載入過就回播
@@ -44,7 +49,7 @@ function onLeave() {
   >
     <a
       class="thumb-link"
-      :href="work.status === 'shipped' ? `/works/${work.slug}/index.html` : undefined"
+      :href="work.status === 'shipped' ? workPath : undefined"
       :target="work.status === 'shipped' ? '_blank' : undefined"
       :rel="work.status === 'shipped' ? 'noopener' : undefined"
       :aria-label="`開啟 ${work.name.zh} 作品`"
@@ -52,7 +57,7 @@ function onLeave() {
       <div class="thumb">
         <img
           v-if="work.status === 'shipped'"
-          :src="`/works/${work.slug}/thumb.webp`"
+          :src="thumbPath"
           :alt="`${work.name.zh} 縮圖`"
           loading="lazy"
           decoding="async"
@@ -98,7 +103,7 @@ function onLeave() {
         </button>
         <a
           class="action open"
-          :href="work.status === 'shipped' ? `/works/${work.slug}/index.html` : undefined"
+          :href="work.status === 'shipped' ? workPath : undefined"
           :target="work.status === 'shipped' ? '_blank' : undefined"
           :rel="work.status === 'shipped' ? 'noopener' : undefined"
           :aria-disabled="work.status !== 'shipped'"

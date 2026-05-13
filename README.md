@@ -26,6 +26,29 @@ npm run dev
 
 開啟 http://localhost:5173 即可瀏覽圖鑑。
 
+## 部署到 GitHub Pages
+
+**建議儲存庫名稱**：`claude-skill-design-gallery`（若用其他名稱，調整 `vite.config.ts` 內的 `PROD_BASE` 或設定環境變數 `VITE_BASE=/your-repo-name/`）
+
+兩種部署方式：
+
+### 自動部署（GitHub Actions，推薦）
+
+push 到 `main` 即觸發 `.github/workflows/deploy.yml`：
+1. 在 GitHub repo 設定 → Pages → Source 選 **GitHub Actions**
+2. push 一次，等 Actions 跑完
+3. URL：`https://<username>.github.io/<repo-name>/`
+
+Action 會自動把 `VITE_BASE` 設為 `/<repo-name>/`，免改檔。
+
+### 手動部署（gh-pages 套件）
+
+```bash
+npm run deploy
+```
+
+會 build 後把 `dist/` push 到 `gh-pages` 分支。需在 GitHub repo 設定 Pages → Source 選 `gh-pages` 分支。
+
 ## 重生作品
 
 ```bash
