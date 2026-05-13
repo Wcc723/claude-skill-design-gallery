@@ -1,13 +1,47 @@
 <script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
 import type { Work } from '../data/works';
-import { categoryLabels } from '../data/works';
+import { categoryLabels, motionTypeLabels } from '../data/works';
 
-defineProps<{ work: Work }>();
+const props = defineProps<{ work: Work }>();
 defineEmits<{ (e: 'open-skill', work: Work): void }>();
+
+const videoRef = useTemplateRef<HTMLVideoElement>('video');
+const showVideo = ref(false);
+const videoLoaded = ref(false);
+
+function onEnter() {
+  if (props.work.round !== 2 || props.work.status !== 'shipped') return;
+  showVideo.value = true;
+  // 第一次 hover 才設 src 觸發載入
+  if (videoRef.value && !videoLoaded.value) {
+    videoRef.value.src = `/works/${props.work.slug}/thumb.webm`;
+    videoLoaded.value = true;
+  }
+  // 已載入過就回播
+  if (videoLoaded.value && videoRef.value) {
+    videoRef.value.currentTime = 0;
+    void videoRef.value.play().catch(() => {});
+  }
+}
+
+function onLeave() {
+  if (props.work.round !== 2) return;
+  showVideo.value = false;
+  if (videoRef.value) videoRef.value.pause();
+}
 </script>
 
 <template>
-  <article class="card" :class="{ 'is-planned': work.status === 'planned' }">
+  <article
+    class="card"
+    :class="{
+      'is-planned': work.status === 'planned',
+      'is-motion': work.round === 2,
+    }"
+    @mouseenter="onEnter"
+    @mouseleave="onLeave"
+  >
     <a
       class="thumb-link"
       :href="work.status === 'shipped' ? `/works/${work.slug}/index.html` : undefined"
@@ -22,11 +56,25 @@ defineEmits<{ (e: 'open-skill', work: Work): void }>();
           :alt="`${work.name.zh} 縮圖`"
           loading="lazy"
           decoding="async"
+          :class="{ 'is-hidden': showVideo && videoLoaded }"
         />
-        <div v-else class="placeholder">
+        <video
+          v-if="work.round === 2 && work.status === 'shipped'"
+          ref="video"
+          class="thumb-video"
+          :class="{ 'is-visible': showVideo && videoLoaded }"
+          muted
+          loop
+          playsinline
+          preload="none"
+        ></video>
+        <div v-if="work.status === 'planned'" class="placeholder">
           <span class="placeholder-label">即將上線</span>
         </div>
         <span class="category-chip">{{ categoryLabels[work.category] }}</span>
+        <span v-if="work.round === 2 && work.motionType" class="motion-chip">
+          ▸ {{ motionTypeLabels[work.motionType] }}
+        </span>
       </div>
     </a>
 
@@ -84,6 +132,12 @@ defineEmits<{ (e: 'open-skill', work: Work): void }>();
 .card.is-planned:hover {
   transform: none;
 }
+.card.is-motion {
+  border-color: rgba(99, 102, 241, 0.2);
+}
+.card.is-motion:hover {
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.08), 0 18px 40px rgba(99, 102, 241, 0.14);
+}
 
 .thumb-link {
   display: block;
@@ -97,11 +151,25 @@ defineEmits<{ (e: 'open-skill', work: Work): void }>();
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   overflow: hidden;
 }
-.thumb img {
+.thumb img,
+.thumb-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: opacity 0.18s ease;
+}
+.thumb img.is-hidden {
+  opacity: 0;
+}
+.thumb-video {
+  opacity: 0;
+  pointer-events: none;
+}
+.thumb-video.is-visible {
+  opacity: 1;
 }
 .placeholder {
   width: 100%;
@@ -129,6 +197,20 @@ defineEmits<{ (e: 'open-skill', work: Work): void }>();
   color: #ffffff;
   border-radius: 999px;
   backdrop-filter: blur(4px);
+  z-index: 2;
+}
+.motion-chip {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  color: #ffffff;
+  border-radius: 999px;
+  z-index: 2;
+  font-weight: 600;
 }
 
 .meta {

@@ -97,3 +97,38 @@ grep -c "data-block=" <output_path>   # 檢查 9 個 section
 - **不要使用 emoji 裝飾文字**（除非 Skill 明確指定）。
 - **不要使用 Tailwind / Bootstrap / 任何 framework CSS**：每個風格的 CSS 應該是手寫客製、體現該風格的視覺語彙。
 - **單檔自足**：一個 `index.html` 加 `assets/` 圖片就應該能獨立運作，把整份檔案放到任何靜態主機都能瀏覽。
+
+---
+
+## 動態風格額外要求（slug 以 `motion-` 開頭時）
+
+當 slug 以 `motion-` 開頭，**除前述 12 條硬性規範外**，必須額外滿足下列 8 條：
+
+1. **必含 inline `<script>`**：實作動態邏輯（IntersectionObserver / scroll listener / mousemove / requestAnimationFrame），**單檔大小總計仍 ≤ 200 KB**，script 內容建議 ≤ 8 KB。
+2. **prefers-reduced-motion**：CSS 中必含 `@media (prefers-reduced-motion: reduce)` 區塊，把所有非必要動畫關閉或簡化為瞬間切換。
+3. **passive scroll listener**：所有 `addEventListener('scroll', ..., { passive: true })`，不能阻擋滾動。
+4. **rAF 節流**：scroll / mousemove 回呼必須以 `requestAnimationFrame` 節流，rAF 內部運算保持輕量（不超過 ~8ms）。
+5. **只動 transform / opacity**：動畫屬性限定 `transform`（translate / rotate / scale / perspective）與 `opacity`，**禁止**動 `top / left / right / bottom / width / height / margin / padding` 等觸發 reflow 的屬性。
+6. **fallback 內容可見**：在 JS 失敗或 reduced motion 模式下，所有內容（樂團、時程、票價...）仍須完整可讀，不能依賴動畫才顯示。如 reveal 類使用 `opacity: 0 → 1`，預設 `opacity` 必須是 1，由 JS 在進入視窗前才設為 0。
+7. **`<body data-motion-type>`**：`<body>` 標籤上加 `data-motion-type="parallax|scroll-driven|reveal|loop|pointer"` 屬性，與 Skill 的 motionType 一致，方便外部測試與識別。
+8. **禁止外部動畫庫**：不可使用 GSAP / anime.js / Lottie / Framer Motion / Popmotion / Tween.js 等任何外部動畫庫的字串或邏輯；只用瀏覽器原生 API（IntersectionObserver、CSS animations、Web Animations API、scroll / mousemove event）。
+
+### 動態類型對應的核心技術
+
+| motionType | 推薦技術 |
+| --- | --- |
+| `parallax` | scroll 事件 + rAF 節流 + transform translateY 不同速率 |
+| `scroll-driven` | CSS `animation-timeline: scroll()`（modern browsers）+ IntersectionObserver fallback |
+| `reveal` | IntersectionObserver（threshold 0.15）+ CSS transition |
+| `loop` | CSS `@keyframes` + `animation-duration` |
+| `pointer` | mousemove + rAF + CSS `transform: rotateX/Y` 或 `--mx/--my` CSS 變數 |
+
+### 動態風格 self-check 附加項
+
+執行完 12 條基本檢查後，**還需確認**：
+- `grep -c '@media (prefers-reduced-motion' <output>` ≥ 1
+- `grep -c 'data-motion-type=' <output>` ≥ 1
+- `grep -E 'IntersectionObserver|@keyframes|animation-timeline|addEventListener\(.(scroll|mousemove)' <output>` 有結果
+- `grep -iE 'gsap|lottie|framer-motion|popmotion|tween\.js|anime\.js' <output>` 無結果
+
+任一項失敗就修正後重寫，最多重做 2 次。

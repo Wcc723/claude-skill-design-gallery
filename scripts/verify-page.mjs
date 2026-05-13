@@ -60,7 +60,18 @@ async function verifyOne(slug) {
   report.blocks_found = blocks;
 
   // 2. bands
-  const text = $('body').text();
+  // 動態頁面可能把文字放在 data-text / aria-label / data-to 等屬性，
+  // 因此合併 body text + 所有 aria/data 屬性值一起搜尋。
+  const bodyText = $('body').text();
+  const attrText = [];
+  $('[aria-label], [data-text], [data-to], [data-count], [title]').each((_, el) => {
+    const a = $(el);
+    ['aria-label', 'data-text', 'data-to', 'data-count', 'title'].forEach((k) => {
+      const v = a.attr(k);
+      if (v) attrText.push(v);
+    });
+  });
+  const text = bodyText + ' ' + attrText.join(' ');
   const missingBands = REQUIRED_BANDS.filter((b) => !text.includes(b));
   if (missingBands.length) {
     report.issues.push({ severity: 'error', msg: `missing bands: ${missingBands.join(', ')}` });
@@ -129,6 +140,47 @@ async function verifyOne(slug) {
   }
   if (!$('html').attr('lang')) {
     report.issues.push({ severity: 'warn', msg: 'missing <html lang>' });
+  }
+
+  // 10. motion-* 額外檢查
+  if (slug.startsWith('motion-')) {
+    // 必含 prefers-reduced-motion
+    if (!/@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce/i.test(html)) {
+      report.issues.push({ severity: 'error', msg: 'motion: missing prefers-reduced-motion media query' });
+      report.ok = false;
+    }
+    // 必含 data-motion-type
+    if (!/data-motion-type\s*=/i.test(html)) {
+      report.issues.push({ severity: 'warn', msg: 'motion: missing <body data-motion-type>' });
+    }
+    // 至少一個動態觸發機制
+    const hasMotion =
+      /IntersectionObserver\s*\(/.test(html) ||
+      /@keyframes\s+/.test(html) ||
+      /animation-timeline\s*:/.test(html) ||
+      /addEventListener\s*\(\s*['"](scroll|mousemove)['"]/i.test(html);
+    if (!hasMotion) {
+      report.issues.push({
+        severity: 'error',
+        msg: 'motion: no animation trigger found (IntersectionObserver / @keyframes / animation-timeline / scroll|mousemove listener)',
+      });
+      report.ok = false;
+    }
+    // 禁用外部動畫庫
+    const blacklist = /(gsap|lottie|framer-motion|popmotion|anime\.js|tween\.js|tween\.min)/i;
+    if (blacklist.test(html)) {
+      report.issues.push({ severity: 'error', msg: 'motion: external animation library reference detected' });
+      report.ok = false;
+    }
+    // 提醒 — 不該動 top/left/width/height 等 reflow 屬性（只提醒不擋）
+    const reflowProps =
+      /(transition\s*:[^;]*?(top|left|right|bottom|width|height|margin|padding))/i.test(html);
+    if (reflowProps) {
+      report.issues.push({
+        severity: 'warn',
+        msg: 'motion: transition on layout properties (top/left/width...) may cause reflow; prefer transform/opacity',
+      });
+    }
   }
 
   return report;

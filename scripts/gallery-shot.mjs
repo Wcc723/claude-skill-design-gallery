@@ -4,9 +4,20 @@ const url = process.argv[2] || 'http://localhost:5173/';
 const out = process.argv[3] || '/tmp/gallery-main.png';
 const full = process.argv.includes('--full');
 const clickSkill = process.argv.includes('--click-skill');
+const clickRound = (() => {
+  const i = process.argv.indexOf('--click-round');
+  return i >= 0 ? Number(process.argv[i + 1]) : null;
+})();
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+await page.waitForTimeout(1000);
+
+if (clickRound !== null) {
+  // 1-based nth-child for round tab buttons inside .round-tab
+  await page.click(`.round-tab .tab:nth-child(${clickRound})`);
+  await page.waitForTimeout(700);
+}
 
 if (full) {
   const height = await page.evaluate(() => document.body.scrollHeight);

@@ -11,22 +11,31 @@ defineEmits<{
   (event: 'change', value: Category | 'all'): void;
 }>();
 
-const order: (Category | 'all')[] = ['all', 'mainstream', 'retro', 'experimental', 'cultural', 'decorative'];
+const order: (Category | 'all')[] = [
+  'all',
+  'mainstream',
+  'retro',
+  'experimental',
+  'cultural',
+  'decorative',
+  'motion',
+];
 const allLabel = (key: Category | 'all') => (key === 'all' ? '全部' : categoryLabels[key]);
 </script>
 
 <template>
   <nav class="filter-bar" aria-label="分類篩選">
-    <button
-      v-for="key in order"
-      :key="key"
-      class="chip"
-      :class="{ 'is-active': active === key }"
-      @click="$emit('change', key)"
-    >
-      <span>{{ allLabel(key) }}</span>
-      <span class="count">{{ counts[key] ?? 0 }}</span>
-    </button>
+    <template v-for="key in order" :key="key">
+      <button
+        v-if="(counts[key] ?? 0) > 0 || key === 'all'"
+        class="chip"
+        :class="{ 'is-active': active === key }"
+        @click="$emit('change', key)"
+      >
+        <span>{{ allLabel(key) }}</span>
+        <span class="count">{{ counts[key] ?? 0 }}</span>
+      </button>
+    </template>
   </nav>
 </template>
 
