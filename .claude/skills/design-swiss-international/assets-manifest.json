@@ -1,0 +1,25 @@
+{
+  "style": "Swiss International",
+  "images": [
+    {
+      "filename": "hero-grid.webp",
+      "size": "800x1000",
+      "prompt": "A minimalist Swiss International style poster image: a single red sphere positioned by the rule of thirds against a pure white background, captured with studio lighting. Very objective, ordered, geometric, no text or letters. Tall poster aspect ratio."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Black and white architectural photograph of an outdoor mountain stage in clean modernist proportions, strong horizontal lines, no people, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Black and white architectural photograph of a beach stage with clean horizontal lines and geometric forms, no people, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Black and white architectural photograph of a wooden warehouse interior with clean modernist composition, no people, no text."
+    }
+  ]
+}

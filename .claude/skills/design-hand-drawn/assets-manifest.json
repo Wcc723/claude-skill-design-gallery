@@ -1,0 +1,40 @@
+{
+  "style": "Hand-Drawn Sketch",
+  "images": [
+    {
+      "filename": "hero-doodle.webp",
+      "size": "1200x1000",
+      "prompt": "A hand-drawn felt-tip and crayon illustration of a Taiwanese east coast music festival scene: wobbly hand-drawn lines outlining mountains and ocean, colorful crayon scribbles of musicians, hand-drawn cute lettering left blank (we'll add text later — no actual words visible), sticky note shapes, doodle arrows, stars and hearts scattered, paper sketchbook texture background. Indie zine style, warm and playful. No text or letters anywhere."
+    },
+    {
+      "filename": "doodle-1.webp",
+      "size": "800x800",
+      "prompt": "Hand-drawn felt-tip and crayon doodle of a whale silhouette with wave lines around it on sketchbook paper, indie zine style, no text. Square."
+    },
+    {
+      "filename": "doodle-2.webp",
+      "size": "800x800",
+      "prompt": "Hand-drawn felt-tip and crayon doodle of a winding road through clouds on sketchbook paper, no text. Square."
+    },
+    {
+      "filename": "doodle-3.webp",
+      "size": "800x800",
+      "prompt": "Hand-drawn felt-tip and crayon doodle of a swirly typhoon eye with raindrops, indie zine style, no text. Square."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Hand-drawn illustration of a mountain stage with crayon shading on sketchbook paper, no people clearly visible, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Hand-drawn illustration of a beach stage with palm trees, ocean waves drawn with felt-tip pen, no people, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Hand-drawn illustration of a wooden cabin music venue interior with hanging lights, sketchbook style, no people, no text."
+    }
+  ]
+}

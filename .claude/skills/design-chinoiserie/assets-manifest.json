@@ -1,0 +1,40 @@
+{
+  "style": "Chinoiserie / Guochao",
+  "images": [
+    {
+      "filename": "hero-ink.webp",
+      "size": "1400x900",
+      "prompt": "A Chinese traditional ink wash painting (水墨) of mountains and ocean meeting, painted with bold brush strokes, on aged yellowish rice paper. Lower right has a small red seal (印章). Asymmetric composition with significant negative space. No characters or text. Traditional Chinese aesthetic blended with modern composition."
+    },
+    {
+      "filename": "ink-band-1.webp",
+      "size": "800x800",
+      "prompt": "Chinese ink wash style art of a stylized whale flowing through water, on rice paper, with gold accent cloud motifs, no text. Square."
+    },
+    {
+      "filename": "ink-band-2.webp",
+      "size": "800x800",
+      "prompt": "Chinese ink wash style art of a misty mountain road disappearing into clouds, on rice paper with gold cloud accents, no text. Square."
+    },
+    {
+      "filename": "ink-band-3.webp",
+      "size": "800x800",
+      "prompt": "Chinese ink wash style art of a swirling typhoon over the sea, dramatic brush strokes, on rice paper, with red accent in the corner, no text. Square."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Traditional Chinese ink painting style of a mountain stage with traditional pavilion roof, on rice paper texture, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Traditional Chinese ink painting style of a beach pavilion with stone lanterns, on rice paper, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Traditional Chinese ink painting style of a wooden tea house interior with hanging scrolls, no text."
+    }
+  ]
+}

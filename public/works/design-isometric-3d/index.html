@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>島嶼共鳴 2026 — Isometric 3D</title>
+<style>
+:root{
+  --iso-bg:#f0e6d2; --iso-bg-2:#f7efe1; --iso-sky:#b9e2ff;
+  --iso-fg:#2d2a26; --iso-fg-soft:#6b6760;
+  --iso-orange:#ff8a3c; --iso-pink:#ff6f9b; --iso-mint:#5fd0b3;
+  --iso-lavender:#b6a2ff; --iso-yellow:#ffd166; --iso-blue:#4c8df6;
+  --iso-shadow:#d3c5a8;
+  --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-pill:999px;
+  --shadow-soft:0 4px 12px rgba(45,42,38,.08),0 12px 24px rgba(45,42,38,.08);
+  --shadow-deep:0 12px 36px rgba(45,42,38,.14);
+  --font:'PingFang TC','Noto Sans TC','Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);background-color:var(--iso-bg);color:var(--iso-fg);
+  background-image:
+    linear-gradient(30deg,transparent 50%,rgba(45,42,38,.04) 50%),
+    linear-gradient(150deg,transparent 50%,rgba(45,42,38,.04) 50%);
+  background-size:60px 35px;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+section{padding:80px 0;position:relative}
+section[data-block="hero"]{padding-top:40px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--iso-fg-soft);margin-bottom:12px}
+h1.section-title{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.2;letter-spacing:-.01em;margin-bottom:16px}
+.lead{font-size:16px;color:var(--iso-fg-soft);max-width:640px;margin-bottom:48px}
+
+/* HERO */
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;min-height:560px}
+.hero-display{font-size:clamp(44px,7vw,84px);line-height:1.02;font-weight:800;letter-spacing:-.02em;margin-bottom:20px}
+.hero-display .accent{color:var(--iso-orange);display:inline-block;position:relative}
+.hero-slogan{font-size:18px;color:var(--iso-fg-soft);margin-bottom:28px;max-width:480px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.chip{background:#fff;padding:8px 16px;border-radius:var(--radius-pill);font-size:13px;font-weight:600;box-shadow:var(--shadow-soft)}
+.chip.orange{background:var(--iso-orange);color:#fff}
+.chip.mint{background:var(--iso-mint);color:#fff}
+.chip.lavender{background:var(--iso-lavender);color:#fff}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+.btn-iso{background:var(--iso-orange);color:#fff;border:none;padding:16px 32px;border-radius:var(--radius-pill);font-weight:700;font-size:15px;letter-spacing:.04em;box-shadow:0 8px 16px rgba(255,138,60,.35);cursor:pointer;text-decoration:none;display:inline-block;transition:transform .2s}
+.btn-iso:hover{transform:translateY(-2px)}
+.btn-iso.ghost{background:#fff;color:var(--iso-fg);box-shadow:var(--shadow-soft)}
+.hero-img-wrap{position:relative;background:linear-gradient(135deg,#fff,var(--iso-bg-2));border-radius:32px;padding:24px;box-shadow:var(--shadow-deep);transform:rotate(-1deg)}
+.hero-img-wrap img{width:100%;height:auto;display:block;border-radius:20px}
+.hero-img-wrap::before{content:"";position:absolute;width:80px;height:80px;background:var(--iso-yellow);border-radius:50%;top:-30px;right:-20px;box-shadow:var(--shadow-soft);z-index:-1}
+.hero-img-wrap::after{content:"";position:absolute;width:60px;height:60px;background:var(--iso-mint);border-radius:20px;bottom:-20px;left:-20px;box-shadow:var(--shadow-soft);transform:rotate(15deg)}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.about-illu{display:grid;place-items:center;padding:32px;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);min-height:360px}
+.about-text p{font-size:16px;margin-bottom:14px;color:var(--iso-fg)}
+.about-text p:last-of-type{margin-bottom:32px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:32px}
+.iso-num{width:100%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:clamp(22px,3vw,36px);font-weight:800;color:#fff;text-align:center;line-height:1;background:radial-gradient(circle at 30% 30%,#ffb085,var(--iso-orange))}
+.iso-num.mint{background:radial-gradient(circle at 30% 30%,#8be3cb,var(--iso-mint))}
+.iso-num.lavender{background:radial-gradient(circle at 30% 30%,#cebeff,var(--iso-lavender))}
+.iso-num.yellow{background:radial-gradient(circle at 30% 30%,#ffe49a,var(--iso-yellow));color:var(--iso-fg)}
+.stat-cell{text-align:center}
+.stat-cell .label{display:block;margin-top:10px;font-size:12px;font-weight:700;color:var(--iso-fg-soft);letter-spacing:.1em;text-transform:uppercase}
+.iso-num span{font-size:.6em;font-weight:700;display:block;margin-top:2px}
+
+/* LINEUP */
+.lineup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.band-card{background:#fff;border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-soft);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;gap:12px}
+.band-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-deep)}
+.band-card.headliner{grid-column:span 1;background:linear-gradient(135deg,#fff,var(--iso-bg-2));box-shadow:var(--shadow-deep);border:2px solid var(--iso-orange)}
+.band-card .iso-art{align-self:center;margin-bottom:8px}
+.band-card.headliner .iso-art{transform:scale(1.15)}
+.band-card .h-tag{align-self:flex-start;background:var(--iso-orange);color:#fff;padding:4px 10px;border-radius:var(--radius-pill);font-size:10px;font-weight:800;letter-spacing:.1em}
+.band-card h3{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.band-card .en{color:var(--iso-fg-soft);font-size:13px;margin-top:-4px}
+.band-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:var(--radius-pill);background:var(--iso-bg-2);color:var(--iso-fg-soft)}
+.tag.country{background:var(--iso-lavender);color:#fff}
+.tag.day{background:var(--iso-mint);color:#fff}
+.tag.stage{background:var(--iso-yellow);color:var(--iso-fg)}
+.tag.time{background:var(--iso-pink);color:#fff}
+
+/* SCHEDULE */
+.schedule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.day-card{background:#fff;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-soft)}
+.day-card-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px dashed var(--iso-bg-2)}
+.day-card h3{font-size:22px;font-weight:800}
+.day-card h3 small{display:block;font-size:13px;font-weight:600;color:var(--iso-fg-soft);margin-top:2px}
+.slot{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--iso-bg-2);gap:12px}
+.slot:last-child{border-bottom:none}
+.slot .t{font-weight:700;font-size:13px;color:var(--iso-fg);min-width:96px}
+.slot .a{font-size:13px;color:var(--iso-fg-soft);text-align:right;flex:1}
+.slot.head .a{color:var(--iso-orange);font-weight:800}
+
+/* VENUES */
+.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.venue-card{background:#fff;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-soft);transition:transform .25s,box-shadow .25s}
+.venue-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-deep)}
+.venue-thumb{aspect-ratio:16/10;display:grid;place-items:center;background:linear-gradient(135deg,var(--iso-bg-2),#fff)}
+.venue-thumb img{width:100%;height:100%;object-fit:cover}
+.venue-body{padding:24px}
+.venue-body h3{font-size:20px;font-weight:800;margin-bottom:4px}
+.venue-body .en{font-size:12px;color:var(--iso-fg-soft);margin-bottom:12px;letter-spacing:.05em}
+.venue-body .cap{display:inline-block;background:var(--iso-orange);color:#fff;padding:4px 12px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;margin-bottom:12px}
+.venue-body p{font-size:14px;color:var(--iso-fg-soft)}
+
+/* TICKETS */
+.ticket-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:center}
+.ticket-card{background:#fff;border-radius:var(--radius-lg);padding:32px 24px;box-shadow:var(--shadow-soft);text-align:center;transition:transform .25s}
+.ticket-card:hover{transform:translateY(-4px)}
+.ticket-card.vip{background:linear-gradient(160deg,#fff,#fff5ea);box-shadow:var(--shadow-deep);transform:scale(1.05);border:2px solid var(--iso-yellow);position:relative}
+.ticket-card.vip:hover{transform:scale(1.05) translateY(-4px)}
+.ticket-card .iso-art{margin:0 auto 16px}
+.ticket-card h3{font-size:22px;font-weight:800;margin-bottom:8px}
+.ticket-card .price{font-size:36px;font-weight:800;color:var(--iso-orange);margin-bottom:4px;letter-spacing:-.02em}
+.ticket-card .price small{font-size:14px;color:var(--iso-fg-soft);font-weight:600}
+.ticket-card ul{list-style:none;text-align:left;margin:20px 0;padding:0}
+.ticket-card li{padding:8px 0;font-size:14px;color:var(--iso-fg-soft);position:relative;padding-left:24px;border-bottom:1px dashed var(--iso-bg-2)}
+.ticket-card li::before{content:"";position:absolute;left:0;top:14px;width:12px;height:12px;background:var(--iso-mint);border-radius:3px;transform:rotate(45deg) skew(8deg,8deg)}
+.tickets-note{margin-top:32px;background:#fff;border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-soft);display:grid;gap:8px}
+.tickets-note p{font-size:14px;color:var(--iso-fg-soft)}
+.tickets-note strong{color:var(--iso-fg)}
+
+/* TRAVEL */
+.travel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.travel-card{background:#fff;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-soft);position:relative}
+.travel-step{position:absolute;top:-12px;left:24px;background:var(--iso-orange);color:#fff;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;box-shadow:var(--shadow-soft)}
+.travel-card .iso-art{margin-bottom:16px}
+.travel-card h3{font-size:20px;font-weight:800;margin-bottom:10px}
+.travel-card p{font-size:14px;color:var(--iso-fg-soft);margin-bottom:8px}
+
+/* SPONSORS */
+.title-sponsor{background:#fff;border-radius:var(--radius-lg);padding:40px;box-shadow:var(--shadow-deep);display:flex;align-items:center;gap:32px;margin-bottom:32px}
+.title-sponsor .iso-art{flex-shrink:0}
+.title-sponsor .info .eyebrow{margin-bottom:8px}
+.title-sponsor h3{font-size:32px;font-weight:800;letter-spacing:-.01em}
+.title-sponsor .en{font-size:14px;color:var(--iso-fg-soft);margin-top:4px}
+.sponsor-tier{margin-bottom:32px}
+.sponsor-tier h4{font-size:13px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--iso-fg-soft);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sponsor-tier h4::before{content:"";width:24px;height:2px;background:var(--iso-orange);border-radius:2px}
+.sponsor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.sponsor-card{background:#fff;border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-soft);display:flex;align-items:center;gap:14px;transition:transform .25s}
+.sponsor-card:hover{transform:translateY(-3px)}
+.sponsor-card h5{font-size:15px;font-weight:800}
+.sponsor-card span{font-size:12px;color:var(--iso-fg-soft)}
+.media-row{margin-top:20px;font-size:14px;color:var(--iso-fg-soft);background:var(--iso-bg-2);padding:14px 20px;border-radius:var(--radius-md)}
+.media-row strong{color:var(--iso-fg);margin-right:8px}
+
+/* FAQ + FOOTER */
+.faq-grid{display:grid;gap:14px}
+.faq-card{background:#fff;border-radius:var(--radius-md);padding:0;box-shadow:var(--shadow-soft);overflow:hidden;transition:box-shadow .25s}
+.faq-card:hover{box-shadow:var(--shadow-deep)}
+.faq-card summary{padding:18px 24px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:14px;font-weight:700;font-size:15px}
+.faq-card summary::-webkit-details-marker{display:none}
+.faq-card summary .iso-art{flex-shrink:0}
+.faq-card summary .q-text{flex:1}
+.faq-card summary::after{content:"+";font-size:24px;color:var(--iso-orange);font-weight:300;transition:transform .25s}
+.faq-card[open] summary::after{transform:rotate(45deg)}
+.faq-card .ans{padding:0 24px 18px 70px;font-size:14px;color:var(--iso-fg-soft);line-height:1.7}
+.footer-info{margin-top:48px;padding-top:32px;border-top:2px dashed var(--iso-bg-2);text-align:center;color:var(--iso-fg-soft);font-size:13px;display:grid;gap:8px}
+.footer-info strong{color:var(--iso-fg)}
+
+/* responsive */
+@media(max-width:980px){
+  .hero-grid,.about-grid{grid-template-columns:1fr;gap:32px}
+  .lineup-grid,.schedule-grid,.venue-grid,.travel-grid{grid-template-columns:repeat(2,1fr)}
+  .ticket-grid{grid-template-columns:1fr;gap:20px}
+  .ticket-card.vip{transform:none}
+  .ticket-card.vip:hover{transform:translateY(-4px)}
+  .title-sponsor{flex-direction:column;text-align:center}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  section{padding:56px 0}
+  .lineup-grid,.schedule-grid,.venue-grid,.travel-grid{grid-template-columns:1fr}
+  .hero-display{font-size:40px}
+  .faq-card .ans{padding-left:24px}
+  .hero-img-wrap{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section data-block="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Island Resonance · 2026 · 6th Edition</div>
+        <h1 class="hero-display">島嶼<span class="accent">共鳴</span><br/>2026</h1>
+        <p class="hero-slogan">在島嶼盡頭，聽見彼此的迴聲。三日、三舞台、十二組亞洲樂團，於台東都蘭灣海岸自然公園，搭起一座可被觀察的微型聲音世界。</p>
+        <div class="hero-chips">
+          <span class="chip orange">8/21–8/23</span>
+          <span class="chip mint">都蘭灣</span>
+          <span class="chip lavender">12 組樂團</span>
+          <span class="chip">3 舞台</span>
+          <span class="chip">25,000 人次</span>
+        </div>
+        <div class="hero-cta">
+          <a href="#tickets" class="btn-iso">立即購票</a>
+          <a href="#lineup" class="btn-iso ghost">查看陣容</a>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <img src="assets/hero-scene.webp" alt="島嶼共鳴 2026 等距插畫" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section data-block="about">
+  <div class="wrap">
+    <div class="eyebrow">About · 關於島嶼共鳴</div>
+    <h1 class="section-title">不只是音樂節，<br/>是一座可堆疊的微縮島嶼。</h1>
+    <div class="about-grid">
+      <div class="about-illu">
+        <!-- iso stack of 3 cubes -->
+        <svg viewBox="0 0 240 260" width="240" height="260" aria-hidden="true">
+          <!-- bottom cube (orange) -->
+          <polygon points="120,170 200,210 120,250 40,210" fill="#ff8a3c"/>
+          <polygon points="40,210 120,250 120,250 40,210" fill="#d97339"/>
+          <polygon points="120,170 200,210 200,210 120,170" fill="#ffb085"/>
+          <polygon points="40,210 120,250 120,170 40,130" fill="#d97339"/>
+          <polygon points="200,210 120,250 120,170 200,130" fill="#b35d2e"/>
+          <!-- middle cube (mint) -->
+          <polygon points="120,100 184,132 120,164 56,132" fill="#5fd0b3"/>
+          <polygon points="56,132 120,164 120,164 56,132" fill="#3fa68a"/>
+          <polygon points="56,132 120,164 120,100 56,68" fill="#3fa68a"/>
+          <polygon points="184,132 120,164 120,100 184,68" fill="#2d8771"/>
+          <!-- top cube (lavender) -->
+          <polygon points="120,40 168,64 120,88 72,64" fill="#b6a2ff"/>
+          <polygon points="72,64 120,88 120,88 72,64" fill="#8d7be0"/>
+          <polygon points="72,64 120,88 120,40 72,16" fill="#8d7be0"/>
+          <polygon points="168,64 120,88 120,40 168,16" fill="#6d5cc4"/>
+          <!-- ground shadow -->
+          <ellipse cx="120" cy="252" rx="86" ry="6" fill="rgba(45,42,38,.12)"/>
+        </svg>
+      </div>
+      <div class="about-text">
+        <p>「島嶼共鳴」自 2021 年由<strong>浪打文化</strong>於台東創辦，2026 年邁入第六屆。三日 25,000 人次、12 組來自台、日、港、韓、馬、越的亞洲樂團，於 3 個與環境共生的舞台之間，與東部自然地景對話。</p>
+        <p>我們相信音樂節是一座可以堆疊的<strong>微縮城市</strong>。在這裡，押金循環杯系統、零一次性塑膠、與都蘭部落的「島嶼夥伴計畫」共同把每一日的聲響，疊成一座更輕盈的島。</p>
+        <div class="stats">
+          <div class="stat-cell">
+            <div class="iso-num">6<span>屆</span></div>
+            <span class="label">2021 創辦</span>
+          </div>
+          <div class="stat-cell">
+            <div class="iso-num mint">12<span>組</span></div>
+            <span class="label">演出樂團</span>
+          </div>
+          <div class="stat-cell">
+            <div class="iso-num lavender">3<span>個</span></div>
+            <span class="label">舞台</span>
+          </div>
+          <div class="stat-cell">
+            <div class="iso-num yellow">25K<span>人次</span></div>
+            <span class="label">三日參與</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LINEUP -->
+<section data-block="lineup" id="lineup">
+  <div class="wrap">
+    <div class="eyebrow">Lineup · 演出陣容</div>
+    <h1 class="section-title">12 組樂團，6 個亞洲座標。</h1>
+    <p class="lead">三組頭條 + 九組支援，從後搖到 World Music，從台灣到越南，每一塊聲音都被堆疊在這座島嶼之上。</p>
+    <div class="lineup-grid">
+
+      <!-- Headliner 1 -->
+      <article class="band-card headliner">
+        <span class="h-tag">HEADLINER</span>
+        <svg class="iso-art" viewBox="0 0 100 100" width="80" height="80" aria-hidden="true">
+          <polygon points="50,15 90,40 50,65 10,40" fill="#ff8a3c"/>
+          <polygon points="50,65 90,40 90,80 50,105" fill="#d97339"/>
+          <polygon points="50,65 10,40 10,80 50,105" fill="#b35d2e"/>
+        </svg>
+        <h3>鯨向海</h3>
+        <div class="en">Whale Bound</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span>
+          <span class="tag">後搖滾</span>
+          <span class="tag day">Day 1</span>
+          <span class="tag stage">共鳴山主舞台</span>
+          <span class="tag time">20:30 – 22:00</span>
+        </div>
+      </article>
+
+      <!-- Headliner 2 -->
+      <article class="band-card headliner">
+        <span class="h-tag">HEADLINER</span>
+        <svg class="iso-art" viewBox="0 0 100 100" width="80" height="80" aria-hidden="true">
+          <polygon points="50,10 88,32 88,70 50,92 12,70 12,32" fill="#5fd0b3"/>
+          <polygon points="50,10 88,32 50,54 12,32" fill="#8be3cb"/>
+          <polygon points="50,54 88,32 88,70 50,92" fill="#3fa68a"/>
+        </svg>
+        <h3>霧色公路</h3>
+        <div class="en">Misty Highway</div>
+        <div class="band-meta">
+          <span class="tag country">日本</span>
+          <span class="tag">Dream Pop</span>
+          <span class="tag day">Day 2</span>
+          <span class="tag stage">共鳴山主舞台</span>
+          <span class="tag time">20:30 – 22:00</span>
+        </div>
+      </article>
+
+      <!-- Headliner 3 -->
+      <article class="band-card headliner">
+        <span class="h-tag">HEADLINER</span>
+        <svg class="iso-art" viewBox="0 0 100 100" width="80" height="80" aria-hidden="true">
+          <polygon points="50,12 88,72 12,72" fill="#b6a2ff"/>
+          <polygon points="50,12 88,72 50,52" fill="#cebeff"/>
+          <polygon points="50,12 12,72 50,52" fill="#8d7be0"/>
+          <ellipse cx="50" cy="80" rx="38" ry="4" fill="rgba(0,0,0,.1)"/>
+        </svg>
+        <h3>颱風口</h3>
+        <div class="en">Eye of Typhoon</div>
+        <div class="band-meta">
+          <span class="tag country">香港</span>
+          <span class="tag">噪音搖滾</span>
+          <span class="tag day">Day 3</span>
+          <span class="tag stage">共鳴山主舞台</span>
+          <span class="tag time">20:30 – 22:00</span>
+        </div>
+      </article>
+
+      <!-- supporting acts 9 -->
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,20 80,38 80,68 50,86 20,68 20,38" fill="#ffd166"/>
+          <polygon points="50,20 80,38 50,56 20,38" fill="#ffe49a"/>
+          <polygon points="50,56 80,38 80,68 50,86" fill="#d9ac49"/>
+        </svg>
+        <h3>海岬鳥群</h3>
+        <div class="en">Cape Birds</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span><span class="tag">Indie Folk</span>
+          <span class="tag day">Day 1</span><span class="tag stage">海風舞台</span>
+          <span class="tag time">18:00 – 19:00</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,22 86,42 50,62 14,42" fill="#4c8df6"/>
+          <polygon points="50,62 86,42 86,76 50,96" fill="#2f6fd1"/>
+          <polygon points="50,62 14,42 14,76 50,96" fill="#1c54a6"/>
+        </svg>
+        <h3>浪打信號</h3>
+        <div class="en">Wave Signal</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span><span class="tag">Electronic</span>
+          <span class="tag day">Day 1</span><span class="tag stage">共鳴山主舞台</span>
+          <span class="tag time">18:30 – 19:30</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,18 86,76 14,76" fill="#ff6f9b"/>
+          <polygon points="50,18 86,76 50,60" fill="#ff96b8"/>
+          <polygon points="50,18 14,76 50,60" fill="#d45078"/>
+        </svg>
+        <h3>火車前進</h3>
+        <div class="en">Train Forward</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span><span class="tag">Punk</span>
+          <span class="tag day">Day 1</span><span class="tag stage">部落舞台</span>
+          <span class="tag time">19:30 – 20:30</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,22 86,42 50,62 14,42" fill="#5fd0b3"/>
+          <polygon points="50,62 86,42 86,76 50,96" fill="#3fa68a"/>
+          <polygon points="50,62 14,42 14,76 50,96" fill="#2d8771"/>
+        </svg>
+        <h3>苔蘚紀年</h3>
+        <div class="en">Moss Chronicle</div>
+        <div class="band-meta">
+          <span class="tag country">韓國</span><span class="tag">Ambient</span>
+          <span class="tag day">Day 2</span><span class="tag stage">海風舞台</span>
+          <span class="tag time">17:00 – 18:00</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,16 86,36 86,68 50,88 14,68 14,36" fill="#b6a2ff"/>
+          <polygon points="50,16 86,36 50,56 14,36" fill="#cebeff"/>
+          <polygon points="50,56 86,36 86,68 50,88" fill="#8d7be0"/>
+        </svg>
+        <h3>銀河郵差</h3>
+        <div class="en">Galaxy Postman</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span><span class="tag">City Pop</span>
+          <span class="tag day">Day 2</span><span class="tag stage">共鳴山主舞台</span>
+          <span class="tag time">18:30 – 19:30</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,22 86,42 50,62 14,42" fill="#ffd166"/>
+          <polygon points="50,62 86,42 86,76 50,96" fill="#d9ac49"/>
+          <polygon points="50,62 14,42 14,76 50,96" fill="#b08833"/>
+        </svg>
+        <h3>夜鷺夜談</h3>
+        <div class="en">Heron Night Talk</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span><span class="tag">Jazz Fusion</span>
+          <span class="tag day">Day 2</span><span class="tag stage">部落舞台</span>
+          <span class="tag time">21:00 – 22:00</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,12 88,72 12,72" fill="#ff8a3c"/>
+          <polygon points="50,12 88,72 50,52" fill="#ffb085"/>
+          <polygon points="50,12 12,72 50,52" fill="#d97339"/>
+        </svg>
+        <h3>紙鳶失蹤</h3>
+        <div class="en">Kite Missing</div>
+        <div class="band-meta">
+          <span class="tag country">馬來西亞</span><span class="tag">Shoegaze</span>
+          <span class="tag day">Day 3</span><span class="tag stage">海風舞台</span>
+          <span class="tag time">17:00 – 18:00</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,22 86,42 50,62 14,42" fill="#ff6f9b"/>
+          <polygon points="50,62 86,42 86,76 50,96" fill="#d45078"/>
+          <polygon points="50,62 14,42 14,76 50,96" fill="#a83a5a"/>
+        </svg>
+        <h3>鏽色羅盤</h3>
+        <div class="en">Rusty Compass</div>
+        <div class="band-meta">
+          <span class="tag country">台灣</span><span class="tag">Blues / Roots</span>
+          <span class="tag day">Day 3</span><span class="tag stage">共鳴山主舞台</span>
+          <span class="tag time">18:30 – 19:30</span>
+        </div>
+      </article>
+
+      <article class="band-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="64" height="64" aria-hidden="true">
+          <polygon points="50,16 86,36 86,68 50,88 14,68 14,36" fill="#4c8df6"/>
+          <polygon points="50,16 86,36 50,56 14,36" fill="#7eb0fa"/>
+          <polygon points="50,56 86,36 86,68 50,88" fill="#2f6fd1"/>
+        </svg>
+        <h3>黎明號角</h3>
+        <div class="en">Dawn Horn</div>
+        <div class="band-meta">
+          <span class="tag country">越南</span><span class="tag">World Music</span>
+          <span class="tag day">Day 3</span><span class="tag stage">部落舞台</span>
+          <span class="tag time">19:30 – 20:30</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section data-block="schedule">
+  <div class="wrap">
+    <div class="eyebrow">Schedule · 三日節目</div>
+    <h1 class="section-title">三日節目時程</h1>
+    <p class="lead">從黃昏的暖場到深夜的迴聲，每一塊時段都被精準地擺進這座島嶼的座標裡。</p>
+    <div class="schedule-grid">
+
+      <div class="day-card">
+        <div class="day-card-head">
+          <svg viewBox="0 0 80 80" width="56" height="56" aria-hidden="true">
+            <ellipse cx="40" cy="42" rx="30" ry="14" fill="#ffb085"/>
+            <ellipse cx="40" cy="38" rx="30" ry="14" fill="#ff8a3c"/>
+            <circle cx="40" cy="38" r="9" fill="#fff"/>
+            <line x1="40" y1="38" x2="40" y2="30" stroke="#2d2a26" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="38" x2="46" y2="40" stroke="#2d2a26" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>Day 1<small>2026 / 08 / 21（五）</small></h3>
+        </div>
+        <div class="slot"><div class="t">17:00 – 18:00</div><div class="a">DJ 暖場 / 主舞台</div></div>
+        <div class="slot"><div class="t">18:00 – 19:00</div><div class="a">海岬鳥群 / 海風舞台</div></div>
+        <div class="slot"><div class="t">18:30 – 19:30</div><div class="a">浪打信號 / 共鳴山主舞台</div></div>
+        <div class="slot"><div class="t">19:30 – 20:30</div><div class="a">火車前進 / 部落舞台</div></div>
+        <div class="slot head"><div class="t">20:30 – 22:00</div><div class="a">★ 鯨向海 / 共鳴山主舞台</div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-head">
+          <svg viewBox="0 0 80 80" width="56" height="56" aria-hidden="true">
+            <ellipse cx="40" cy="42" rx="30" ry="14" fill="#8be3cb"/>
+            <ellipse cx="40" cy="38" rx="30" ry="14" fill="#5fd0b3"/>
+            <circle cx="40" cy="38" r="9" fill="#fff"/>
+            <line x1="40" y1="38" x2="40" y2="30" stroke="#2d2a26" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="38" x2="46" y2="40" stroke="#2d2a26" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>Day 2<small>2026 / 08 / 22（六）</small></h3>
+        </div>
+        <div class="slot"><div class="t">17:00 – 18:00</div><div class="a">苔蘚紀年 / 海風舞台</div></div>
+        <div class="slot"><div class="t">18:30 – 19:30</div><div class="a">銀河郵差 / 共鳴山主舞台</div></div>
+        <div class="slot head"><div class="t">20:30 – 22:00</div><div class="a">★ 霧色公路 / 共鳴山主舞台</div></div>
+        <div class="slot"><div class="t">21:00 – 22:00</div><div class="a">夜鷺夜談 / 部落舞台</div></div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-card-head">
+          <svg viewBox="0 0 80 80" width="56" height="56" aria-hidden="true">
+            <ellipse cx="40" cy="42" rx="30" ry="14" fill="#cebeff"/>
+            <ellipse cx="40" cy="38" rx="30" ry="14" fill="#b6a2ff"/>
+            <circle cx="40" cy="38" r="9" fill="#fff"/>
+            <line x1="40" y1="38" x2="40" y2="30" stroke="#2d2a26" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="38" x2="46" y2="40" stroke="#2d2a26" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>Day 3<small>2026 / 08 / 23（日）</small></h3>
+        </div>
+        <div class="slot"><div class="t">17:00 – 18:00</div><div class="a">紙鳶失蹤 / 海風舞台</div></div>
+        <div class="slot"><div class="t">18:30 – 19:30</div><div class="a">鏽色羅盤 / 共鳴山主舞台</div></div>
+        <div class="slot"><div class="t">19:30 – 20:30</div><div class="a">黎明號角 / 部落舞台</div></div>
+        <div class="slot head"><div class="t">20:30 – 22:00</div><div class="a">★ 颱風口 / 共鳴山主舞台</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VENUES -->
+<section data-block="venues">
+  <div class="wrap">
+    <div class="eyebrow">Venues · 三舞台</div>
+    <h1 class="section-title">三座與環境共生的舞台</h1>
+    <p class="lead">從山坡草地、沙灘日落，到木造倉庫，每一個舞台都用不同的尺度承接不同的聲響。</p>
+    <div class="venue-grid">
+
+      <div class="venue-card">
+        <div class="venue-thumb"><img src="assets/icon-1.webp" alt="共鳴山主舞台等距插畫" loading="lazy"/></div>
+        <div class="venue-body">
+          <h3>共鳴山主舞台</h3>
+          <div class="en">Resonance Mountain Stage</div>
+          <span class="cap">容納 8,000 人</span>
+          <p>都蘭灣山坡草地、面海背山，360 度環繞音場讓聲音在山與海之間自然折返。</p>
+        </div>
+      </div>
+
+      <div class="venue-card">
+        <div class="venue-thumb">
+          <svg viewBox="0 0 200 160" width="160" height="120" aria-hidden="true">
+            <ellipse cx="100" cy="140" rx="80" ry="10" fill="rgba(0,0,0,.1)"/>
+            <polygon points="100,20 170,120 30,120" fill="#5fd0b3"/>
+            <polygon points="100,20 170,120 100,90" fill="#8be3cb"/>
+            <polygon points="100,20 30,120 100,90" fill="#3fa68a"/>
+            <circle cx="60" cy="40" r="14" fill="#ffd166"/>
+          </svg>
+        </div>
+        <div class="venue-body">
+          <h3>海風舞台</h3>
+          <div class="en">Sea Breeze Stage</div>
+          <span class="cap">容納 3,000 人</span>
+          <p>沙灘搭建、夕陽時段最魔幻；脫掉鞋子，把腳印留在這片金色的浪潮裡。</p>
+        </div>
+      </div>
+
+      <div class="venue-card">
+        <div class="venue-thumb">
+          <svg viewBox="0 0 200 160" width="160" height="120" aria-hidden="true">
+            <ellipse cx="100" cy="140" rx="80" ry="10" fill="rgba(0,0,0,.1)"/>
+            <polygon points="100,30 170,120 30,120" fill="#ff8a3c"/>
+            <polygon points="100,30 170,120 100,95" fill="#ffb085"/>
+            <polygon points="100,30 30,120 100,95" fill="#d97339"/>
+            <rect x="92" y="80" width="16" height="40" fill="#6b4423"/>
+          </svg>
+        </div>
+        <div class="venue-body">
+          <h3>部落舞台</h3>
+          <div class="en">Tribe Stage</div>
+          <span class="cap">容納 800 人</span>
+          <p>木造倉庫改建的小型 livehouse 氛圍；限量手環入場，最親密的聲音切面。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TICKETS -->
+<section data-block="tickets" id="tickets">
+  <div class="wrap">
+    <div class="eyebrow">Tickets · 票券資訊</div>
+    <h1 class="section-title">三種進場方式</h1>
+    <p class="lead">任選一日、三日全程，或一張通往後台的 VIP 通行證。</p>
+    <div class="ticket-grid">
+
+      <div class="ticket-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="72" height="72" aria-hidden="true">
+          <polygon points="50,18 86,38 50,58 14,38" fill="#5fd0b3"/>
+          <polygon points="50,58 86,38 86,72 50,92" fill="#3fa68a"/>
+          <polygon points="50,58 14,38 14,72 50,92" fill="#2d8771"/>
+        </svg>
+        <h3>單日票</h3>
+        <div class="price">NT$ 2,200<small> / 一日</small></div>
+        <ul>
+          <li>任選一日入場</li>
+          <li>含現場飲水（循環杯）</li>
+          <li>可購買限定周邊</li>
+        </ul>
+        <a href="#" class="btn-iso ghost">立即購買</a>
+      </div>
+
+      <div class="ticket-card vip">
+        <svg class="iso-art" viewBox="0 0 120 100" width="96" height="80" aria-hidden="true">
+          <!-- iso crown -->
+          <polygon points="60,28 88,50 60,72 32,50" fill="#ffd166"/>
+          <polygon points="60,72 88,50 88,62 60,84" fill="#d9ac49"/>
+          <polygon points="60,72 32,50 32,62 60,84" fill="#b08833"/>
+          <polygon points="32,50 22,30 36,40 60,28 84,40 98,30 88,50 60,40" fill="#ffe49a"/>
+          <circle cx="22" cy="30" r="4" fill="#ff6f9b"/>
+          <circle cx="98" cy="30" r="4" fill="#ff6f9b"/>
+          <circle cx="60" cy="22" r="4" fill="#4c8df6"/>
+        </svg>
+        <h3>VIP 三日</h3>
+        <div class="price">NT$ 12,800<small> / 三日</small></div>
+        <ul>
+          <li>三日全程入場</li>
+          <li>後台休息區 + 限定餐飲</li>
+          <li>專屬接駁 + 紀念樂團 T</li>
+        </ul>
+        <a href="#" class="btn-iso">VIP 立即購買</a>
+      </div>
+
+      <div class="ticket-card">
+        <svg class="iso-art" viewBox="0 0 100 100" width="72" height="72" aria-hidden="true">
+          <polygon points="50,12 86,30 50,48 14,30" fill="#b6a2ff"/>
+          <polygon points="50,48 86,30 86,46 50,64" fill="#8d7be0"/>
+          <polygon points="50,48 14,30 14,46 50,64" fill="#6d5cc4"/>
+          <polygon points="50,64 86,46 50,64 14,46" fill="#cebeff"/>
+          <polygon points="50,64 86,46 86,62 50,80" fill="#8d7be0"/>
+          <polygon points="50,64 14,46 14,62 50,80" fill="#6d5cc4"/>
+        </svg>
+        <h3>三日通票</h3>
+        <div class="price">NT$ 5,400<small> / 三日</small></div>
+        <ul>
+          <li>三日全程暢遊</li>
+          <li>含限量手環</li>
+          <li>一場部落舞台優先入場</li>
+        </ul>
+        <a href="#" class="btn-iso ghost">立即購買</a>
+      </div>
+
+    </div>
+    <div class="tickets-note">
+      <p><strong>售票通路：</strong>官網售票（islandresonance.tw/tickets）、KKTIX、ibon、tixCraft</p>
+      <p><strong>早鳥優惠：</strong>2026 年 5 月 31 日前購買三日通票享 9 折（NT$ 4,860），售完為止</p>
+      <p><strong>退票政策：</strong>演出前 14 天前可全額退款，14 天內恕不接受退換票</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRAVEL -->
+<section data-block="travel">
+  <div class="wrap">
+    <div class="eyebrow">Travel · 交通與住宿</div>
+    <h1 class="section-title">怎麼來、怎麼住</h1>
+    <p class="lead">三條路徑通往都蘭灣，三種棲身方式陪你度過三日。</p>
+    <div class="travel-grid">
+
+      <div class="travel-card">
+        <span class="travel-step">1</span>
+        <svg class="iso-art" viewBox="0 0 120 100" width="100" height="84" aria-hidden="true">
+          <!-- iso bus -->
+          <ellipse cx="60" cy="92" rx="46" ry="5" fill="rgba(0,0,0,.1)"/>
+          <polygon points="20,38 60,18 100,38 100,72 60,92 20,72" fill="#ff8a3c"/>
+          <polygon points="20,38 60,18 60,52 20,72" fill="#ffb085"/>
+          <polygon points="60,18 100,38 100,72 60,52" fill="#d97339"/>
+          <rect x="28" y="44" width="10" height="8" fill="#fff" transform="skewY(-15)"/>
+          <rect x="46" y="44" width="10" height="8" fill="#fff" transform="skewY(-15)"/>
+          <circle cx="32" cy="80" r="6" fill="#2d2a26"/>
+          <circle cx="88" cy="80" r="6" fill="#2d2a26"/>
+        </svg>
+        <h3>自行開車</h3>
+        <p>台北經國道 5 號（雪山隧道）轉台 9 線南下，至都蘭灣海岸自然公園約 4.5 小時。</p>
+        <p><strong>停車場：</strong>單日 NT$ 200／三日 NT$ 500，建議共乘減碳。</p>
+      </div>
+
+      <div class="travel-card">
+        <span class="travel-step">2</span>
+        <svg class="iso-art" viewBox="0 0 120 100" width="100" height="84" aria-hidden="true">
+          <!-- iso train -->
+          <ellipse cx="60" cy="92" rx="46" ry="5" fill="rgba(0,0,0,.1)"/>
+          <polygon points="14,42 60,22 106,42 106,68 60,88 14,68" fill="#5fd0b3"/>
+          <polygon points="14,42 60,22 60,48 14,68" fill="#8be3cb"/>
+          <polygon points="60,22 106,42 106,68 60,48" fill="#3fa68a"/>
+          <rect x="24" y="48" width="8" height="6" fill="#fff" transform="skewY(-15)"/>
+          <rect x="38" y="48" width="8" height="6" fill="#fff" transform="skewY(-15)"/>
+          <rect x="52" y="48" width="8" height="6" fill="#fff" transform="skewY(-15)"/>
+          <circle cx="68" cy="38" r="4" fill="#ffd166"/>
+        </svg>
+        <h3>大眾運輸</h3>
+        <p>台鐵或高鐵 + 轉乘至台東車站，主辦方提供<strong>免費接駁巴士</strong>。</p>
+        <p>每日 09:00–12:00、13:00–17:00 兩段、每 30 分鐘一班，車程約 25 分鐘。</p>
+      </div>
+
+      <div class="travel-card">
+        <span class="travel-step">3</span>
+        <svg class="iso-art" viewBox="0 0 120 100" width="100" height="84" aria-hidden="true">
+          <!-- iso tent -->
+          <ellipse cx="60" cy="92" rx="46" ry="5" fill="rgba(0,0,0,.1)"/>
+          <polygon points="60,20 100,80 20,80" fill="#b6a2ff"/>
+          <polygon points="60,20 100,80 60,68" fill="#cebeff"/>
+          <polygon points="60,20 20,80 60,68" fill="#8d7be0"/>
+          <polygon points="55,80 60,50 65,80" fill="#2d2a26"/>
+          <circle cx="78" cy="42" r="4" fill="#ffd166"/>
+        </svg>
+        <h3>住宿建議</h3>
+        <p><strong>場區帳篷營位：</strong>NT$ 800／晚（含早餐券、淋浴間）</p>
+        <p><strong>合作民宿：</strong>都蘭、東河沿線 12 家（8 折碼 ISLAND2026）</p>
+        <p><strong>露營車：</strong>「島嶼漫遊」三日方案 NT$ 9,800 起</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section data-block="sponsors">
+  <div class="wrap">
+    <div class="eyebrow">Partners · 贊助商與夥伴</div>
+    <h1 class="section-title">把這座島嶼疊得更高的夥伴</h1>
+
+    <div class="title-sponsor">
+      <svg class="iso-art" viewBox="0 0 140 130" width="120" height="110" aria-hidden="true">
+        <!-- iso gift box -->
+        <ellipse cx="70" cy="120" rx="56" ry="6" fill="rgba(0,0,0,.12)"/>
+        <polygon points="70,30 116,52 70,74 24,52" fill="#ff8a3c"/>
+        <polygon points="70,74 116,52 116,98 70,120" fill="#d97339"/>
+        <polygon points="70,74 24,52 24,98 70,120" fill="#b35d2e"/>
+        <!-- ribbon -->
+        <polygon points="62,34 78,42 78,118 62,110" fill="#ff6f9b"/>
+        <polygon points="42,40 98,40 70,54 24,52" fill="#ffd166" opacity=".9"/>
+        <polygon points="70,30 88,16 96,22 78,36" fill="#ff6f9b"/>
+        <polygon points="70,30 52,16 44,22 62,36" fill="#ff6f9b"/>
+      </svg>
+      <div class="info">
+        <div class="eyebrow">Title Sponsor · 冠名贊助</div>
+        <h3>麥森啤酒</h3>
+        <div class="en">Marsen Beer</div>
+      </div>
+    </div>
+
+    <div class="sponsor-tier">
+      <h4>Gold Sponsor</h4>
+      <div class="sponsor-grid">
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="44" height="44" aria-hidden="true">
+            <polygon points="30,10 52,22 52,46 30,58 8,46 8,22" fill="#ffd166"/>
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ffe49a"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d9ac49"/>
+          </svg>
+          <div><h5>山隈唱片</h5><span>Mountain Edge Records</span></div>
+        </div>
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="44" height="44" aria-hidden="true">
+            <polygon points="30,10 52,22 52,46 30,58 8,46 8,22" fill="#ffd166"/>
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ffe49a"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d9ac49"/>
+          </svg>
+          <div><h5>潮間帶咖啡</h5><span>Tideline Coffee</span></div>
+        </div>
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="44" height="44" aria-hidden="true">
+            <polygon points="30,10 52,22 52,46 30,58 8,46 8,22" fill="#ffd166"/>
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ffe49a"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d9ac49"/>
+          </svg>
+          <div><h5>雲擇科技</h5><span>Cloudpick Tech</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sponsor-tier">
+      <h4>Silver Sponsor</h4>
+      <div class="sponsor-grid">
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,14 50,26 30,38 10,26" fill="#cfd6dc"/>
+            <polygon points="30,38 50,26 50,46 30,58" fill="#a3aab1"/>
+            <polygon points="30,38 10,26 10,46 30,58" fill="#7e858c"/>
+          </svg>
+          <div><h5>海島襪品</h5><span>Island Socks</span></div>
+        </div>
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,14 50,26 30,38 10,26" fill="#cfd6dc"/>
+            <polygon points="30,38 50,26 50,46 30,58" fill="#a3aab1"/>
+            <polygon points="30,38 10,26 10,46 30,58" fill="#7e858c"/>
+          </svg>
+          <div><h5>長浪電池</h5><span>Longwave Battery</span></div>
+        </div>
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,14 50,26 30,38 10,26" fill="#cfd6dc"/>
+            <polygon points="30,38 50,26 50,46 30,58" fill="#a3aab1"/>
+            <polygon points="30,38 10,26 10,46 30,58" fill="#7e858c"/>
+          </svg>
+          <div><h5>青葉旅店</h5><span>Greenleaf Inn</span></div>
+        </div>
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,14 50,26 30,38 10,26" fill="#cfd6dc"/>
+            <polygon points="30,38 50,26 50,46 30,58" fill="#a3aab1"/>
+            <polygon points="30,38 10,26 10,46 30,58" fill="#7e858c"/>
+          </svg>
+          <div><h5>輕食工坊</h5><span>Lightfare Studio</span></div>
+        </div>
+        <div class="sponsor-card">
+          <svg viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,14 50,26 30,38 10,26" fill="#cfd6dc"/>
+            <polygon points="30,38 50,26 50,46 30,58" fill="#a3aab1"/>
+            <polygon points="30,38 10,26 10,46 30,58" fill="#7e858c"/>
+          </svg>
+          <div><h5>半島郵差</h5><span>Peninsula Postman</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-row"><strong>媒體夥伴</strong>Blow 吹音樂 · StreetVoice · KKBOX · 大誌雜誌</div>
+  </div>
+</section>
+
+<!-- FOOTER + FAQ -->
+<section data-block="footer-faq">
+  <div class="wrap">
+    <div class="eyebrow">FAQ · 常見問題</div>
+    <h1 class="section-title">出發前，先問問島嶼</h1>
+    <p class="lead">關於雨天、寵物、兒童、攝影——7 個你最常問的問題。</p>
+    <div class="faq-grid">
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ff8a3c"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d97339"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#b35d2e"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">雨天如何處理？</span>
+        </summary>
+        <div class="ans">本活動為雨天照常舉行，僅在劇烈雷雨或主辦方判斷有安全疑慮時暫停演出；如完全取消，依退票政策辦理。</div>
+      </details>
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#5fd0b3"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#3fa68a"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#2d8771"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">可以攜帶寵物嗎？</span>
+        </summary>
+        <div class="ans">為維護動物與觀眾安全，本活動全區禁止攜帶寵物；導盲犬、輔助犬請於入口出示證明。</div>
+      </details>
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#b6a2ff"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#8d7be0"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#6d5cc4"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">兒童入場規則？</span>
+        </summary>
+        <div class="ans">12 歲以下兒童由父母陪同免票入場（每位購票者最多攜帶 2 名兒童），需配戴主辦方提供的螢光手環。</div>
+      </details>
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ffd166"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d9ac49"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#b08833"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#2d2a26" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">可以自備食物或外食嗎？</span>
+        </summary>
+        <div class="ans">可攜帶輕食與飲水（限玻璃以外容器）；場內提供 30 家風味攤位，鼓勵支持在地餐飲。</div>
+      </details>
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ff6f9b"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d45078"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#a83a5a"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">場內可以搭設帳篷嗎？</span>
+        </summary>
+        <div class="ans">僅限購買「帳篷營位」方案者於指定營區搭設，請依現場標示；禁止占用一般草地。</div>
+      </details>
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#4c8df6"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#2f6fd1"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#1c54a6"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">無障礙設施？</span>
+        </summary>
+        <div class="ans">三舞台均設無障礙觀賞區與專用通道；輪椅租借請於官網表單預約，現場備有 20 台輪椅。</div>
+      </details>
+
+      <details class="faq-card">
+        <summary>
+          <svg class="iso-art" viewBox="0 0 60 60" width="40" height="40" aria-hidden="true">
+            <polygon points="30,10 52,22 30,34 8,22" fill="#ff8a3c"/>
+            <polygon points="30,34 52,22 52,46 30,58" fill="#d97339"/>
+            <polygon points="30,34 8,22 8,46 30,58" fill="#b35d2e"/>
+            <text x="30" y="42" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">?</text>
+          </svg>
+          <span class="q-text">可以攝影錄影嗎？</span>
+        </summary>
+        <div class="ans">歡迎個人手機與小型相機紀錄；商業攝影（含腳架、長焦、無人機）需另外申請媒體證。</div>
+      </details>
+
+    </div>
+
+    <div class="footer-info">
+      <p><strong>島嶼共鳴 2026 · Island Resonance 2026</strong></p>
+      <p>2026 / 08 / 21（五）– 08 / 23（日） · 台東都蘭灣海岸自然公園</p>
+      <p>主辦：浪打文化 Wave Strike Culture · 官網：islandresonance.tw</p>
+      <p>#島嶼共鳴2026 #IslandResonance2026</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// gentle hover lift for cards via JS (progressive)
+document.querySelectorAll('.faq-card').forEach(d=>{
+  d.addEventListener('toggle',()=>{ /* noop, animation handled by CSS */ });
+});
+</script>
+</body>
+</html>

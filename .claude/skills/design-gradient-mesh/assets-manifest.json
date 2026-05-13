@@ -1,0 +1,40 @@
+{
+  "style": "Gradient Mesh Aurora",
+  "images": [
+    {
+      "filename": "hero-aurora.webp",
+      "size": "1600x1000",
+      "prompt": "An abstract digital painting of flowing aurora-like gradient blobs in vivid pink, mint, periwinkle, and peach colors blended seamlessly against a deep dark indigo-purple background, soft motion blur, dreamy fluid, no text or logos. Wide aspect."
+    },
+    {
+      "filename": "blob-1.webp",
+      "size": "800x800",
+      "prompt": "Abstract gradient mesh painting of a single floating blob with smooth pink-purple-peach transitions over deep indigo, ethereal, soft glow, no text. Square."
+    },
+    {
+      "filename": "blob-2.webp",
+      "size": "800x800",
+      "prompt": "Abstract gradient mesh painting of mint and periwinkle aurora swirling on a deep purple background, dreamy, no text. Square."
+    },
+    {
+      "filename": "blob-3.webp",
+      "size": "800x800",
+      "prompt": "Abstract gradient mesh painting of peach and pink wave-like color flow on deep indigo background, no text. Square."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Photo of an outdoor stage at twilight with vivid pink and purple aurora-like sky, fluid colors, no people clearly visible, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Photo of a beach stage at sunset with peach and mint gradient sky, no people, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Photo of a wooden warehouse interior with multicolor gradient lighting (pink, mint, periwinkle), no people, no text."
+    }
+  ]
+}

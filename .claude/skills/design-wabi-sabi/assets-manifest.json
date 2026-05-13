@@ -1,0 +1,40 @@
+{
+  "style": "Wabi-Sabi",
+  "images": [
+    {
+      "filename": "hero-sumi.webp",
+      "size": "1400x900",
+      "prompt": "A traditional Japanese sumi-e ink wash painting: a single mountain silhouette and a faint horizon line, painted with brush strokes of ink on aged washi paper, large negative space, the bottom right has a small crimson red name stamp. Tranquil, imperfect, asymmetrical composition. No text or letters. Wabi-sabi aesthetic."
+    },
+    {
+      "filename": "ink-1.webp",
+      "size": "800x800",
+      "prompt": "Minimal sumi-e ink wash painting of a small fishing boat on calm water with washi paper texture, large empty space, no text. Square."
+    },
+    {
+      "filename": "ink-2.webp",
+      "size": "800x800",
+      "prompt": "Minimal sumi-e ink wash painting of a single pine branch with a few needles, on aged washi paper, asymmetric composition with lots of empty space, no text. Square."
+    },
+    {
+      "filename": "ink-3.webp",
+      "size": "800x800",
+      "prompt": "Minimal sumi-e ink wash painting of a misty mountain peak with empty space around it, on aged washi paper, no text. Square."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Black and white documentary photograph of a wooden outdoor stage with traditional Japanese tatami floor and shoji screens, surrounded by misty mountains, very minimal, no people, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Black and white photograph of a quiet beach with a small wooden platform and a single hanging paper lantern, calm sea, soft mist, no people, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Black and white photograph of a serene wooden tea room interior with single small stage, tatami floor, hanging scroll on wall, very minimal, no people, no text."
+    }
+  ]
+}

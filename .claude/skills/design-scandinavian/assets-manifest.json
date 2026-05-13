@@ -1,0 +1,40 @@
+{
+  "style": "Scandinavian",
+  "images": [
+    {
+      "filename": "hero-forest.webp",
+      "size": "1400x1050",
+      "prompt": "A serene Scandinavian-style outdoor music festival scene: a wooden stage nestled in a peaceful pine forest at golden hour, soft warm natural light filtering through trees, audience seated on blankets on the grass, calm and cozy hygge atmosphere, muted earthy color palette of cream beige forest green and warm wood tones, photographic editorial style, no readable text, no logos."
+    },
+    {
+      "filename": "band-natural-1.webp",
+      "size": "800x800",
+      "prompt": "Nordic editorial photograph of a folk band acoustic setup on a wooden stage with natural light, warm wood tones, no faces clearly visible, intimate and cozy, no text. Square."
+    },
+    {
+      "filename": "band-natural-2.webp",
+      "size": "800x800",
+      "prompt": "Nordic editorial photo of a dream-pop band silhouette against soft forest light, warm calm tones, no faces, no text. Square."
+    },
+    {
+      "filename": "band-natural-3.webp",
+      "size": "800x800",
+      "prompt": "Nordic editorial photo of musicians and instruments arranged thoughtfully on wood floor, natural light, minimalist composition, no faces, no text. Square."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Nordic photo of a wooden outdoor stage in a forest clearing, large pine trees, warm afternoon light, no people, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Nordic photo of a wooden beach stage on a quiet sandy shore with driftwood, calm sea, sunset, no people, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Nordic photo of a cozy wooden cabin interior with hanging lights, small stage, warm tungsten light, blankets on benches, no people, no text."
+    }
+  ]
+}

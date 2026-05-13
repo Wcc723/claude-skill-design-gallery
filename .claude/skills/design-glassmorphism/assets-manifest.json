@@ -1,0 +1,40 @@
+{
+  "style": "Glassmorphism",
+  "images": [
+    {
+      "filename": "hero-bg.webp",
+      "size": "1600x900",
+      "prompt": "Aerial wide shot of a coastal music festival at dusk on the eastern coast of Taiwan (Dulan Bay), warm purple-pink-orange sunset sky bleeding into deep indigo, mountains in distance, stage lights starting to glow over a crowd silhouette. Cinematic, soft mist rising from the ocean, slight motion blur on lights, dreamy atmosphere. Photographic style, ultra-realistic, vibrant gradient sky perfect for glassmorphism overlay. No text, no logos."
+    },
+    {
+      "filename": "lineup-art-1.webp",
+      "size": "1024x1024",
+      "prompt": "Abstract album-cover style portrait of a post-rock band silhouette on a foggy mountain stage, deep indigo with magenta and amber light rays, ethereal, no faces visible, painterly digital art. Square 1:1. No text."
+    },
+    {
+      "filename": "lineup-art-2.webp",
+      "size": "1024x1024",
+      "prompt": "Dreamy abstract art of a dream-pop band performing at night, pastel pink and lavender gradient, soft glowing particles, silhouettes blending into clouds, ethereal japanese aesthetic, no faces, no text. Square 1:1."
+    },
+    {
+      "filename": "lineup-art-3.webp",
+      "size": "1024x1024",
+      "prompt": "Abstract noise-rock band visual: jagged purple and electric blue light streaks across a black ocean, distorted radio waves, intense vibrant, painterly digital art, no text, no logos. Square 1:1."
+    },
+    {
+      "filename": "stage-main.webp",
+      "size": "1200x800",
+      "prompt": "Photo of a large outdoor music festival main stage at twilight, surrounded by green Taiwanese coastal mountains, audience in foreground, warm magenta and orange stage lights, very atmospheric, cinematic, slight haze. No visible text or logos."
+    },
+    {
+      "filename": "stage-sea.webp",
+      "size": "1200x800",
+      "prompt": "Smaller beach stage at sunset on a Taiwan eastern coast beach, people barefoot in sand watching, golden hour light, palm trees on the sides, intimate vibe. Photographic, no text."
+    },
+    {
+      "filename": "stage-tribe.webp",
+      "size": "1200x800",
+      "prompt": "Cozy wooden warehouse converted indoor stage, warm tungsten lights, small audience, rustic wooden beams, intimate livehouse atmosphere, indie band silhouette on stage, no text, photographic."
+    }
+  ]
+}

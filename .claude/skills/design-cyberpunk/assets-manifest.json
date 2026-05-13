@@ -1,0 +1,40 @@
+{
+  "style": "Cyberpunk",
+  "images": [
+    {
+      "filename": "hero-cityscape.webp",
+      "size": "1600x900",
+      "prompt": "A cyberpunk night scene: a futuristic Taiwanese east coast where the mountain meets the sea, transformed into a neon dystopia. Towering holographic stage rigs, magenta and cyan neon signs in Japanese katakana and Chinese, heavy rain, reflective wet ground, distant chrome speakers floating in the sky. Blade Runner Akira aesthetic, no real readable text. Wide aspect ratio."
+    },
+    {
+      "filename": "lineup-art-1.webp",
+      "size": "800x800",
+      "prompt": "Cyberpunk album cover: a chrome whale silhouette with neon magenta circuits embedded, deep purple-black background, rain streaks, no text. Square."
+    },
+    {
+      "filename": "lineup-art-2.webp",
+      "size": "800x800",
+      "prompt": "Cyberpunk album cover: a foggy neon highway with cyan reflective lines, retro-future vehicles silhouetted, no text. Square."
+    },
+    {
+      "filename": "lineup-art-3.webp",
+      "size": "800x800",
+      "prompt": "Cyberpunk album cover: a swirling holographic eye of typhoon in magenta and cyan over a black background, no text. Square."
+    },
+    {
+      "filename": "stage-main.webp",
+      "size": "1200x700",
+      "prompt": "Cyberpunk concert stage: a giant LED video wall on a mountain backdrop, magenta and cyan neon, lasers, fog, no people visible, no text."
+    },
+    {
+      "filename": "stage-sea.webp",
+      "size": "1200x700",
+      "prompt": "Cyberpunk beach stage at night with holographic projections, neon palm trees, rain, no people visible, no text."
+    },
+    {
+      "filename": "stage-tribe.webp",
+      "size": "1200x700",
+      "prompt": "Cyberpunk small underground venue: concrete walls covered in neon graffiti, magenta and green lights, no people visible, no text."
+    }
+  ]
+}

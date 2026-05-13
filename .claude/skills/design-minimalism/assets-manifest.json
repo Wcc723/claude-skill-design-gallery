@@ -1,0 +1,30 @@
+{
+  "style": "Minimalism",
+  "images": [
+    {
+      "filename": "hero-mark.webp",
+      "size": "800x800",
+      "prompt": "Pure minimalist black and white abstract mark for a music festival: a single thin horizontal line interrupted by a small solid circle, surrounded by very generous white space. Subtle, refined, museum poster aesthetic. Pure white background, deep black ink. No text, no logos. Square."
+    },
+    {
+      "filename": "hero-line.webp",
+      "size": "1200x400",
+      "prompt": "Minimalist black ink horizontal landscape silhouette of Taiwan east coast mountains and ocean, very simple, single ink stroke style, mostly white space, sumi-e influenced. No text, no figures."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "Minimalist black and white photograph of a single empty stage at dawn, vast empty surroundings, lots of negative space, fine grain, gelatin silver aesthetic, no people, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "Minimalist black and white photo of a wide empty beach with a single small wooden structure in the distance, immense sky, lots of negative space, no people, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "Minimalist black and white photo of an old wooden warehouse interior, single beam of light from skylight, empty floor, no people, no text."
+    }
+  ]
+}

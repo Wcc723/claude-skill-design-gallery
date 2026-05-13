@@ -1,0 +1,40 @@
+{
+  "style": "Vaporwave",
+  "images": [
+    {
+      "filename": "hero-statue.webp",
+      "size": "1200x1200",
+      "prompt": "Vaporwave aesthetic image: a classical Greek marble bust (David or Apollo style) floating against a glitchy gradient sunset of magenta, pink, and cyan, scanlines overlay, palm tree silhouettes, retro 90s anime style, low-resolution VHS feel. No text, no logos. Square."
+    },
+    {
+      "filename": "stage-aesthetic-1.webp",
+      "size": "1000x700",
+      "prompt": "Vaporwave landscape: outdoor music stage as a chrome 3D pyramid against a pink-purple sunset sky, neon grid floor extending into horizon, palm trees, retro CGI 1995 style. No text."
+    },
+    {
+      "filename": "stage-aesthetic-2.webp",
+      "size": "1000x700",
+      "prompt": "Vaporwave landscape: a beach stage at sunset with a giant geometric pink sun on the horizon, scanlines, retro CGI, deserted beach. No text."
+    },
+    {
+      "filename": "stage-aesthetic-3.webp",
+      "size": "1000x700",
+      "prompt": "Vaporwave interior: small wooden room with a single CRT TV displaying static, neon pink and cyan lights, plastic palm tree, retro window 95 vibe. No text."
+    },
+    {
+      "filename": "lineup-tape-1.webp",
+      "size": "800x800",
+      "prompt": "Vaporwave VHS tape album art: floating cyan dolphin, magenta gradient background, scanlines, retro 90s logo aesthetic, no text. Square."
+    },
+    {
+      "filename": "lineup-tape-2.webp",
+      "size": "800x800",
+      "prompt": "Vaporwave VHS tape album art: pink retro CGI sunset with hot pink rays, geometric shapes, scanlines, no text. Square."
+    },
+    {
+      "filename": "lineup-tape-3.webp",
+      "size": "800x800",
+      "prompt": "Vaporwave VHS tape album art: floating chrome sphere with rainbow refraction over a pink-cyan grid, scanlines, no text. Square."
+    }
+  ]
+}

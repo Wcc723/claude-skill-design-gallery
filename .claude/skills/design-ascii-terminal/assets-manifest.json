@@ -1,0 +1,10 @@
+{
+  "style": "ASCII Terminal",
+  "images": [
+    {
+      "filename": "crt-photo.webp",
+      "size": "1000x700",
+      "prompt": "A close-up photograph of a vintage CRT monochrome computer terminal screen glowing in green phosphor against a dark room, slight scanlines visible on the screen, intimate retrocomputing aesthetic, no readable text or letters visible (screen shows abstract glowing patterns), no logos."
+    }
+  ]
+}

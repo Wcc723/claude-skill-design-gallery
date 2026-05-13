@@ -1,0 +1,35 @@
+{
+  "style": "Brutalism",
+  "images": [
+    {
+      "filename": "stage-raw-1.webp",
+      "size": "1000x700",
+      "prompt": "Harsh black and white documentary photograph of a raw outdoor concrete music stage at night, single harsh stage light from above, gritty texture, unforgiving contrast, no people clearly visible, no text. Brutalist architecture vibe."
+    },
+    {
+      "filename": "stage-raw-2.webp",
+      "size": "1000x700",
+      "prompt": "Harsh black and white documentary photograph of a raw beach with a makeshift wooden stage and exposed cables, gritty texture, harsh contrast, no people, no text."
+    },
+    {
+      "filename": "stage-raw-3.webp",
+      "size": "1000x700",
+      "prompt": "Harsh black and white documentary photograph of a raw industrial warehouse interior with a small stage, exposed pipes, brutalist concrete walls, no people, no text."
+    },
+    {
+      "filename": "band-raw-1.webp",
+      "size": "800x800",
+      "prompt": "Harsh black and white documentary photograph of a single microphone on a empty concrete stage, high contrast, photocopy aesthetic, no text. Square."
+    },
+    {
+      "filename": "band-raw-2.webp",
+      "size": "800x800",
+      "prompt": "Harsh black and white documentary photograph of stacked speakers in a raw warehouse, high contrast, no text. Square."
+    },
+    {
+      "filename": "band-raw-3.webp",
+      "size": "800x800",
+      "prompt": "Harsh black and white documentary photograph of crumpled concert posters on a brutalist concrete wall, high contrast, no readable text. Square."
+    }
+  ]
+}

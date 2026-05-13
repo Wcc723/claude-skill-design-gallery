@@ -1,0 +1,40 @@
+{
+  "style": "Material 3 / Material You",
+  "images": [
+    {
+      "filename": "hero.webp",
+      "size": "1200x1200",
+      "prompt": "A warm bright photograph of an outdoor music festival audience at golden hour on a Taiwanese east coast beach, sunlight reflecting off the ocean, warm amber-orange-coral palette dominant, friendly and approachable, slight bokeh on lights, no visible text or logos. Photorealistic, suitable for a Google product hero image."
+    },
+    {
+      "filename": "band-1.webp",
+      "size": "800x600",
+      "prompt": "Photo of an indie post-rock band guitarist silhouette against a stage with amber spotlights, warm tones, soft bokeh background, no faces clearly visible, professional concert photography, no text."
+    },
+    {
+      "filename": "band-2.webp",
+      "size": "800x600",
+      "prompt": "Photo of a dream-pop band performing under pastel pink stage lights, soft shoegaze atmosphere, no clear faces, professional concert photography, no text."
+    },
+    {
+      "filename": "band-3.webp",
+      "size": "800x600",
+      "prompt": "Photo of a noise-rock band with intense red and blue lights, dynamic motion, no clear faces, professional concert photography, no text."
+    },
+    {
+      "filename": "stage-main.webp",
+      "size": "1000x700",
+      "prompt": "Photo of an outdoor festival main stage with amber backlit lights, mountains and ocean in distance, warm and inviting, no text, photographic style."
+    },
+    {
+      "filename": "stage-beach.webp",
+      "size": "1000x700",
+      "prompt": "Photo of a beach stage during golden sunset, audience standing on sand, warm tones, no text, photographic."
+    },
+    {
+      "filename": "stage-tribe.webp",
+      "size": "1000x700",
+      "prompt": "Photo of a small intimate wooden warehouse stage with warm tungsten lighting, indie crowd, no clear faces, no text."
+    }
+  ]
+}

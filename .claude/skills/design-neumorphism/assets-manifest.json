@@ -1,0 +1,40 @@
+{
+  "style": "Neumorphism",
+  "images": [
+    {
+      "filename": "hero-illust.webp",
+      "size": "1200x900",
+      "prompt": "A soft 3D rendered illustration of a coastal music festival scene in pastel cream and beige tones, gentle morning light. Sculpted clay-like style with smooth shadows, no harsh edges. Tiny mountains, a stage with rounded soft shapes, soft pillows of clouds. All in one tonal range of warm off-white to gentle gray. No text, no logos. Minimal, calm, like soft clay diorama."
+    },
+    {
+      "filename": "band-portrait-1.webp",
+      "size": "800x800",
+      "prompt": "Soft 3D clay portrait silhouette of a post-rock band on stage, monochrome warm cream-gray palette, sculpted soft shapes, gentle inset and outset shadows, indie album cover aesthetic, no faces, no text. Square."
+    },
+    {
+      "filename": "band-portrait-2.webp",
+      "size": "800x800",
+      "prompt": "Soft 3D clay portrait of a dream-pop band silhouette, beige and pale lavender pastel, sculpted soft shapes, calm meditative, no faces, no text. Square."
+    },
+    {
+      "filename": "band-portrait-3.webp",
+      "size": "800x800",
+      "prompt": "Soft 3D clay portrait of a noise-rock band silhouette with abstract speaker stack, monochrome warm gray with single accent of muted brick red, sculpted, no faces no text. Square."
+    },
+    {
+      "filename": "venue-main.webp",
+      "size": "1000x700",
+      "prompt": "Soft 3D illustration of a main outdoor stage, rounded sculpted forms, beige and cream palette, soft inset shadows, peaceful morning vibe. No text."
+    },
+    {
+      "filename": "venue-beach.webp",
+      "size": "1000x700",
+      "prompt": "Soft 3D illustration of a beach side stage with sand dunes, warm cream and pale ochre, sculpted soft forms, no text."
+    },
+    {
+      "filename": "venue-tribe.webp",
+      "size": "1000x700",
+      "prompt": "Soft 3D illustration of a small wooden warehouse stage interior, warm cream, soft sculpted clay aesthetic, no text."
+    }
+  ]
+}

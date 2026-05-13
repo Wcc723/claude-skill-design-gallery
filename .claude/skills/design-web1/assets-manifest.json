@@ -1,0 +1,30 @@
+{
+  "style": "Web 1.0",
+  "images": [
+    {
+      "filename": "banner-gif.webp",
+      "size": "800x200",
+      "prompt": "A pixelated 1996-era animated banner style: rainbow gradient text effect on black background with stars scattered around, looks like an old animated GIF from a Geocities personal homepage, low-res, 256-color palette aesthetic. No actual letters visible — just decorative banner. Wide aspect ratio."
+    },
+    {
+      "filename": "construction.webp",
+      "size": "400x400",
+      "prompt": "A retro 90s 'under construction' style graphic: yellow caution triangle with hard hat icon, low resolution pixelated, simple cartoon, no actual text. Square, 256-color palette aesthetic."
+    },
+    {
+      "filename": "stage-pixel-1.webp",
+      "size": "600x400",
+      "prompt": "Pixel-art style image of an outdoor music stage at night, 16-bit aesthetic, retro game style, no text, no people clearly visible. Low resolution feel."
+    },
+    {
+      "filename": "stage-pixel-2.webp",
+      "size": "600x400",
+      "prompt": "Pixel-art style image of a beach stage at sunset, 16-bit aesthetic, retro game style, no text, no people clearly visible."
+    },
+    {
+      "filename": "stage-pixel-3.webp",
+      "size": "600x400",
+      "prompt": "Pixel-art style image of a wooden warehouse interior music venue, 16-bit aesthetic, no text, no people clearly visible."
+    }
+  ]
+}
