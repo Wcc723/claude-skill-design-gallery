@@ -1,21 +1,54 @@
 # Claude Code Skill 設計風格圖鑑 · 島嶼共鳴 2026
 
-> 一個音樂節，25 種設計語言。
-> 由 Claude Code 主執行緒撰寫 Skill，再由 SubAgent 透過 Skill 完成單檔網頁的示範作品集。
+> 一個音樂節，**40 種設計語言**。
+> 由 Claude Code 主執行緒撰寫 Skill，再交給 SubAgent 透過 Skill 完成單檔網頁。
+> 內容相同、視覺各異——這就是設計風格的本體。
+
+🌐 **線上瀏覽**：[www.casper.tw/claude-skill-design-gallery](https://www.casper.tw/claude-skill-design-gallery/)
+
+![Claude Code Skill 設計風格圖鑑封面](./docs/cover.webp)
+
+---
 
 ## 這是什麼
 
-這個專案展示一個可規模化的設計工作流：
+40 份單檔 HTML 網頁，每一份都是同一個虛構音樂節「**島嶼共鳴 2026**」（12 樂團 / 3 舞台 / 3 票價 / 9 贊助商 / 9 個標準區塊），但用 40 種**完全不同的設計語言**重新詮釋。
 
-1. **共用內容腦** — `.claude/content/festival-brief.md` 定義虛構音樂節「島嶼共鳴 2026」的所有內容（12 組樂團、3 個舞台、3 種票價、9 個贊助商、7 條 FAQ）
-2. **設計風格 Skill** — `.claude/skills/design-*/` 各自描述一種設計風格的完整規範（設計 token、字體、構圖規則、do/don't、reference snippets）
-3. **SubAgent 製造工** — `.claude/agents/style-page-builder.md` 接 JSON 輸入，讀 Skill 與 brief，吐出單檔 HTML
-4. **AI 圖像資產** — `scripts/gen-images.mjs` 透過 codex CLI 內建 `imagegen` 工具，依 `assets-manifest.json` 批次產出每個風格的圖像素材
-5. **品質驗證** — `scripts/verify-page.mjs` 用 cheerio 自動檢查 9 區塊、12 樂團名、3 票價、無外部 CDN
-6. **截圖** — `scripts/screenshot-pages.mjs` 用 Playwright 預先截每頁縮圖
-7. **Vue Gallery** — 主頁 (`src/App.vue`) 以縮圖卡片牆展示 25 份作品，可依分類 filter
+- 🎨 **第一輪 · 25 種靜態風格**：玻璃擬態、新擬物化、Material You、極簡、暗黑、蒸氣波、Y2K、Web 1.0、美式復古印刷、Synthwave、包浩斯、野獸派、故障藝術、賽博龐克、構成主義、ASCII 終端機、雜誌排版、日式禪意、中國風國潮、北歐極簡、瑞士國際、台灣廟會、等距 3D、手繪塗鴉、漸層 Mesh
+- 🎬 **第二輪 · 15 種動態效果**：視差滾動 × 3、Scroll-driven × 3、入場動畫 × 3、循環動畫 × 3、指標互動 × 3
 
-內容相同、視覺各異——這就是設計風格的本體。
+每份 Skill 都是**可下載的單一目錄** `.claude/skills/<slug>/`——複製到任意 Claude Code 專案即可被 Claude 召喚並重現該風格網頁。
+
+![動態效果分頁](./docs/gallery-motion.webp)
+
+---
+
+## 工作流
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  主執行緒 (Claude Code)                                    │
+│                                                            │
+│  1. 寫 .claude/skills/<slug>/SKILL.md                     │
+│     ↓                                                      │
+│  2. scripts/gen-images.mjs → codex imagegen 批次產圖      │
+│     ↓                                                      │
+│  3. Agent(style-page-builder) 派 SubAgent                 │
+│     讀 SKILL.md + festival-brief.md                       │
+│     → public/works/<slug>/index.html  (≤ 200 KB)          │
+│     ↓                                                      │
+│  4. scripts/verify-page.mjs 驗 9 區塊 / 12 樂團 / 票價 ... │
+│     scripts/screenshot-pages.mjs 截縮圖                   │
+│     scripts/record-webm.mjs 錄 3s 動態 webm (round 2)     │
+│     ↓                                                      │
+│  5. 更新 src/data/works.ts 標 shipped                     │
+│     Vue gallery 自動列出新卡                              │
+└────────────────────────────────────────────────────────────┘
+```
+
+關鍵原則：**先寫 Skill 再呼叫 SubAgent**。Skill 的「可用性」是被 SubAgent 透過它穩定產出網頁的能力來驗證的。
+
+---
 
 ## 啟動
 
@@ -26,95 +59,63 @@ npm run dev
 
 開啟 http://localhost:5173 即可瀏覽圖鑑。
 
+### 常用指令
+
+| 指令 | 用途 |
+| --- | --- |
+| `npm run dev` | 啟動 Vite 開發伺服器 |
+| `npm run build` | 產 production build |
+| `npm run preview` | 預覽 build 結果（含 base path） |
+| `npm run deploy` | build + 推到 gh-pages 分支（手動部署備案） |
+| `node scripts/verify-page.mjs --all` | 驗證 40 份頁面（9 區塊、樂團名、票價、無 CDN、motion 檢查） |
+| `node scripts/screenshot-pages.mjs --slug <slug>` | 截單張縮圖 |
+| `node scripts/record-webm.mjs --slug motion-<slug>` | 錄 3s WebM hover 預覽 |
+| `node scripts/gen-images.mjs --slug <slug>` | 透過 codex imagegen 批次產圖 |
+| `node scripts/cover-shot.mjs` | 為 README 拍封面 |
+
+---
+
 ## 部署到 GitHub Pages
 
-**建議儲存庫名稱**：`claude-skill-design-gallery`（若用其他名稱，調整 `vite.config.ts` 內的 `PROD_BASE` 或設定環境變數 `VITE_BASE=/your-repo-name/`）
+**儲存庫名稱**：`claude-skill-design-gallery`（若改名，調整 `vite.config.ts` 的 `PROD_BASE` 或設環境變數 `VITE_BASE=/your-repo/`）
 
-兩種部署方式：
+### 自動部署（推薦）
 
-### 自動部署（GitHub Actions，推薦）
+`.github/workflows/deploy.yml` 已配置——push 到 `main` 即觸發：
 
-push 到 `main` 即觸發 `.github/workflows/deploy.yml`：
-1. 在 GitHub repo 設定 → Pages → Source 選 **GitHub Actions**
+1. GitHub repo → Settings → Pages → Source 選 **GitHub Actions**
 2. push 一次，等 Actions 跑完
-3. URL：`https://<username>.github.io/<repo-name>/`
+3. URL：`https://<username>.github.io/<repo>/` 或自訂 domain
 
-Action 會自動把 `VITE_BASE` 設為 `/<repo-name>/`，免改檔。
+Action 會自動把 `VITE_BASE` 設成 `/<repository.name>/`，免改檔。
 
-### 手動部署（gh-pages 套件）
+### 手動部署
 
 ```bash
 npm run deploy
 ```
 
-會 build 後把 `dist/` push 到 `gh-pages` 分支。需在 GitHub repo 設定 Pages → Source 選 `gh-pages` 分支。
+build 後把 `dist/` 推到 `gh-pages` 分支。在 Pages → Source 選 `gh-pages`。
 
-## 重生作品
+---
 
-```bash
-# 為某個風格生成 AI 圖像（需 codex CLI 已登入）
-node scripts/gen-images.mjs --slug design-glassmorphism --parallel 2
+## 下載任一 Skill 給自己用
 
-# 用 SubAgent 重建頁面（在 Claude Code 內透過 style-page-builder agent）
+兩種方式：
 
-# 驗證頁面
-node scripts/verify-page.mjs --slug design-glassmorphism
-node scripts/verify-page.mjs --all
-
-# 重新截縮圖
-node scripts/screenshot-pages.mjs --slug design-glassmorphism
-node scripts/screenshot-pages.mjs --all
-```
-
-## 下載並使用某個 Skill
-
-每個 `.claude/skills/design-<slug>/` 目錄都是自足的 Skill，把整個目錄複製到任意 Claude Code 專案的 `.claude/skills/` 內即可由 Claude 召喚使用。
+1. **線上 drawer 一鍵複製**：在 [圖鑑](https://www.casper.tw/claude-skill-design-gallery/) 任一張卡點「📄 查看 Skill」，drawer 滑出 SKILL.md 全文，按右上「複製 SKILL.md」。
+2. **複製整個目錄**：把 `.claude/skills/design-<slug>/` 或 `.claude/skills/motion-<slug>/` 整個 copy 到你自己專案的 `.claude/skills/` 即可被 Claude 召喚。
 
 每個 Skill 包含：
-- `SKILL.md` — 風格哲學、design token、layout rule、reference snippets
-- `assets-manifest.json` — AI 圖像生成 prompt 清單
-- （可選）`references/` — 補充材料
+- `SKILL.md` — 風格哲學 / design token / typography / layout / do-don't / reference snippets
+- `assets-manifest.json` — AI 圖像生成 prompt 清單（給 codex imagegen 用）
+- （可選）`references/snippets.md` — 補充材料
 
-## 25 個風格
+---
 
-### 主流 UI
-- `design-glassmorphism` 玻璃擬態
-- `design-neumorphism` 新擬物化
-- `design-material-3` Material You
-- `design-minimalism` 極簡主義
-- `design-dark-mode` 沉浸暗黑
+## 標準 9 區塊
 
-### 復古懷舊
-- `design-vaporwave` 蒸氣波
-- `design-y2k` Y2K 千禧
-- `design-web1` 90s Web 1.0
-- `design-american-retro-print` 美式復古印刷
-- `design-synthwave` 80s Synthwave
-- `design-bauhaus` 包浩斯
-
-### 實驗前衛
-- `design-brutalism` 野獸派
-- `design-glitch` 故障藝術
-- `design-cyberpunk` 賽博龐克
-- `design-constructivism` 構成主義
-- `design-ascii-terminal` ASCII 終端機
-- `design-editorial` 雜誌排版
-
-### 文化在地
-- `design-wabi-sabi` 日式禪意
-- `design-chinoiserie` 中國風國潮
-- `design-scandinavian` 北歐極簡
-- `design-swiss-international` 瑞士國際
-- `design-taiwan-temple` 台灣廟會
-
-### 裝飾性
-- `design-isometric-3d` 等距 3D
-- `design-hand-drawn` 手繪塗鴉
-- `design-gradient-mesh` 漸層 Mesh
-
-## 9 個標準區塊
-
-所有 25 頁都使用同一份內容、同一份 HTML 區塊結構：
+所有 40 頁都用同一份 HTML 結構骨架，每個區塊用 `<section data-block="<id>">` 包起來：
 
 | # | data-block | 內容 |
 |---|---|---|
@@ -130,51 +131,36 @@ node scripts/screenshot-pages.mjs --all
 
 差異**只在視覺設計**，便於並列比較不同風格的詮釋。
 
+---
+
+## 動態風格的硬性規範
+
+第二輪 15 個 motion-* 風格除了通用契約外，**必須**：
+
+1. 純 vanilla JS / CSS / IntersectionObserver，**禁用** GSAP / Lottie / 任何外部動畫庫
+2. 必含 `@media (prefers-reduced-motion: reduce)` 區塊
+3. scroll listener 必須 `passive: true`、配合 `requestAnimationFrame` 節流
+4. 動畫只能動 `transform` + `opacity`（禁止 `top/left/width/height` 觸發 reflow）
+5. JS 失敗或 reduced motion 模式下，內容仍須完整可讀
+6. `<body data-motion-type="parallax|scroll-driven|reveal|loop|pointer">` 必須存在
+7. inline `<script>` ≤ 8 KB
+8. 單檔總大小仍 ≤ 200 KB
+
+完整契約見 [`.claude/agents/style-page-builder.md`](./.claude/agents/style-page-builder.md)。
+
+---
+
 ## 技術棧
 
 - **Vue 3.5** + **Vite 8** + **TypeScript**
 - **Cheerio** — HTML 解析驗證
 - **Sharp** — 圖像處理
-- **Playwright** — 自動截圖
+- **Playwright + ffmpeg** — 自動截圖 / 錄 WebM
+- **codex CLI** — 透過內建 `imagegen` 工具產 AI 圖
 
-## 工作流圖示
-
-```
-┌────────────────────────────────────────────────────────────┐
-│  主執行緒 (Claude Code)                                    │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  1. 寫 SKILL.md + assets-manifest.json              │  │
-│  └──────────────────────────────────────────────────────┘  │
-│             │                                              │
-│             ▼                                              │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  2. 跑 scripts/gen-images.mjs                       │  │
-│  │     → codex exec → imagegen tool                    │  │
-│  │     → public/works/<slug>/assets/*.webp             │  │
-│  └──────────────────────────────────────────────────────┘  │
-│             │                                              │
-│             ▼                                              │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  3. 派 style-page-builder SubAgent                  │  │
-│  │     輸入 { slug, skill_path, brief_path, ... }      │  │
-│  │     → 產出 public/works/<slug>/index.html           │  │
-│  └──────────────────────────────────────────────────────┘  │
-│             │                                              │
-│             ▼                                              │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  4. verify-page.mjs / screenshot-pages.mjs         │  │
-│  │     → public/works/<slug>/thumb.webp                │  │
-│  │     → 確認 9 區塊 / 12 樂團 / 3 票價 / 無 CDN       │  │
-│  └──────────────────────────────────────────────────────┘  │
-│             │                                              │
-│             ▼                                              │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  5. 更新 src/data/works.ts 標 shipped               │  │
-│  │     gallery 主頁卡片自動顯示                        │  │
-│  └──────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────┘
-```
+---
 
 ## License
 
-作品集中所有樂團名、贊助商名、節慶名皆為虛構，與任何實際存在的組織無關。
+所有樂團名、贊助商名、節慶名皆為虛構，與任何實際存在的組織無關。
+作品本身與 Skill 內容可自由使用、修改、二創。

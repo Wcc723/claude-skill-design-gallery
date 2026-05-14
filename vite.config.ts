@@ -10,9 +10,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 const PROD_BASE = process.env.VITE_BASE ?? '/claude-skill-design-gallery/'
 
 // https://vite.dev/config/
-export default defineConfig(({ command, mode }) => ({
-  // command === 'serve' 在 dev 與 preview 都會觸發；用 mode 區分
-  // (vite preview 預設 mode = 'production')
+export default defineConfig(({ mode }) => ({
+  // vite dev = mode 'development'、vite build / preview = mode 'production'
   base: mode === 'production' ? PROD_BASE : '/',
   plugins: [
     vue(),
