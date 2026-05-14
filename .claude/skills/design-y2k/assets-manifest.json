@@ -1,0 +1,40 @@
+{
+  "style": "Y2K Millennium",
+  "images": [
+    {
+      "filename": "hero-emblem.webp",
+      "size": "1200x1200",
+      "prompt": "A glossy 3D Y2K-era emblem: a chrome silver butterfly or sparkle star with hot pink and electric blue gradients, suspended over a soft pastel pink-blue gradient sky with floating glassy bubbles, frutiger aero aesthetic, 2002 product launch ad style. Pure glossy plastic feel. No text. Square."
+    },
+    {
+      "filename": "band-disc-1.webp",
+      "size": "800x800",
+      "prompt": "Y2K aesthetic CD/disc artwork: a holographic chrome heart over pastel pink gradient with star sparkles, frutiger aero style, glossy plastic feel, no text, square."
+    },
+    {
+      "filename": "band-disc-2.webp",
+      "size": "800x800",
+      "prompt": "Y2K aesthetic CD/disc artwork: a 3D blue bubble with rainbow refraction over pastel blue sky, glossy, no text, square."
+    },
+    {
+      "filename": "band-disc-3.webp",
+      "size": "800x800",
+      "prompt": "Y2K aesthetic CD/disc artwork: a chrome silver sneaker against pastel pink-blue gradient, glossy plastic, 2002 style, no text, square."
+    },
+    {
+      "filename": "stage-y2k-1.webp",
+      "size": "1000x700",
+      "prompt": "Y2K aesthetic: an outdoor festival stage rendered as glossy chrome silver and pink plastic, soft pastel sky with bubbles, no people, no text, 2002 ad style."
+    },
+    {
+      "filename": "stage-y2k-2.webp",
+      "size": "1000x700",
+      "prompt": "Y2K aesthetic: a beach stage as a transparent blue plastic dome on sand, pastel cyan sky with star sparkles, no people, no text."
+    },
+    {
+      "filename": "stage-y2k-3.webp",
+      "size": "1000x700",
+      "prompt": "Y2K aesthetic: a small wooden indoor stage with hot pink chrome accents, butterflies on the walls, pastel pink ambient lighting, no people, no text."
+    }
+  ]
+}

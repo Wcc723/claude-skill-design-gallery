@@ -1,0 +1,25 @@
+{
+  "style": "Bauhaus",
+  "images": [
+    {
+      "filename": "hero-composition.webp",
+      "size": "1200x1200",
+      "prompt": "A Bauhaus art composition: a big bold red circle, a deep cobalt blue triangle, and a saturated yellow square arranged asymmetrically on a cream off-white paper background, slight paper grain texture, in the spirit of Herbert Bayer / Wassily Kandinsky / László Moholy-Nagy poster art. Pure geometric, no realism. No text, no letters. Square."
+    },
+    {
+      "filename": "geom-1.webp",
+      "size": "800x800",
+      "prompt": "Bauhaus-style composition with overlapping red circle and blue triangle on cream paper, abstract, no text. Square."
+    },
+    {
+      "filename": "geom-2.webp",
+      "size": "800x800",
+      "prompt": "Bauhaus-style composition with yellow square crossed by a thin black line and a small blue dot on cream paper, abstract, no text. Square."
+    },
+    {
+      "filename": "geom-3.webp",
+      "size": "800x800",
+      "prompt": "Bauhaus-style composition with concentric red and yellow circles and a black bar on cream paper, abstract, no text. Square."
+    }
+  ]
+}

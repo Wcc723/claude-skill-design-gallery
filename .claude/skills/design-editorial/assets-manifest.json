@@ -1,0 +1,40 @@
+{
+  "style": "Editorial Magazine",
+  "images": [
+    {
+      "filename": "cover-photo.webp",
+      "size": "1400x1800",
+      "prompt": "An editorial magazine cover photograph: a wide-angle composition of a music festival audience at dusk on a Taiwanese east coast beach, taken by a Monocle / Wallpaper magazine staff photographer. Cinematic warm light, intentional composition with rule of thirds, audience back-lit by stage. Documentary editorial style, no posed faces. Tall poster aspect ratio. No text or logos."
+    },
+    {
+      "filename": "band-portrait-1.webp",
+      "size": "900x1100",
+      "prompt": "Editorial magazine band portrait: a post-rock guitarist on stage, dramatic side lighting, captured mid-performance, no clear face visible (back lit), Kinfolk-style intimate framing, no text."
+    },
+    {
+      "filename": "band-portrait-2.webp",
+      "size": "900x1100",
+      "prompt": "Editorial magazine band portrait: a dream-pop singer with soft pink stage lights, silhouetted profile, intimate atmosphere, no clear face, no text."
+    },
+    {
+      "filename": "band-portrait-3.webp",
+      "size": "900x1100",
+      "prompt": "Editorial magazine band portrait: a noise-rock musician backlit by stage strobe, motion blur on instrument, no clear face, no text."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1200x800",
+      "prompt": "Editorial photograph of an outdoor mountain stage at dusk on the Taiwanese east coast, wide framing, audience small in foreground, mountains and ocean in background, golden hour, photo journalism aesthetic, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1200x800",
+      "prompt": "Editorial photograph of a beach stage at sunset, soft light, small intimate audience, calm ocean, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1200x800",
+      "prompt": "Editorial photograph of an intimate wooden warehouse music venue interior, warm tungsten lighting, atmospheric, no people clearly visible, no text."
+    }
+  ]
+}

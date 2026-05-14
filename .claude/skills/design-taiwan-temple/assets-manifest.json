@@ -1,0 +1,40 @@
+{
+  "style": "Taiwan Temple Carnival",
+  "images": [
+    {
+      "filename": "hero-temple.webp",
+      "size": "1400x900",
+      "prompt": "A vibrant photograph of a traditional Taiwanese temple festival at night: glowing red and gold lanterns hanging in rows, ornate golden temple roof in background, hand-painted neon signs in Chinese characters glowing yellow and pink, festive crowd silhouettes, food stalls with neon lights. Warm intense saturation, festive atmosphere, no readable text. Photographic style."
+    },
+    {
+      "filename": "lantern-1.webp",
+      "size": "800x800",
+      "prompt": "A close-up photograph of a single bright red traditional Chinese lantern hanging at dusk with gold tassels, soft glow, ornate detail, no text, square."
+    },
+    {
+      "filename": "lantern-2.webp",
+      "size": "800x800",
+      "prompt": "A close-up photograph of a row of pink and red paper lanterns at a Taiwanese night market with neon glow, square, no text."
+    },
+    {
+      "filename": "lantern-3.webp",
+      "size": "800x800",
+      "prompt": "A photograph of a golden incense burner with smoke at a Taiwanese temple, warm tones, square, no text."
+    },
+    {
+      "filename": "stage-1.webp",
+      "size": "1000x700",
+      "prompt": "A photograph of a traditional Taiwanese opera stage (歌仔戲) at night with bright red and gold ornate decorations, multiple lanterns, no people, no text."
+    },
+    {
+      "filename": "stage-2.webp",
+      "size": "1000x700",
+      "prompt": "A photograph of a Taiwanese electronic float (電子琴花車) stage at a temple festival, neon lights, gold trim, no people clearly visible, no text."
+    },
+    {
+      "filename": "stage-3.webp",
+      "size": "1000x700",
+      "prompt": "A photograph of a small wooden temple opera stage with red curtains and gold trim, intimate, no people, no text."
+    }
+  ]
+}

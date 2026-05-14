@@ -1,0 +1,40 @@
+{
+  "style": "Constructivism",
+  "images": [
+    {
+      "filename": "hero-montage.webp",
+      "size": "1200x1400",
+      "prompt": "A high-contrast black-and-white documentary photograph collage of laborers and musicians performing, in the style of 1920s Soviet Constructivism photomontage (Rodchenko / El Lissitzky). Strong diagonal composition. Tall poster aspect ratio. No text."
+    },
+    {
+      "filename": "band-mono-1.webp",
+      "size": "800x800",
+      "prompt": "Black and white high contrast documentary photo of musicians on a stage, dramatic top-down angle in the spirit of Rodchenko, no faces clearly visible, no text. Square."
+    },
+    {
+      "filename": "band-mono-2.webp",
+      "size": "800x800",
+      "prompt": "Black and white high contrast photo of a singer's silhouette against a strong diagonal light, Rodchenko style, no clear faces, no text. Square."
+    },
+    {
+      "filename": "band-mono-3.webp",
+      "size": "800x800",
+      "prompt": "Black and white high contrast photo of musicians captured from a low diagonal angle, Soviet constructivist photography, no clear faces, no text. Square."
+    },
+    {
+      "filename": "stage-mono-1.webp",
+      "size": "1000x700",
+      "prompt": "Black and white high contrast photo of a large outdoor stage with industrial scaffolding, taken from a dramatic diagonal angle, no people, no text."
+    },
+    {
+      "filename": "stage-mono-2.webp",
+      "size": "1000x700",
+      "prompt": "Black and white photo of a beach stage with strong diagonal shadows, no people, no text."
+    },
+    {
+      "filename": "stage-mono-3.webp",
+      "size": "1000x700",
+      "prompt": "Black and white photo of an industrial warehouse interior with hanging lights, sharp diagonal composition, no people, no text."
+    }
+  ]
+}

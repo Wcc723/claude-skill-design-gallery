@@ -1,0 +1,40 @@
+{
+  "style": "Immersive Dark",
+  "images": [
+    {
+      "filename": "hero.webp",
+      "size": "1600x900",
+      "prompt": "Cinematic low-light photograph of a music festival audience seen from behind, silhouettes against a single pink-magenta spotlight beam piercing through fog onto a distant stage, deep black surroundings, very moody, Netflix poster aesthetic. Subtle film grain, high contrast, no text, no logos."
+    },
+    {
+      "filename": "band-1.webp",
+      "size": "900x600",
+      "prompt": "Low-light cinematic photo of a post-rock band silhouette under a single magenta spotlight, dramatic shadows, smoky atmosphere, deep blacks, no faces clearly visible, no text."
+    },
+    {
+      "filename": "band-2.webp",
+      "size": "900x600",
+      "prompt": "Low-light cinematic photo of a dream-pop band silhouette under cool teal lighting, smoke, dreamy distant feeling, no faces clearly visible, no text."
+    },
+    {
+      "filename": "band-3.webp",
+      "size": "900x600",
+      "prompt": "Low-light cinematic photo of a noise-rock band silhouette in front of a wall of stage lights, dramatic backlight, lens flare, no faces clearly visible, no text."
+    },
+    {
+      "filename": "stage-main.webp",
+      "size": "1000x650",
+      "prompt": "Cinematic low-light photo of a large outdoor festival main stage at night, single magenta beam against fog, distant mountain silhouettes, no people in foreground, no text."
+    },
+    {
+      "filename": "stage-sea.webp",
+      "size": "1000x650",
+      "prompt": "Cinematic low-light photo of a small beach stage at night, single warm spotlight on stage, dark ocean in background, very moody, no people visible, no text."
+    },
+    {
+      "filename": "stage-tribe.webp",
+      "size": "1000x650",
+      "prompt": "Cinematic low-light photo of a small wooden warehouse interior stage with a single hanging Edison bulb lighting the stage, dark wooden beams, no people, no text."
+    }
+  ]
+}

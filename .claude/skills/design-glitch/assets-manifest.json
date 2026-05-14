@@ -1,0 +1,40 @@
+{
+  "style": "Glitch Art",
+  "images": [
+    {
+      "filename": "hero-glitch.webp",
+      "size": "1600x900",
+      "prompt": "Glitch art image: a distorted photograph of a music festival audience with intense RGB chromatic aberration shift, horizontal scanlines, datamoshing pixel blocks, deep black background with electric red and cyan offsets, broken signal aesthetic, no text, no logos."
+    },
+    {
+      "filename": "stage-distort-1.webp",
+      "size": "1000x700",
+      "prompt": "Glitch art photo of an outdoor stage at night with RGB chromatic aberration, scanlines, broken transmission look, pink and cyan offsets, no text."
+    },
+    {
+      "filename": "stage-distort-2.webp",
+      "size": "1000x700",
+      "prompt": "Glitch art photo of a beach stage with extreme datamoshing, scanlines, RGB shift, no text."
+    },
+    {
+      "filename": "stage-distort-3.webp",
+      "size": "1000x700",
+      "prompt": "Glitch art photo of a small indoor venue with VHS noise, RGB shift, scanlines, no text."
+    },
+    {
+      "filename": "band-glitch-1.webp",
+      "size": "800x800",
+      "prompt": "Glitch art portrait of a band silhouette with severe pixel sorting and RGB chromatic shift, datamoshing, no faces, no text. Square."
+    },
+    {
+      "filename": "band-glitch-2.webp",
+      "size": "800x800",
+      "prompt": "Glitch art portrait of musicians silhouette with horizontal stripe distortion, pink and cyan offsets, no faces, no text. Square."
+    },
+    {
+      "filename": "band-glitch-3.webp",
+      "size": "800x800",
+      "prompt": "Glitch art portrait of stacked speakers with intense glitch artifacts, broken pixel rows, no text. Square."
+    }
+  ]
+}

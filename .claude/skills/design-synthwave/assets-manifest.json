@@ -1,0 +1,40 @@
+{
+  "style": "80s Synthwave",
+  "images": [
+    {
+      "filename": "hero-sunset.webp",
+      "size": "1600x1000",
+      "prompt": "An iconic 80s synthwave / outrun aesthetic: a giant horizontally-banded neon sun (yellow to orange to magenta) rising over a perspective grid of glowing magenta lines, deep purple-black night sky above, distant retro mountains silhouette, all in vivid synthwave palette. Cinematic, no text. Wide aspect ratio."
+    },
+    {
+      "filename": "lineup-art-1.webp",
+      "size": "800x800",
+      "prompt": "Synthwave album cover: a stylized whale silhouette in chrome flying through neon clouds with a magenta sun behind, 80s outrun palette, no text, square."
+    },
+    {
+      "filename": "lineup-art-2.webp",
+      "size": "800x800",
+      "prompt": "Synthwave album cover: a retro highway disappearing into a neon sunset with mountains, magenta and cyan lights, vintage 80s palette, no text, square."
+    },
+    {
+      "filename": "lineup-art-3.webp",
+      "size": "800x800",
+      "prompt": "Synthwave album cover: a stylized eye of typhoon spiral storm with neon lightning around it, magenta and cyan against deep purple night, no text, square."
+    },
+    {
+      "filename": "stage-main.webp",
+      "size": "1200x700",
+      "prompt": "Synthwave landscape: a music festival main stage as a retro pyramid against a neon sunset and grid floor, no people, 80s outrun style, no text."
+    },
+    {
+      "filename": "stage-sea.webp",
+      "size": "1200x700",
+      "prompt": "Synthwave landscape: a beach with neon palm trees and a horizontal-banded sun on the ocean horizon, magenta and cyan, no people, no text."
+    },
+    {
+      "filename": "stage-tribe.webp",
+      "size": "1200x700",
+      "prompt": "Synthwave interior: a small dark room with magenta and cyan neon lighting outlining wooden walls, retro 80s aesthetic, no people, no text."
+    }
+  ]
+}

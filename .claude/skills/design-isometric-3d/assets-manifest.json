@@ -1,0 +1,40 @@
+{
+  "style": "Isometric 3D",
+  "images": [
+    {
+      "filename": "hero-scene.webp",
+      "size": "1400x1200",
+      "prompt": "An isometric 3D illustration of a miniature music festival: a small cute scene viewed from 30-degree angle showing a main outdoor stage on a hill, a beach stage with palm trees on one side, a small wooden cabin venue on the other side, tiny cartoon people scattered as audience and crew, food trucks, tents, all in vibrant flat shading with soft drop shadows, warm cream background with light gridlines. Stripe / Notion / Slack illustration aesthetic. No text or logos."
+    },
+    {
+      "filename": "icon-1.webp",
+      "size": "800x800",
+      "prompt": "Isometric 3D illustration of a small stage with band setup viewed from 30-degree angle, vibrant warm colors, no text. Square."
+    },
+    {
+      "filename": "icon-2.webp",
+      "size": "800x800",
+      "prompt": "Isometric 3D illustration of a beach stage with palm trees, ocean wave, sun, no text. Square."
+    },
+    {
+      "filename": "icon-3.webp",
+      "size": "800x800",
+      "prompt": "Isometric 3D illustration of a small wooden cabin venue with chairs around a campfire, no text. Square."
+    },
+    {
+      "filename": "band-1.webp",
+      "size": "800x800",
+      "prompt": "Isometric 3D cute illustration of cartoon musicians performing on a small floating platform, vibrant colors, no realistic faces, no text. Square."
+    },
+    {
+      "filename": "band-2.webp",
+      "size": "800x800",
+      "prompt": "Isometric 3D cute illustration of cartoon musicians under a starry night with floating notes, no faces, no text. Square."
+    },
+    {
+      "filename": "band-3.webp",
+      "size": "800x800",
+      "prompt": "Isometric 3D cute illustration of cartoon musicians playing in a stormy weather scene, no faces, no text. Square."
+    }
+  ]
+}

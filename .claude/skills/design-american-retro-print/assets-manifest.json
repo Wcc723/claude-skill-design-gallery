@@ -1,0 +1,40 @@
+{
+  "style": "American Retro Print",
+  "images": [
+    {
+      "filename": "hero-poster.webp",
+      "size": "1200x1600",
+      "prompt": "A 1969 Woodstock-style screen-printed music festival poster illustration: bold mountain silhouettes, a setting sun with halftone dots, a stylized bird flying across, all in a limited 4-color palette of cream paper, brick red, mustard yellow, and deep navy ink. Slight misregistration print effect, paper grain texture. No text or letters at all — only the illustration. Tall poster aspect ratio."
+    },
+    {
+      "filename": "band-illust-1.webp",
+      "size": "800x800",
+      "prompt": "Hatch-show-print-style screen printed illustration of a stylized whale, brick red ink on cream paper, halftone dots, slight misregistration with mustard yellow accents, vintage 1970s rock poster aesthetic, no text. Square."
+    },
+    {
+      "filename": "band-illust-2.webp",
+      "size": "800x800",
+      "prompt": "Screen printed retro illustration of a vintage car or highway disappearing into fog, navy blue and mustard yellow palette on cream, halftone, no text. Square."
+    },
+    {
+      "filename": "band-illust-3.webp",
+      "size": "800x800",
+      "prompt": "Screen printed retro illustration of a stylized eye of a typhoon / spiral storm in red and navy ink on cream paper, vintage poster aesthetic, no text. Square."
+    },
+    {
+      "filename": "venue-1.webp",
+      "size": "1000x700",
+      "prompt": "1970s screen-printed style illustration of a mountain main stage with light rays, navy and mustard ink on cream paper, halftone dots, vintage Americana, no text."
+    },
+    {
+      "filename": "venue-2.webp",
+      "size": "1000x700",
+      "prompt": "1970s screen-printed style illustration of a beach stage with palm tree silhouettes and a setting sun, navy and mustard on cream, no text."
+    },
+    {
+      "filename": "venue-3.webp",
+      "size": "1000x700",
+      "prompt": "1970s screen-printed style illustration of a wooden barn or warehouse music venue at dusk, brick red and mustard on cream, no text."
+    }
+  ]
+}
