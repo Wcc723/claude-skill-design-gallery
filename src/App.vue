@@ -15,9 +15,9 @@ const activeWork = ref<Work | null>(null);
 const INFEED_EVERY = 8; // 每 8 張卡後插入一個 in-feed 版位
 const infeedSlot = import.meta.env.VITE_ADSENSE_SLOT_INFEED;
 const sidebarSlot = import.meta.env.VITE_ADSENSE_SLOT_SIDEBAR;
-// 有設版位（prod 真廣告）或 dev（顯示佔位框）才插入，避免 prod 未設定時渲染空節點
-const showInfeed = !!infeedSlot || import.meta.env.DEV;
-const showSidebar = !!sidebarSlot || import.meta.env.DEV;
+// 只有在有設定對應版位 ID 時才插入廣告；未設定就完全不顯示（含不顯示佔位框）
+const showInfeed = !!infeedSlot;
+const showSidebar = !!sidebarSlot;
 
 const r1Works = computed(() => works.filter((w) => w.round === 1));
 const r2Works = computed(() => works.filter((w) => w.round === 2));
@@ -71,10 +71,9 @@ function onRoundChange(r: Round | 'all') {
           <span class="emph">{{ works.length }}</span> 種設計語言。
         </h1>
         <p class="hero-sub">
-          以虛構獨立音樂節「<strong>島嶼共鳴 2026</strong>」為共同主題，
+          以虛構獨立音樂節「<strong>島嶼共鳴 2026</strong>」與虛構音樂串流 App「<strong>迴聲 Resona</strong>」為共同主題，
           每一份作品都先由 Claude Code 撰寫成一個可下載的 Skill，再交給 SubAgent 透過該 Skill 完成單檔網頁。
-          第一輪是 25 種靜態設計語言，第二輪加入視差、滾動、入場、循環、指標 5 類動態效果共 15 種；
-          第三輪則跳出活動頁、以虛構音樂串流 App「<strong>迴聲 Resona</strong>」為題，用 iOS HIG、Material You 到新野獸派等 12 種行動 App 設計系統各自詮釋同一套畫面。
+          涵蓋 25 種靜態設計語言、視差／滾動／入場／循環／指標 5 類共 15 種動態效果，以及 iOS HIG、Material You 到新野獸派等 12 種行動 App 介面風格。
         </p>
         <ul class="hero-stats">
           <li><strong>{{ works.length }}</strong><span>設計風格</span></li>

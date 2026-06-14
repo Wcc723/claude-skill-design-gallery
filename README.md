@@ -111,7 +111,7 @@ build 後把 `dist/` 推到 `gh-pages` 分支。在 Pages → Source 選 `gh-pag
 | `VITE_ADSENSE_SLOT_INFEED` | 作品 grid 內每 8 張卡插入的 in-feed 版位 |
 | `VITE_ADSENSE_SLOT_SIDEBAR` | footer 版位（可選） |
 
-- **本機**：`cp .env.example .env.local` 後填值（未填的功能不啟用；dev 會顯示虛線「廣告版位」佔位框）。
+- **本機**：`cp .env.example .env.local` 後填值（未填的功能不啟用，且不顯示任何版位/佔位）。
 - **部署**：在 repo **Settings → Secrets and variables → Actions → Variables** 設同名 `vars`（這些 ID 本就公開，用 Variables 而非 Secrets）。
 - **邊界**：GA / AdSense 只存在於外層 gallery，作品頁 `public/works/*/index.html` 維持單檔自足、無外部 CDN。
 - ⚠️ 正式投放 AdSense 前，需自行補上隱私權政策頁與 cookie 同意機制（本專案僅接好線路與預留版位）。

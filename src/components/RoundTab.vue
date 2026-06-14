@@ -26,17 +26,14 @@ defineEmits<{
     </button>
     <button class="tab" :class="{ 'is-active': active === 1 }" @click="$emit('change', 1)">
       <span class="tab-name">靜態</span>
-      <span class="tab-tag">第一輪</span>
       <span class="tab-count">{{ totalR1 }}</span>
     </button>
     <button class="tab" :class="{ 'is-active': active === 2 }" @click="$emit('change', 2)">
       <span class="tab-name">動態</span>
-      <span class="tab-tag">第二輪</span>
       <span class="tab-count">{{ totalR2 }}</span>
     </button>
     <button class="tab" :class="{ 'is-active': active === 3 }" @click="$emit('change', 3)">
       <span class="tab-name">行動</span>
-      <span class="tab-tag">第三輪</span>
       <span class="tab-count">{{ totalR3 }}</span>
     </button>
   </nav>

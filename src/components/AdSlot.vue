@@ -12,9 +12,8 @@ const props = withDefaults(
 );
 
 const client = import.meta.env.VITE_ADSENSE_CLIENT;
-// 需同時有 publisher id 與版位 slot 才渲染真實廣告
+// 需同時有 publisher id 與版位 slot 才渲染真實廣告；否則完全不顯示（不渲染佔位框）
 const enabled = hasAdSense() && !!props.adSlot;
-const isDev = import.meta.env.DEV;
 
 onMounted(() => {
   if (!enabled) return;
@@ -27,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- 有 client + slot：真實 AdSense 版位 -->
+  <!-- 只有同時有 client + slot 才渲染真實 AdSense 版位；否則什麼都不輸出 -->
   <ins
     v-if="enabled"
     class="adsbygoogle ad-slot"
@@ -38,25 +37,10 @@ onMounted(() => {
     :data-ad-layout="layout || undefined"
     data-full-width-responsive="true"
   ></ins>
-  <!-- 無 client：DEV 顯示佔位框；PROD 不渲染（v-if 皆 false → 什麼都不輸出） -->
-  <div v-else-if="isDev" class="ad-placeholder" aria-hidden="true">
-    廣告版位<template v-if="adSlot"> · {{ adSlot }}</template>
-  </div>
 </template>
 
 <style scoped>
 .ad-slot {
   min-height: 90px;
-}
-.ad-placeholder {
-  display: grid;
-  place-items: center;
-  min-height: 140px;
-  border: 1px dashed #94a3b8;
-  border-radius: 14px;
-  color: #94a3b8;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  background: rgba(148, 163, 184, 0.05);
 }
 </style>

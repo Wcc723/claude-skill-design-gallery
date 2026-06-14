@@ -44,7 +44,7 @@ src/
     RoundTab.vue                   # 「全部 / 靜態 25 / 動態 15 / 行動 12」
     SkillDrawer.vue                # 點卡開 drawer 顯示 SKILL.md + 複製（app 加左側手機預覽）
     PhonePreview.vue               # 手機外框 + 即時 iframe（app 限定）
-    AdSlot.vue                     # AdSense 版位（未設 client 時 dev 顯示佔位框、prod 不渲染）
+    AdSlot.vue                     # AdSense 版位（未設 client/slot 時完全不顯示）
 scripts/
   gen-images.mjs                   # codex imagegen 批次產圖
   verify-page.mjs                  # cheerio 驗證（9 區塊 / 12 樂團 / 票價 / motion 額外）
