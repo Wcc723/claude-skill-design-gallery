@@ -1,0 +1,35 @@
+{
+  "style": "Material You",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Material You tonal aesthetic, soft morning haze over a calm island shoreline rendered as smooth gradient blobs of lavender purple and teal cyan, gentle warm sunrise glow, rounded organic shapes, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Material You tonal aesthetic, late-night highway mood with flowing deep indigo and violet light streaks fading into teal, smooth blurred bokeh, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Material You tonal aesthetic, energetic electronic pulse of layered cyan and purple concentric arcs with soft glow, harmonious geometric rhythm, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Material You tonal aesthetic, rain-after-walk calm with translucent water-drop gradients in cool teal and pale lilac on a muted surface, dewy soft focus, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Material You tonal aesthetic, warm urban heartbeat with pulsing magenta-to-purple gradient circles over a dusky cyan field, soft elevation shadows, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Material You tonal aesthetic, between mountains and sea theme with layered overlapping translucent shapes in jade teal, ocean blue and soft violet, serene minimal gradient, abstract, no text, no logo"
+    }
+  ]
+}

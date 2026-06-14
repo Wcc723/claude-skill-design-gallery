@@ -20,6 +20,31 @@ const REQUIRED_VENUES = ['共鳴山主舞台', '海風舞台', '部落舞台'];
 const REQUIRED_SPONSORS = ['麥森啤酒', '山隈唱片', '潮間帶咖啡', '雲擇科技', '海島襪品', '長浪電池', '青葉旅店', '輕食工坊', '半島郵差'];
 const MAX_FILE_SIZE = 200 * 1024;
 
+// ── App 模式（slug 以 app- 開頭）：迴聲 Resona 音樂串流 App 的權威字串 ──
+// 取代 festival 的 BLOCKS / BANDS / TICKETS / VENUES / SPONSORS。來源：.claude/content/app-brief.md 第 7 節。
+// 改 app-brief 必同步改這裡（對齊 CLAUDE.md「改 brief 必同步改 verify 常數」）。
+const REQUIRED_APP_SCREENS = ['status-bar', 'home', 'search', 'detail', 'player', 'library', 'profile', 'tab-bar'];
+const REQUIRED_APP_BRAND = ['迴聲', 'Resona'];
+const REQUIRED_APP_PLANS = ['免費', 'Plus', 'Family'];
+const REQUIRED_APP_PRICING = [
+  { label: 'NT$ 0', re: /NT\$\s*0(?!\d)/ },
+  { label: 'NT$ 149', re: /NT\$\s*149/ },
+  { label: 'NT$ 249', re: /NT\$\s*249/ },
+];
+const REQUIRED_APP_TABS = ['首頁', '搜尋', '音樂庫', '我的'];
+const REQUIRED_APP_CONTENT = [
+  // 6 核心功能
+  '個人化每日推薦', '無損音質串流', '離線下載', '歌詞同步', '跨裝置接續播放', '共享音樂庫',
+  // 7 歌單 / 專輯
+  '浪潮回聲', '深夜公路', '島嶼晨光', '雨後散步', '城市心跳', '山海之間', '失重時刻',
+  // 9 歌名（純名）
+  '藍色信號', '霓虹巷弄', '候鳥地圖', '靜電', '晚風練習曲', '無人車站', '潮間帶', '第七個夏天', '月台九又四分之三',
+  // 5 藝人
+  '海平面樂團', '林知夏', '夜行列車', 'Echo Lab', '何遠',
+  // 4 分類 chip
+  '華語', '獨立', '電子', '放鬆',
+];
+
 function arg(name, fallback) {
   const i = process.argv.indexOf(`--${name}`);
   if (i === -1) return fallback;
@@ -49,60 +74,154 @@ async function verifyOne(slug) {
   }
 
   const $ = load(html);
+  const isApp = slug.startsWith('app-');
 
-  // 1. blocks
-  const blocks = $('[data-block]').map((_, el) => $(el).attr('data-block')).get();
-  const missingBlocks = REQUIRED_BLOCKS.filter((b) => !blocks.includes(b));
-  if (missingBlocks.length) {
-    report.issues.push({ severity: 'error', msg: `missing blocks: ${missingBlocks.join(', ')}` });
-    report.ok = false;
-  }
-  report.blocks_found = blocks;
-
-  // 2. bands
-  // 動態頁面可能把文字放在 data-text / aria-label / data-to 等屬性，
-  // 因此合併 body text + 所有 aria/data 屬性值一起搜尋。
+  // 合併「body 可見文字 + 所有 data-* / aria-* / title / alt 屬性值」一起搜尋。
+  // 計數類 / 打字機 / 純圖示風格常把文字放在屬性，故掃描全部屬性以避免漏判。
   const bodyText = $('body').text();
   const attrText = [];
-  $('[aria-label], [data-text], [data-to], [data-count], [title]').each((_, el) => {
-    const a = $(el);
-    ['aria-label', 'data-text', 'data-to', 'data-count', 'title'].forEach((k) => {
-      const v = a.attr(k);
-      if (v) attrText.push(v);
-    });
+  $('*').each((_, el) => {
+    const attribs = el.attribs || {};
+    for (const [k, v] of Object.entries(attribs)) {
+      if (!v) continue;
+      if (k.startsWith('data-') || k.startsWith('aria-') || k === 'title' || k === 'alt') attrText.push(v);
+    }
   });
   const text = bodyText + ' ' + attrText.join(' ');
-  const missingBands = REQUIRED_BANDS.filter((b) => !text.includes(b));
-  if (missingBands.length) {
-    report.issues.push({ severity: 'error', msg: `missing bands: ${missingBands.join(', ')}` });
-    report.ok = false;
+
+  // ──────────────────────────────────────────────────────────
+  // festival 專屬檢查（design-* / motion-*）：app-* 一律跳過。
+  // ⚠️ 注意邊界：外部 CDN / 圖片 / doctype / 檔案大小 等「共同檢查」
+  //    必須留在這個 if 之外，對三類都跑（app 頁的無 CDN 防線靠那段）。
+  // ──────────────────────────────────────────────────────────
+  if (!isApp) {
+    // 1. blocks
+    const blocks = $('[data-block]').map((_, el) => $(el).attr('data-block')).get();
+    const missingBlocks = REQUIRED_BLOCKS.filter((b) => !blocks.includes(b));
+    if (missingBlocks.length) {
+      report.issues.push({ severity: 'error', msg: `missing blocks: ${missingBlocks.join(', ')}` });
+      report.ok = false;
+    }
+    report.blocks_found = blocks;
+
+    // 2. bands
+    const missingBands = REQUIRED_BANDS.filter((b) => !text.includes(b));
+    if (missingBands.length) {
+      report.issues.push({ severity: 'error', msg: `missing bands: ${missingBands.join(', ')}` });
+      report.ok = false;
+    }
+
+    // 3. tickets
+    const missingTickets = REQUIRED_TICKETS.filter((t) => !text.includes(t));
+    if (missingTickets.length) {
+      report.issues.push({ severity: 'error', msg: `missing ticket prices: ${missingTickets.join(', ')}` });
+      report.ok = false;
+    }
+
+    // 4. venues
+    const missingVenues = REQUIRED_VENUES.filter((v) => !text.includes(v));
+    if (missingVenues.length) {
+      report.issues.push({ severity: 'error', msg: `missing venues: ${missingVenues.join(', ')}` });
+      report.ok = false;
+    }
+
+    // 5. sponsors (允許缺 1 個，但不能缺 title)
+    const missingSponsors = REQUIRED_SPONSORS.filter((s) => !text.includes(s));
+    if (missingSponsors.length > 1) {
+      report.issues.push({ severity: 'error', msg: `missing sponsors: ${missingSponsors.join(', ')}` });
+      report.ok = false;
+    } else if (missingSponsors.length === 1) {
+      report.issues.push({ severity: 'warn', msg: `missing one sponsor: ${missingSponsors[0]}` });
+    }
+    if (!text.includes('麥森啤酒')) {
+      report.issues.push({ severity: 'error', msg: `title sponsor 麥森啤酒 missing` });
+      report.ok = false;
+    }
   }
 
-  // 3. tickets
-  const missingTickets = REQUIRED_TICKETS.filter((t) => !text.includes(t));
-  if (missingTickets.length) {
-    report.issues.push({ severity: 'error', msg: `missing ticket prices: ${missingTickets.join(', ')}` });
-    report.ok = false;
-  }
+  // ──────────────────────────────────────────────────────────
+  // App 專屬檢查（app-*）：迴聲 Resona 音樂串流 App
+  // ──────────────────────────────────────────────────────────
+  if (isApp) {
+    // A. 8 個 data-screen：唯一、各出現恰一次（全頁單一固定外框）
+    const screens = $('[data-screen]').map((_, el) => $(el).attr('data-screen')).get();
+    report.screens_found = screens;
+    const missingScreens = REQUIRED_APP_SCREENS.filter((s) => !screens.includes(s));
+    if (missingScreens.length) {
+      report.issues.push({ severity: 'error', msg: `app: missing screens: ${missingScreens.join(', ')}` });
+      report.ok = false;
+    }
+    const dupScreens = REQUIRED_APP_SCREENS.filter((s) => screens.filter((x) => x === s).length > 1);
+    if (dupScreens.length) {
+      report.issues.push({ severity: 'error', msg: `app: duplicated screens (expect single fixed chrome): ${dupScreens.join(', ')}` });
+      report.ok = false;
+    }
 
-  // 4. venues
-  const missingVenues = REQUIRED_VENUES.filter((v) => !text.includes(v));
-  if (missingVenues.length) {
-    report.issues.push({ severity: 'error', msg: `missing venues: ${missingVenues.join(', ')}` });
-    report.ok = false;
-  }
+    // B. 品牌
+    const missingBrand = REQUIRED_APP_BRAND.filter((b) => !text.includes(b));
+    if (missingBrand.length) {
+      report.issues.push({ severity: 'error', msg: `app: missing brand: ${missingBrand.join(', ')}` });
+      report.ok = false;
+    }
 
-  // 5. sponsors (允許缺 1 個，但不能缺 title)
-  const missingSponsors = REQUIRED_SPONSORS.filter((s) => !text.includes(s));
-  if (missingSponsors.length > 1) {
-    report.issues.push({ severity: 'error', msg: `missing sponsors: ${missingSponsors.join(', ')}` });
-    report.ok = false;
-  } else if (missingSponsors.length === 1) {
-    report.issues.push({ severity: 'warn', msg: `missing one sponsor: ${missingSponsors[0]}` });
-  }
-  if (!text.includes('麥森啤酒')) {
-    report.issues.push({ severity: 'error', msg: `title sponsor 麥森啤酒 missing` });
-    report.ok = false;
+    // C. 內容字串（功能 / 歌單 / 歌名 / 藝人 / 分類）
+    const missingContent = REQUIRED_APP_CONTENT.filter((c) => !text.includes(c));
+    if (missingContent.length) {
+      const head = missingContent.slice(0, 8).join(', ');
+      report.issues.push({ severity: 'error', msg: `app: missing content (${missingContent.length}): ${head}${missingContent.length > 8 ? '…' : ''}` });
+      report.ok = false;
+    }
+
+    // D. 方案名
+    const missingPlans = REQUIRED_APP_PLANS.filter((p) => !text.includes(p));
+    if (missingPlans.length) {
+      report.issues.push({ severity: 'error', msg: `app: missing plan names: ${missingPlans.join(', ')}` });
+      report.ok = false;
+    }
+
+    // E. 三層定價（regex 容忍 NT$ 與數字間空白；NT$ 0 用負向預看防誤配）
+    const missingPricing = REQUIRED_APP_PRICING.filter((p) => !p.re.test(text));
+    if (missingPricing.length) {
+      report.issues.push({ severity: 'error', msg: `app: missing pricing: ${missingPricing.map((p) => p.label).join(', ')}` });
+      report.ok = false;
+    }
+
+    // F. 手機外觀標記
+    if (!$('meta[name="viewport"]').length) {
+      report.issues.push({ severity: 'error', msg: 'app: missing <meta name="viewport">' });
+      report.ok = false;
+    }
+    if (!/data-viewport\s*=\s*["']?mobile/i.test(html)) {
+      report.issues.push({ severity: 'error', msg: 'app: missing <body data-viewport="mobile"> marker' });
+      report.ok = false;
+    }
+    if (!text.includes('9:41')) {
+      report.issues.push({ severity: 'error', msg: 'app: status-bar time 9:41 not found' });
+      report.ok = false;
+    }
+    const missingTabs = REQUIRED_APP_TABS.filter((t) => !text.includes(t));
+    if (missingTabs.length) {
+      report.issues.push({ severity: 'warn', msg: `app: tab labels missing: ${missingTabs.join(', ')}` });
+    }
+
+    // G. 互動性：必須是可導覽的多畫面 App（inline script + click handler）
+    const hasInlineScript = /<script(?:\s[^>]*)?>[\s\S]*?<\/script>/i.test(html);
+    if (!hasInlineScript) {
+      report.issues.push({ severity: 'error', msg: 'app: missing inline <script> (多畫面導覽需要 JS)' });
+      report.ok = false;
+    }
+    const hasClick = /addEventListener\s*\(\s*['"]click/i.test(html) || /\bonclick\s*=/i.test(html);
+    if (!hasClick) {
+      report.issues.push({ severity: 'error', msg: 'app: no click handler found (互動元素需可點擊：tab/卡片/曲目導覽)' });
+      report.ok = false;
+    }
+
+    // H. 動畫政策：有動畫但缺 prefers-reduced-motion → warn
+    const hasAnim = /@keyframes\s+/.test(html) || /animation\s*:/.test(html) || /\.animate\s*\(/.test(html);
+    const hasReduced = /@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce/i.test(html);
+    if (hasAnim && !hasReduced) {
+      report.issues.push({ severity: 'warn', msg: 'app: animation present but no prefers-reduced-motion media query' });
+    }
   }
 
   // 6. external CDN
@@ -129,8 +248,8 @@ async function verifyOne(slug) {
     report.issues.push({ severity: 'warn', msg: `image files missing: ${missingImgs.slice(0, 3).join(', ')}` });
   }
 
-  // 8. date
-  if (!text.includes('8 月 21') && !text.includes('8/21') && !text.includes('08/21') && !text.includes('08-21')) {
+  // 8. date (festival 專屬)
+  if (!isApp && !text.includes('8 月 21') && !text.includes('8/21') && !text.includes('08/21') && !text.includes('08-21')) {
     report.issues.push({ severity: 'warn', msg: 'festival start date 8/21 not found' });
   }
 

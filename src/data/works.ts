@@ -4,11 +4,16 @@ export type Category =
   | 'experimental'
   | 'cultural'
   | 'decorative'
-  | 'motion';
+  | 'motion'
+  // 第三輪 · 行動 App
+  | 'native-ui'
+  | 'stylized-mobile';
 
-export type Round = 1 | 2;
+export type Round = 1 | 2 | 3;
 
 export type MotionType = 'parallax' | 'scroll-driven' | 'reveal' | 'loop' | 'pointer';
+
+export type Viewport = 'desktop' | 'mobile';
 
 export type Work = {
   slug: string;
@@ -17,6 +22,8 @@ export type Work = {
   round: Round;
   /** 僅第二輪 motion 風格使用 */
   motionType?: MotionType;
+  /** 第三輪行動 App 用 'mobile'（390×844 直式）；未設＝desktop */
+  viewport?: Viewport;
   tags: string[];
   brief: string;
   /** 是否已完成（縮圖與 index.html 都已產出） */
@@ -30,6 +37,8 @@ export const categoryLabels: Record<Category, string> = {
   cultural: '文化在地',
   decorative: '裝飾性',
   motion: '動態效果',
+  'native-ui': '原生平台',
+  'stylized-mobile': '風格化行動',
 };
 
 export const motionTypeLabels: Record<MotionType, string> = {
@@ -441,6 +450,135 @@ export const works: Work[] = [
     motionType: 'pointer',
     tags: ['magnetic', 'attraction', 'cta'],
     brief: '主 CTA 按鈕在滑鼠靠近時被輕輕吸過去，按鍵變成有重力的物件。',
+    status: 'shipped',
+  },
+
+  // ========================================
+  // 第三輪 · 12 個行動 App 風格 (round: 3)
+  // 虛構音樂串流 App「迴聲 Resona」，同一 App 套用不同設計系統
+  // ========================================
+
+  // 原生平台 native-ui (8)
+  {
+    slug: 'app-ios-hig',
+    name: { zh: 'iOS 淺色 HIG', en: 'iOS HIG' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['ios', 'hig', 'light'],
+    brief: '蘋果 HIG 淺色：SF 字體、大標題、分組列表與毛玻璃 tab-bar，迴聲 Resona 的標準 iOS 樣貌。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-ios-dark',
+    name: { zh: 'iOS 深色', en: 'iOS Dark' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['ios', 'dark', 'oled'],
+    brief: 'iOS 深色模式：純黑 OLED 背景、高對比強調色，夜間聽歌的 Resona。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-material-you',
+    name: { zh: 'Material You', en: 'Material You' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['m3', 'android', 'dynamic-color'],
+    brief: 'Android Material 3：動態取色、藥丸導覽列與超大圓角卡片。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-one-ui',
+    name: { zh: 'One UI', en: 'Samsung One UI' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['samsung', 'one-ui', 'reachable'],
+    brief: '三星 One UI：上半大留白把操作元素壓到單手可及區，柔和卡片。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-fluent',
+    name: { zh: 'Fluent', en: 'Microsoft Fluent' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['fluent', 'acrylic', 'microsoft'],
+    brief: '微軟 Fluent：壓克力材質、雲母質感與 Reveal 高光、Segoe 風字。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-harmonyos',
+    name: { zh: '鴻蒙 HarmonyOS', en: 'HarmonyOS' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['harmonyos', 'huawei', 'grid'],
+    brief: '華為鴻蒙：靈動卡片、柵格化資訊密度與清爽留白。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-ios6-skeuomorphic',
+    name: { zh: 'iOS6 擬物', en: 'iOS6 Skeuomorphic' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['ios6', 'skeuomorphic', 'linen'],
+    brief: 'iOS6 擬物：亞麻紋理、皮革縫線與光澤按鈕的舊日 Resona。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-android-holo',
+    name: { zh: 'Holo 復古', en: 'Android Holo' },
+    category: 'native-ui',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['holo', 'android-4', 'cyan'],
+    brief: 'Android 4 Holo：青藍強調、底線分隔與 Roboto Light 的復古安卓。',
+    status: 'shipped',
+  },
+
+  // 風格化行動 stylized-mobile (4)
+  {
+    slug: 'app-neobrutalism',
+    name: { zh: '新野獸派', en: 'Neobrutalism' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['neobrutalism', 'hard-shadow', 'bold'],
+    brief: '新野獸派：粗黑邊框、硬陰影與高彩度色塊的叛逆播放器。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-glassmorphism',
+    name: { zh: '玻璃擬態行動', en: 'Glassmorphism' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['glass', 'blur', 'translucent'],
+    brief: '玻璃擬態：磨砂半透明卡片疊在漸層光暈背景上的清涼 Resona。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-y2k',
+    name: { zh: 'Y2K 手機', en: 'Y2K Phone' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['y2k', 'chrome', 'bubble'],
+    brief: 'Y2K：鉻金屬泡泡按鈕、星星貼紙與半透塑膠的千禧手機介面。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-wireframe',
+    name: { zh: '線框 lo-fi', en: 'Wireframe' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['wireframe', 'lo-fi', 'grayscale'],
+    brief: '線框 lo-fi：灰階方框、佔位斜線與手寫註記的原型稿風格。',
     status: 'shipped',
   },
 ];

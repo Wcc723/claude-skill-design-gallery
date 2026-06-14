@@ -5,13 +5,23 @@ import WorkCard from './components/WorkCard.vue';
 import FilterBar from './components/FilterBar.vue';
 import RoundTab from './components/RoundTab.vue';
 import SkillDrawer from './components/SkillDrawer.vue';
+import AdSlot from './components/AdSlot.vue';
 
 const activeRound = ref<Round | 'all'>('all');
 const active = ref<Category | 'all'>('all');
 const activeWork = ref<Work | null>(null);
 
+// 廣告版位（皆由 VITE_ 環境變數控制；未設定時 AdSlot 在 prod 不渲染、dev 顯示佔位框）
+const INFEED_EVERY = 8; // 每 8 張卡後插入一個 in-feed 版位
+const infeedSlot = import.meta.env.VITE_ADSENSE_SLOT_INFEED;
+const sidebarSlot = import.meta.env.VITE_ADSENSE_SLOT_SIDEBAR;
+// 有設版位（prod 真廣告）或 dev（顯示佔位框）才插入，避免 prod 未設定時渲染空節點
+const showInfeed = !!infeedSlot || import.meta.env.DEV;
+const showSidebar = !!sidebarSlot || import.meta.env.DEV;
+
 const r1Works = computed(() => works.filter((w) => w.round === 1));
 const r2Works = computed(() => works.filter((w) => w.round === 2));
+const r3Works = computed(() => works.filter((w) => w.round === 3));
 
 const roundFiltered = computed(() => {
   if (activeRound.value === 'all') return works;
@@ -27,6 +37,8 @@ const counts = computed(() => {
     cultural: 0,
     decorative: 0,
     motion: 0,
+    'native-ui': 0,
+    'stylized-mobile': 0,
   };
   for (const w of roundFiltered.value) c[w.category] += 1;
   return c;
@@ -35,6 +47,7 @@ const counts = computed(() => {
 const shippedCount = computed(() => works.filter((w) => w.status === 'shipped').length);
 const r1Shipped = computed(() => r1Works.value.filter((w) => w.status === 'shipped').length);
 const r2Shipped = computed(() => r2Works.value.filter((w) => w.status === 'shipped').length);
+const r3Shipped = computed(() => r3Works.value.filter((w) => w.status === 'shipped').length);
 
 const filtered = computed(() => {
   if (active.value === 'all') return roundFiltered.value;
@@ -60,13 +73,14 @@ function onRoundChange(r: Round | 'all') {
         <p class="hero-sub">
           以虛構獨立音樂節「<strong>島嶼共鳴 2026</strong>」為共同主題，
           每一份作品都先由 Claude Code 撰寫成一個可下載的 Skill，再交給 SubAgent 透過該 Skill 完成單檔網頁。
-          第一輪是 25 種靜態設計語言，第二輪則加入視差、滾動、入場、循環、指標 5 類動態效果共 15 種。
+          第一輪是 25 種靜態設計語言，第二輪加入視差、滾動、入場、循環、指標 5 類動態效果共 15 種；
+          第三輪則跳出活動頁、以虛構音樂串流 App「<strong>迴聲 Resona</strong>」為題，用 iOS HIG、Material You 到新野獸派等 12 種行動 App 設計系統各自詮釋同一套畫面。
         </p>
         <ul class="hero-stats">
           <li><strong>{{ works.length }}</strong><span>設計風格</span></li>
           <li><strong>{{ shippedCount }}</strong><span>已完成作品</span></li>
-          <li><strong>{{ r1Shipped }} / {{ r2Shipped }}</strong><span>靜態 / 動態</span></li>
-          <li><strong>9</strong><span>共用標準區塊</span></li>
+          <li><strong>{{ r1Shipped }} / {{ r2Shipped }} / {{ r3Shipped }}</strong><span>靜態 / 動態 / 行動</span></li>
+          <li><strong>8–9</strong><span>共用標準區塊</span></li>
         </ul>
       </div>
     </header>
@@ -78,6 +92,7 @@ function onRoundChange(r: Round | 'all') {
           :total-all="works.length"
           :total-r1="r1Works.length"
           :total-r2="r2Works.length"
+          :total-r3="r3Works.length"
           @change="onRoundChange"
         />
       </section>
@@ -87,17 +102,25 @@ function onRoundChange(r: Round | 'all') {
       </section>
 
       <section class="grid" aria-label="作品列表">
-        <WorkCard
-          v-for="work in filtered"
-          :key="work.slug"
-          :work="work"
-          @open-skill="(w) => (activeWork = w)"
-        />
+        <template v-for="(work, i) in filtered" :key="work.slug">
+          <WorkCard :work="work" @open-skill="(w) => (activeWork = w)" />
+          <AdSlot
+            v-if="showInfeed && (i + 1) % INFEED_EVERY === 0 && i + 1 < filtered.length"
+            class="grid-ad"
+            :ad-slot="infeedSlot"
+            format="fluid"
+            layout="in-article"
+          />
+        </template>
       </section>
 
       <p v-if="filtered.length === 0" class="empty-state">
         這個分類目前沒有作品。試試切換到「全部」。
       </p>
+
+      <section v-if="showSidebar" class="footer-ad" aria-label="贊助">
+        <AdSlot :ad-slot="sidebarSlot" format="auto" />
+      </section>
     </main>
 
     <footer class="footer">
@@ -224,6 +247,16 @@ function onRoundChange(r: Round | 'all') {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 22px;
+}
+/* in-feed 廣告版位：橫跨整列，不破壞 auto-fill 欄寬與卡片對齊 */
+.grid-ad {
+  grid-column: 1 / -1;
+}
+
+.footer-ad {
+  max-width: 1180px;
+  margin: 32px auto 0;
+  padding: 0 28px;
 }
 
 .empty-state {

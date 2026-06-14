@@ -10,6 +10,8 @@ const BASE = import.meta.env.BASE_URL;
 const workPath = computed(() => `${BASE}works/${props.work.slug}/index.html`);
 const thumbPath = computed(() => `${BASE}works/${props.work.slug}/thumb.webp`);
 const videoPath = computed(() => `${BASE}works/${props.work.slug}/thumb.webm`);
+// 第三輪行動 App 用直式手機比例縮圖
+const isMobile = computed(() => props.work.viewport === 'mobile');
 
 const videoRef = useTemplateRef<HTMLVideoElement>('video');
 const showVideo = ref(false);
@@ -54,7 +56,7 @@ function onLeave() {
       :rel="work.status === 'shipped' ? 'noopener' : undefined"
       :aria-label="`開啟 ${work.name.zh} 作品`"
     >
-      <div class="thumb">
+      <div class="thumb" :class="{ 'is-mobile': isMobile }">
         <img
           v-if="work.status === 'shipped'"
           :src="thumbPath"
@@ -155,6 +157,33 @@ function onLeave() {
   aspect-ratio: 16 / 10;
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   overflow: hidden;
+}
+/* 第三輪行動 App：直式手機外框縮圖 */
+.thumb.is-mobile {
+  aspect-ratio: 9 / 16;
+  max-width: 208px;
+  margin: 18px auto 6px;
+  border-radius: 30px;
+  border: 7px solid #0f172a;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  background: #0f172a;
+}
+.thumb.is-mobile img,
+.thumb.is-mobile .placeholder {
+  border-radius: 22px;
+}
+/* 瀏海 */
+.thumb.is-mobile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38%;
+  height: 16px;
+  background: #0f172a;
+  border-radius: 0 0 12px 12px;
+  z-index: 3;
 }
 .thumb img,
 .thumb-video {

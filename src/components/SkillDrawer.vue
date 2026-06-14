@@ -2,12 +2,15 @@
 import { computed, ref, watch } from 'vue';
 import type { Work } from '../data/works';
 import { skillContent } from '../data/skill-content';
+import PhonePreview from './PhonePreview.vue';
 
 const props = defineProps<{ work: Work | null }>();
 const emit = defineEmits<{ (e: 'close'): void }>();
 
 const copied = ref(false);
 const content = computed(() => (props.work ? skillContent[props.work.slug] || '' : ''));
+// 第三輪行動 App：在 drawer 左側嵌入手機外框即時預覽
+const isMobileWork = computed(() => props.work?.round === 3);
 const targetPath = computed(() =>
   props.work ? `.claude/skills/${props.work.slug}/SKILL.md` : '',
 );
@@ -62,39 +65,49 @@ watch(
 <template>
   <Transition name="drawer">
     <div v-if="work" class="backdrop" @click="onBackdrop" role="dialog" aria-modal="true">
-      <aside class="panel" :aria-label="`${work.name.zh} Skill 內容`">
-        <header class="panel-head">
-          <div class="panel-title">
-            <span class="kicker">SKILL · {{ work.slug }}</span>
-            <h2>{{ work.name.zh }} <span class="en">{{ work.name.en }}</span></h2>
+      <aside class="panel" :class="{ 'has-preview': isMobileWork }" :aria-label="`${work.name.zh} Skill 內容`">
+        <div v-if="isMobileWork" class="preview-pane">
+          <div class="phone-scale">
+            <div class="phone-inner">
+              <PhonePreview :work="work" :active="!!work" />
+            </div>
           </div>
-          <button class="close" @click="emit('close')" aria-label="關閉">✕</button>
-        </header>
+        </div>
 
-        <section class="install">
-          <h3>使用方式</h3>
-          <ol>
-            <li>
-              在你的 Claude Code 專案中建立 <code>{{ targetPath }}</code>
-            </li>
-            <li>
-              點下方「複製 SKILL.md」按鈕，把整段內容貼進該檔案
-            </li>
-            <li>
-              在 Claude Code 中召喚 <code>{{ work.slug }}</code>，即可重現這個風格的網頁
-            </li>
-          </ol>
-        </section>
-
-        <section class="code-block">
-          <header class="code-head">
-            <span class="filename">{{ targetPath }}</span>
-            <button class="copy-btn" :class="{ done: copied }" @click="copyContent">
-              {{ copied ? '✓ 已複製' : '複製 SKILL.md' }}
-            </button>
+        <div class="main-pane">
+          <header class="panel-head">
+            <div class="panel-title">
+              <span class="kicker">SKILL · {{ work.slug }}</span>
+              <h2>{{ work.name.zh }} <span class="en">{{ work.name.en }}</span></h2>
+            </div>
+            <button class="close" @click="emit('close')" aria-label="關閉">✕</button>
           </header>
-          <pre><code>{{ content }}</code></pre>
-        </section>
+
+          <section class="install">
+            <h3>使用方式</h3>
+            <ol>
+              <li>
+                在你的 Claude Code 專案中建立 <code>{{ targetPath }}</code>
+              </li>
+              <li>
+                點下方「複製 SKILL.md」按鈕，把整段內容貼進該檔案
+              </li>
+              <li>
+                在 Claude Code 中召喚 <code>{{ work.slug }}</code>，即可重現這個風格的網頁
+              </li>
+            </ol>
+          </section>
+
+          <section class="code-block">
+            <header class="code-head">
+              <span class="filename">{{ targetPath }}</span>
+              <button class="copy-btn" :class="{ done: copied }" @click="copyContent">
+                {{ copied ? '✓ 已複製' : '複製 SKILL.md' }}
+              </button>
+            </header>
+            <pre><code>{{ content }}</code></pre>
+          </section>
+        </div>
       </aside>
     </div>
   </Transition>
@@ -116,9 +129,69 @@ watch(
   height: 100%;
   background: #ffffff;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   box-shadow: -20px 0 60px rgba(15, 23, 42, 0.25);
   overflow: hidden;
+}
+.panel.has-preview {
+  width: min(1200px, 100%);
+}
+
+/* 主內容欄（標題 + 安裝說明 + SKILL code）—— 維持原本垂直堆疊 */
+.main-pane {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 行動 App 預覽欄：左側手機外框，等比縮放使整支裝置一眼可見 */
+.preview-pane {
+  flex: 0 0 auto;
+  background: #eef2f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-right: 1px solid rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+.phone-scale {
+  --s: 0.82;
+  width: calc(412px * var(--s)); /* 390 + 11*2 border */
+  height: calc(866px * var(--s)); /* 844 + 11*2 border */
+}
+.phone-inner {
+  width: 412px;
+  height: 866px;
+  transform: scale(var(--s));
+  transform-origin: top left;
+}
+@media (max-height: 880px) {
+  .phone-scale {
+    --s: 0.66;
+  }
+}
+@media (max-height: 700px) {
+  .phone-scale {
+    --s: 0.52;
+  }
+}
+/* 窄螢幕：改為上下堆疊（預覽在上、SKILL 在下） */
+@media (max-width: 980px) {
+  .panel.has-preview {
+    flex-direction: column;
+  }
+  .preview-pane {
+    border-right: none;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    padding: 14px;
+  }
+  .phone-scale {
+    --s: 0.5;
+  }
 }
 
 .panel-head {

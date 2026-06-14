@@ -1,0 +1,35 @@
+{
+  "style": "iOS 深色 (iOS Dark)",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, deep midnight ocean at night under a faint moon, dark navy and electric system-blue glow rolling waves, OLED black background, moody and luminous, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, neon-lit empty highway at midnight, magenta and cyan streaks of light over pitch black, cinematic late-night drive mood, glowing reflections, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, first warm dawn light breaking over a dark island coastline, soft amber and pink gradient emerging from deep black sea, serene morning calm yet rich saturated, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, rain droplets and wet asphalt reflecting cool teal and violet city lights after rain, glistening dark surface, contemplative quiet mood, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, pulsing city skyline silhouette at night with crimson and electric-pink heartbeat-like light pulses against black sky, energetic urban nightlife, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, the boundary between dark mountains and a luminous starry sea, deep indigo and emerald-green aurora glow over black, vast weightless dreamlike atmosphere, abstract, no text, no logo"
+    }
+  ]
+}

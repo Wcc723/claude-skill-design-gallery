@@ -38,4 +38,8 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# Local env（含真實 GA / AdSense ID；.env.local 已被上方 *.local 涵蓋，這裡補裸 .env。.env.example 仍會被追蹤）
+.env
+.env.*.local
+
 .claude/*.local.*

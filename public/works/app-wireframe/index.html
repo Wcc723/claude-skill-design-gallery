@@ -1,0 +1,1251 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>迴聲 Resona — 線框 lo-fi 原型稿</title>
+<style>
+:root{
+  /* 裝置外殼基準 */
+  --screen-w:390px; --screen-h:844px;
+  --statusbar-h:44px; --tabbar-h:56px; --miniplayer-h:56px;
+  --safe-bottom:34px; --device-radius:44px; --content-pad:16px;
+  /* 灰階調色（唯一允許顏色家族） */
+  --ink:#111111; --ink-2:#555555; --ink-3:#999999;
+  --line:#cccccc; --line-2:#dddddd; --line-strong:#111111;
+  --paper:#ffffff; --fill:#f0f0f0; --fill-2:#e4e4e4; --fill-3:#d8d8d8;
+  --note:#888888;
+  /* 線條樣式 */
+  --bw:1px; --bw-strong:2px;
+  --border:var(--bw) solid var(--line);
+  --border-strong:var(--bw-strong) solid var(--line-strong);
+  --border-dash:var(--bw) dashed var(--line);
+  --border-dash-2:var(--bw) dashed var(--line-2);
+  /* 圓角 */
+  --radius-xs:2px; --radius-sm:4px; --radius-md:6px; --radius-pill:999px;
+  /* 陰影：硬位移貼紙感 */
+  --shadow-flat:none;
+  --shadow-lift:2px 2px 0 var(--line);
+  --shadow-lift-strong:3px 3px 0 var(--ink);
+  /* 間距 8pt 尺度 */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --sp-5:20px; --sp-6:24px; --sp-8:32px;
+  /* 字體 */
+  --font-ui:'PingFang TC','Noto Sans TC',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-note:'DFKai-SB','BiauKai','標楷體',ui-monospace,'SFMono-Regular','Courier New',monospace;
+  /* 對角交叉佔位 X */
+  --x-placeholder:
+    linear-gradient(to top right,transparent calc(50% - 0.5px),var(--line) 50%,transparent calc(50% + 0.5px)),
+    linear-gradient(to top left,transparent calc(50% - 0.5px),var(--line) 50%,transparent calc(50% + 0.5px));
+  --dur-fast:140ms; --dur-mid:240ms;
+  --ease:cubic-bezier(0.2,0,0.2,1);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-ui);
+  color:var(--ink);
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 23px,#0000000a 23px,#0000000a 24px),
+    repeating-linear-gradient(90deg,transparent,transparent 23px,#0000000a 23px,#0000000a 24px),
+    radial-gradient(120% 80% at 50% 0%,#fafafa 0%,#efefef 60%,#e7e7e7 100%);
+  min-height:100vh;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:24px 12px 40px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== 裝置外殼 ===== */
+.device{
+  width:var(--screen-w); height:var(--screen-h);
+  flex:0 0 auto;
+  background:var(--paper); color:var(--ink);
+  border:var(--bw-strong) solid var(--ink);
+  border-radius:var(--device-radius);
+  overflow:hidden; display:flex; flex-direction:column;
+  position:relative;
+  box-shadow:6px 6px 0 #d4d4d4, 0 18px 40px -12px #00000040;
+}
+.device::before{
+  content:"// device frame · 390×844 · iPhone 直式";
+  position:absolute; top:-22px; left:6px;
+  font:11px/1 var(--font-note); color:#aaa;
+  letter-spacing:.02em;
+}
+
+/* ===== 狀態列 ===== */
+.statusbar{
+  height:var(--statusbar-h); flex:0 0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--content-pad) 0 22px;
+  border-bottom:var(--border);
+  font:600 14px/1 var(--font-note); color:var(--ink);
+  letter-spacing:.02em;
+  background:var(--paper); z-index:3;
+}
+.statusbar .sb-right{display:flex; align-items:center; gap:var(--sp-2);}
+.signal{display:flex; align-items:flex-end; gap:2px; height:11px;}
+.signal i{width:3px; background:var(--ink); border-radius:1px;}
+.signal i:nth-child(1){height:4px;}
+.signal i:nth-child(2){height:6px;}
+.signal i:nth-child(3){height:8px;}
+.signal i:nth-child(4){height:11px;}
+.wifi{width:16px; height:12px; position:relative;}
+.wifi::before,.wifi::after{
+  content:""; position:absolute; left:50%; bottom:2px;
+  border:var(--bw) solid var(--ink); border-bottom:none;
+  border-radius:50% 50% 0 0; transform:translateX(-50%);
+}
+.wifi::before{width:14px; height:7px;}
+.wifi::after{width:7px; height:3.5px;}
+.wifi i{position:absolute; left:50%; bottom:1px; width:3px; height:3px; background:var(--ink); border-radius:50%; transform:translateX(-50%);}
+.battery{
+  width:24px; height:12px; border:var(--bw) solid var(--ink);
+  border-radius:var(--radius-xs); position:relative;
+  padding:1.5px;
+}
+.battery i{display:block; height:100%; width:72%; background:var(--ink); border-radius:1px;}
+.battery::after{
+  content:""; position:absolute; right:-3px; top:3.5px;
+  width:2px; height:5px; background:var(--ink); border-radius:0 1px 1px 0;
+}
+
+/* ===== 中間舞台（含可捲動內容區 + player 覆蓋層）===== */
+.stage{flex:1 1 auto; position:relative; min-height:0; display:flex; flex-direction:column;}
+
+/* ===== 可捲動內容區 ===== */
+.viewport{
+  flex:1 1 auto; overflow-y:auto; overflow-x:hidden;
+  position:relative; min-height:0;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+.viewport::-webkit-scrollbar{width:4px;}
+.viewport::-webkit-scrollbar-thumb{background:var(--line); border-radius:2px;}
+
+/* 單一活躍畫面：基礎一律隱藏，只有 .is-active 顯示 */
+.screen{display:none; padding:var(--sp-5) var(--content-pad)
+  calc(var(--miniplayer-h) + var(--tabbar-h) + var(--safe-bottom) + var(--sp-4));}
+.screen.is-active{display:block;}
+
+/* 屏名草稿分隔註記 */
+.screen-note{
+  font:11px/1.4 var(--font-note); color:var(--note);
+  letter-spacing:.04em; padding-bottom:var(--sp-3);
+  border-bottom:var(--border-dash); margin-bottom:var(--sp-4);
+}
+
+/* 進場 staggered reveal */
+.reveal{opacity:0; transform:translateY(8px);}
+.screen.is-active .reveal{animation:rise var(--dur-mid) var(--ease) forwards;}
+@keyframes rise{to{opacity:1; transform:translateY(0);}}
+.screen.is-active .reveal:nth-child(1){animation-delay:.02s;}
+.screen.is-active .reveal:nth-child(2){animation-delay:.06s;}
+.screen.is-active .reveal:nth-child(3){animation-delay:.10s;}
+.screen.is-active .reveal:nth-child(4){animation-delay:.14s;}
+.screen.is-active .reveal:nth-child(5){animation-delay:.18s;}
+.screen.is-active .reveal:nth-child(6){animation-delay:.22s;}
+.screen.is-active .reveal:nth-child(7){animation-delay:.26s;}
+.screen.is-active .reveal:nth-child(8){animation-delay:.30s;}
+.screen.is-active .reveal:nth-child(9){animation-delay:.34s;}
+
+/* ===== 共用：對角交叉佔位框 ===== */
+.ph{
+  background-color:var(--fill); background-image:var(--x-placeholder);
+  border:var(--border); border-radius:var(--radius-sm); position:relative;
+  flex:0 0 auto;
+}
+.ph[data-label]:not([data-label=""])::before{
+  content:attr(data-label); position:absolute; top:4px; left:6px;
+  font:11px/1.2 var(--font-note); color:var(--ink-3);
+  background:var(--paper); padding:1px 3px; border-radius:var(--radius-xs);
+}
+.cover-lg{width:230px; height:230px; margin:0 auto;}
+.cover-md{width:144px; height:144px;}
+.cover-grid{width:100%; aspect-ratio:1;}
+.cover-sm{width:48px; height:48px; border-radius:var(--radius-xs);}
+.cover-xs{width:40px; height:40px; border-radius:var(--radius-xs);}
+.avatar{width:56px; height:56px; border-radius:50%;}
+.avatar-sm{width:60px; height:60px; border-radius:50%;}
+
+/* ===== 手寫便利貼註記 ===== */
+.note{font:italic 11px/1.45 var(--font-note); color:var(--note); letter-spacing:.01em;}
+.note-tag{
+  display:inline-block; font:11px/1.2 var(--font-note); color:var(--ink-3);
+  border:var(--border-dash); border-radius:var(--radius-xs);
+  padding:2px 6px; background:var(--paper);
+}
+
+/* ===== 區段標題列 ===== */
+.section-head{
+  display:flex; align-items:baseline; justify-content:space-between;
+  margin:var(--sp-6) 0 var(--sp-3); gap:var(--sp-2);
+}
+.section-head h2{font:600 18px/1.33 var(--font-ui); margin:0; letter-spacing:0; min-width:0;}
+.section-head .more{
+  font:500 13px/1 var(--font-ui); color:var(--ink-2); cursor:pointer;
+  flex:0 0 auto; white-space:nowrap;
+  transition:color var(--dur-fast) var(--ease);
+}
+.section-head .more:hover{color:var(--ink);}
+.section-head .more:active{color:var(--ink); transform:translateY(1px);}
+
+/* ===== 大標題列 ===== */
+.app-head{margin-bottom:var(--sp-2);}
+.app-head .brand{
+  font:600 28px/1.2 var(--font-ui); letter-spacing:-0.01em; margin:0;
+  display:flex; align-items:baseline; gap:var(--sp-2);
+}
+.app-head .brand .en{font-size:20px; color:var(--ink-2); letter-spacing:.04em;}
+.app-head .slogan{font:400 15px/1.47 var(--font-ui); color:var(--ink-2); margin:var(--sp-1) 0 0;}
+.app-head .ver{margin-top:var(--sp-2);}
+
+/* 屏名標題 */
+.screen-title{font:600 22px/1.27 var(--font-ui); letter-spacing:-0.01em; margin:0 0 var(--sp-2);}
+
+/* ===== 分類 chip ===== */
+.chip-row{
+  display:flex; gap:var(--sp-2); overflow-x:auto; padding-bottom:var(--sp-2);
+  margin:var(--sp-2) 0 var(--sp-2); scrollbar-width:none;
+}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{
+  display:inline-flex; align-items:center; padding:var(--sp-2) var(--sp-3);
+  border:var(--border); border-radius:var(--radius-pill);
+  font:500 13px/1 var(--font-ui); color:var(--ink-2);
+  background:var(--paper); cursor:pointer; white-space:nowrap; flex:0 0 auto;
+  transition:border-color var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.chip:hover{border-color:var(--line-strong); color:var(--ink);}
+.chip:active{background:var(--fill-3); transform:translateY(1px);}
+.chip[aria-selected="true"]{border:var(--border-strong); color:var(--ink); font-weight:600;}
+
+/* ===== Banner ===== */
+.banner{
+  width:100%; height:140px; margin-top:var(--sp-2);
+  display:flex; align-items:flex-end; padding:var(--sp-3); cursor:pointer;
+  transition:border-color var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease);
+}
+.banner:hover{border-color:var(--line-strong); box-shadow:var(--shadow-lift);}
+.banner:active{box-shadow:none; transform:translateY(1px);}
+.banner .b-note{font:italic 11px/1.4 var(--font-note); color:var(--note); background:var(--paper); padding:2px 6px; border-radius:var(--radius-xs);}
+
+/* 推薦歌單卡（home 區段 A 下方，可點 → detail）*/
+.feature-card{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:var(--sp-3); gap:var(--sp-3); cursor:pointer;
+  border:var(--border); border-radius:var(--radius-md); padding:var(--sp-3) var(--sp-4);
+  background:var(--paper);
+  transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.feature-card:hover{background:var(--fill); border-color:var(--line-strong);}
+.feature-card:active{background:var(--fill-3); transform:translateY(1px);}
+.feature-card .fc-body{min-width:0;}
+.feature-card .fc-name{font:600 16px/1.375 var(--font-ui); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.feature-card .fc-sub{font:400 12px/1.33 var(--font-ui); color:var(--ink-3); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* ===== 小線框按鈕 ===== */
+.btn-sm{
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+  padding:var(--sp-2) var(--sp-3); border:var(--border);
+  border-radius:var(--radius-pill); background:var(--paper); color:var(--ink);
+  font:600 13px/1 var(--font-ui); cursor:pointer; flex:0 0 auto; white-space:nowrap;
+  transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.btn-sm:hover{border-color:var(--line-strong); background:var(--fill);}
+.btn-sm:active{background:var(--fill-3); transform:translateY(1px);}
+
+/* ===== 歌單卡 2 欄 ===== */
+.grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:var(--sp-4);}
+.playlist-card{cursor:pointer; min-width:0;
+  transition:transform var(--dur-fast) var(--ease);}
+.playlist-card .cover-grid{transition:border-color var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease);}
+.playlist-card:hover .cover-grid{border-color:var(--line-strong); box-shadow:var(--shadow-lift);}
+.playlist-card .name{
+  font:600 16px/1.375 var(--font-ui); margin-top:var(--sp-2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.playlist-card .sub{font:400 12px/1.33 var(--font-ui); color:var(--ink-3);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.playlist-card:active{transform:scale(.98);}
+
+/* ===== 歌曲列 ===== */
+.song-row{
+  display:flex; align-items:center; gap:var(--sp-3);
+  padding:var(--sp-3) var(--sp-1); border-bottom:var(--border-dash); cursor:pointer;
+  transition:background var(--dur-fast) var(--ease);
+}
+.song-row:last-child{border-bottom:none;}
+.song-row:hover{background:var(--fill);}
+.song-row:active{background:var(--fill-3);}
+.song-row .idx{font:600 13px/1 var(--font-note); color:var(--ink-3); width:22px; flex:0 0 auto; text-align:center;}
+.song-row .meta{flex:1 1 auto; min-width:0;}
+.song-row .title{
+  font:600 15px/1.3 var(--font-ui); color:var(--ink);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.song-row .artist{font:400 12px/1.4 var(--font-ui); color:var(--ink-3);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.song-row .time{font:600 11px/1 var(--font-note); color:var(--ink-3); flex:0 0 auto; white-space:nowrap;}
+.song-row .play-ic{
+  width:26px; height:26px; border:var(--border); border-radius:50%;
+  display:grid; place-items:center; flex:0 0 auto; color:var(--ink-2);
+  font-size:11px; transition:border-color var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease);
+}
+.song-row:hover .play-ic{border-color:var(--line-strong); color:var(--ink);}
+.song-row .more-ic{font:600 16px/1 var(--font-ui); color:var(--ink-3); flex:0 0 auto; width:18px; text-align:center;}
+
+/* ===== 主 / 次按鈕 ===== */
+.btn-primary,.btn-ghost{
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--sp-1);
+  padding:10px 20px; border-radius:var(--radius-pill);
+  background:var(--paper); color:var(--ink);
+  font:600 15px/1 var(--font-ui); cursor:pointer; white-space:nowrap;
+  transition:background var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.btn-primary{border:var(--border-strong);}
+.btn-ghost{border:var(--border);}
+.btn-primary:hover{background:var(--fill);}
+.btn-ghost:hover{background:var(--fill); border-color:var(--line-strong);}
+.btn-primary:active,.btn-ghost:active{background:var(--fill-3); transform:translateY(1px);}
+
+/* ===== 頂部導覽列（detail / player） ===== */
+.nav-bar{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:var(--sp-4); gap:var(--sp-3);
+}
+.nav-btn{
+  width:36px; height:36px; border:var(--border); border-radius:var(--radius-sm);
+  display:grid; place-items:center; cursor:pointer; background:var(--paper);
+  font:600 18px/1 var(--font-ui); color:var(--ink); flex:0 0 auto;
+  transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.nav-btn:hover{background:var(--fill); border-color:var(--line-strong);}
+.nav-btn:active{background:var(--fill-3); transform:translateY(1px);}
+.nav-bar .nav-label{font:500 13px/1 var(--font-ui); color:var(--ink-3); letter-spacing:.04em; white-space:nowrap;}
+
+/* ===== detail meta ===== */
+.detail-cover-wrap{display:flex; gap:var(--sp-4); align-items:flex-start; margin:var(--sp-2) 0 var(--sp-4);}
+.detail-info{flex:1 1 auto; min-width:0; align-self:center;}
+.detail-info .album{font:600 22px/1.27 var(--font-ui); letter-spacing:-0.01em; margin:0 0 var(--sp-2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.detail-info .meta-line{
+  font:400 13px/1.5 var(--font-ui); color:var(--ink-2);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.detail-actions{display:flex; gap:var(--sp-3); margin-bottom:var(--sp-5);}
+
+/* ===== player（覆蓋全屏，固定不靠捲動）===== */
+.player-screen{
+  position:absolute; inset:0; z-index:4;
+  background:var(--paper);
+  display:none; flex-direction:column;
+  padding:var(--sp-5) var(--content-pad) calc(var(--safe-bottom) + var(--sp-4));
+  overflow:hidden;
+}
+.player-screen.is-active{display:flex;}
+.player-screen .nav-bar{flex:0 0 auto; margin-bottom:var(--sp-3);}
+.player-cover-wrap{flex:0 0 auto; display:flex; justify-content:center; margin-bottom:var(--sp-3);}
+.player-info{flex:0 0 auto; text-align:center; margin:var(--sp-2) 0 var(--sp-3);}
+.player-info .pl-title{font:600 24px/1.2 var(--font-ui); letter-spacing:-0.01em; margin:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.player-info .pl-artist{font:400 15px/1.47 var(--font-ui); color:var(--ink-2); margin:var(--sp-1) 0 0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.player-info .pl-album{font:400 12px/1.33 var(--font-ui); color:var(--ink-3); margin:var(--sp-1) 0 0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lyrics{flex:0 0 auto; margin:0 0 var(--sp-3); padding:var(--sp-3) 0; border-top:var(--border-dash); border-bottom:var(--border-dash);}
+.lyrics .line-wrap{text-align:center;}
+.lyrics .line{font:400 14px/1.6 var(--font-ui); color:var(--ink-3); text-align:center;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; display:inline-block;}
+.lyrics .line.active{color:var(--ink); font-weight:600; padding:2px var(--sp-2);
+  background:var(--fill-2); border-radius:var(--radius-xs);}
+.lyrics .lyr-note{margin-top:var(--sp-2); text-align:center;}
+.player-bottom{flex:0 0 auto; margin-top:auto;}
+.progress{position:relative; height:4px; background:var(--fill-2); margin:0 0 var(--sp-2); border-radius:var(--radius-pill);}
+.progress .played{position:absolute; inset:0 33% 0 0; background:var(--ink); border-radius:var(--radius-pill);}
+.progress .knob{
+  position:absolute; left:67%; top:50%; width:13px; height:13px;
+  transform:translate(-50%,-50%); border:var(--border-strong);
+  border-radius:50%; background:var(--paper); cursor:grab;
+}
+.progress-time{display:flex; justify-content:space-between; font:600 11px/1 var(--font-note); color:var(--ink-3);}
+.controls{display:flex; align-items:center; justify-content:space-between; margin:var(--sp-4) 0 var(--sp-3); padding:0 var(--sp-2);}
+.ctrl-btn{
+  background:var(--paper); border:none; cursor:pointer; color:var(--ink-2);
+  font:400 18px/1 var(--font-ui); display:grid; place-items:center;
+  width:40px; height:40px; transition:color var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.ctrl-btn:hover{color:var(--ink);}
+.ctrl-btn:active{transform:scale(.92);}
+.ctrl-play{
+  width:60px; height:60px; border:var(--border-strong); border-radius:50%;
+  display:grid; place-items:center; cursor:pointer; background:var(--paper);
+  font:400 20px/1 var(--font-ui); color:var(--ink); flex:0 0 auto;
+  transition:background var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.ctrl-play:hover{background:var(--fill);}
+.ctrl-play:active{transform:scale(.94);}
+.player-foot{display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3); margin-bottom:var(--sp-1);}
+.badge{
+  display:inline-flex; align-items:center; gap:var(--sp-1);
+  border:var(--border); border-radius:var(--radius-pill);
+  padding:var(--sp-1) var(--sp-3); font:600 11px/1.2 var(--font-ui); color:var(--ink); white-space:nowrap; flex:0 0 auto;
+}
+.vol{display:flex; align-items:center; gap:var(--sp-2); flex:1 1 auto; max-width:150px;}
+.vol .vol-track{position:relative; height:3px; background:var(--fill-2); flex:1 1 auto; border-radius:var(--radius-pill);}
+.vol .vol-track .vol-fill{position:absolute; inset:0 40% 0 0; background:var(--ink); border-radius:var(--radius-pill);}
+.vol .vol-track .vol-knob{position:absolute; left:60%; top:50%; width:10px; height:10px; transform:translate(-50%,-50%); border:var(--border-strong); border-radius:50%; background:var(--paper);}
+.vol .vol-ic{font:400 12px/1 var(--font-ui); color:var(--ink-3); flex:0 0 auto;}
+.player-foot-note{text-align:center; margin-top:var(--sp-2);}
+
+/* ===== library ===== */
+.lib-tabs{display:flex; gap:var(--sp-5); border-bottom:var(--border); margin-bottom:var(--sp-3);}
+.lib-tab{
+  font:500 14px/1 var(--font-ui); color:var(--ink-3); padding:var(--sp-2) 0 var(--sp-3);
+  cursor:pointer; position:relative; border-bottom:var(--bw-strong) solid transparent; margin-bottom:-1px;
+  transition:color var(--dur-fast) var(--ease);
+}
+.lib-tab:hover{color:var(--ink-2);}
+.lib-tab[aria-selected="true"]{color:var(--ink); font-weight:600; border-bottom-color:var(--ink);}
+.lib-row{
+  display:flex; align-items:center; gap:var(--sp-3);
+  padding:var(--sp-3) var(--sp-1); border-bottom:var(--border-dash); cursor:pointer;
+  transition:background var(--dur-fast) var(--ease);
+}
+.lib-row:hover{background:var(--fill);}
+.lib-row:active{background:var(--fill-3);}
+.lib-row .meta{flex:1 1 auto; min-width:0;}
+.lib-row .name{font:600 16px/1.375 var(--font-ui); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lib-row .sub{font:400 12px/1.33 var(--font-ui); color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lib-row .handle{display:flex; flex-direction:column; gap:3px; flex:0 0 auto; padding:var(--sp-1);}
+.lib-row .handle i{width:16px; height:2px; background:var(--ink-3); border-radius:1px;}
+.feature-block{
+  display:flex; align-items:flex-start; gap:var(--sp-3);
+  border:var(--border); border-radius:var(--radius-md); padding:var(--sp-4);
+  margin-top:var(--sp-3);
+}
+.feature-block .fb-ic{
+  width:36px; height:36px; border:var(--border); border-radius:var(--radius-sm);
+  display:grid; place-items:center; flex:0 0 auto; color:var(--ink-2); font:400 16px/1 var(--font-ui);
+}
+.feature-block .fb-body{flex:1 1 auto; min-width:0;}
+.feature-block .fb-title{font:600 15px/1.4 var(--font-ui);}
+.feature-block .fb-sub{font:400 12px/1.4 var(--font-ui); color:var(--ink-3); margin-top:2px;}
+.dl-bar{height:4px; background:var(--fill-2); border-radius:var(--radius-pill); margin-top:var(--sp-2); position:relative; overflow:hidden;}
+.dl-bar::before{content:""; position:absolute; inset:0 35% 0 0; background:var(--ink); border-radius:var(--radius-pill);}
+.toggle{
+  width:40px; height:22px; border:var(--border); border-radius:var(--radius-pill);
+  position:relative; flex:0 0 auto; cursor:pointer; background:var(--paper);
+  transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease);
+}
+.toggle i{position:absolute; top:2px; left:2px; width:16px; height:16px; border:var(--border); border-radius:50%; background:var(--paper);
+  transition:transform var(--dur-fast) var(--ease);}
+.toggle[aria-checked="true"]{background:var(--fill-2); border-color:var(--line-strong);}
+.toggle[aria-checked="true"] i{transform:translateX(18px); border-color:var(--line-strong); background:var(--ink);}
+
+/* ===== profile ===== */
+.user-card{
+  display:flex; align-items:center; gap:var(--sp-3);
+  border:var(--border); border-radius:var(--radius-md); padding:var(--sp-4);
+  box-shadow:var(--shadow-lift); margin-bottom:var(--sp-2);
+}
+.user-card .uc-body{flex:1 1 auto; min-width:0;}
+.user-card .uc-name{font:600 16px/1.375 var(--font-ui); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.user-card .uc-sub{font:400 12px/1.33 var(--font-ui); color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.user-card .uc-edit{font:500 13px/1 var(--font-ui); color:var(--ink-2); cursor:pointer; flex:0 0 auto; white-space:nowrap;}
+.user-card .uc-edit:active{transform:translateY(1px);}
+.setting-row{
+  display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+  padding:var(--sp-3) var(--sp-1); border-bottom:var(--border-dash); cursor:pointer;
+  transition:background var(--dur-fast) var(--ease);
+}
+.setting-row:hover{background:var(--fill);}
+.setting-row .sr-label{font:400 15px/1.47 var(--font-ui); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.setting-row .sr-val{font:400 13px/1 var(--font-ui); color:var(--ink-3); flex:0 0 auto; white-space:nowrap;}
+.plan-card{
+  border:var(--border); border-radius:var(--radius-md);
+  padding:var(--sp-4); margin-bottom:var(--sp-4); background:var(--paper); position:relative;
+}
+.plan-card[data-recommend]{border:var(--border-strong); box-shadow:var(--shadow-lift-strong);}
+.plan-card[data-recommend]::after{
+  content:"推薦"; position:absolute; top:var(--sp-3); right:var(--sp-3);
+  font:600 11px/1 var(--font-note); color:var(--ink); border:var(--border-strong);
+  border-radius:var(--radius-xs); padding:3px 6px; letter-spacing:.04em;
+}
+.plan-head{display:flex; align-items:baseline; gap:var(--sp-2); margin-bottom:var(--sp-2); flex-wrap:wrap;}
+.plan-card .plan-name{font:600 16px/1.375 var(--font-ui);}
+.plan-card .price{font:600 22px/1.2 var(--font-ui); color:var(--ink); white-space:nowrap;}
+.plan-card .unit{font:400 12px/1.33 var(--font-ui); color:var(--ink-3); white-space:nowrap;}
+.plan-perks{list-style:none; margin:var(--sp-2) 0 var(--sp-3); padding:0;}
+.plan-perks li{font:400 13px/1.6 var(--font-ui); color:var(--ink-2); display:flex; align-items:flex-start; gap:var(--sp-2);}
+.plan-perks li::before{content:""; width:11px; height:11px; border:var(--border); border-radius:var(--radius-xs); flex:0 0 auto; margin-top:4px;}
+.plan-card[data-recommend] .plan-perks li::before{border-color:var(--line-strong);}
+.plan-btn{
+  width:100%; padding:10px; border:var(--border); border-radius:var(--radius-sm);
+  background:var(--paper); color:var(--ink); font:600 14px/1 var(--font-ui); cursor:pointer;
+  transition:background var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease);
+}
+.plan-card[data-recommend] .plan-btn{border:var(--border-strong);}
+.plan-btn:hover{background:var(--fill);}
+.plan-btn:active{background:var(--fill-3); transform:translateY(1px);}
+.plan-btn[data-current]{color:var(--ink-3); cursor:default;}
+
+/* 橫向藝人列 */
+.artist-row{display:flex; gap:var(--sp-4); overflow-x:auto; padding-bottom:var(--sp-2); scrollbar-width:none;}
+.artist-row::-webkit-scrollbar{display:none;}
+.artist-item{flex:0 0 auto; text-align:center; cursor:pointer; width:64px;}
+.artist-item .avatar-sm{transition:border-color var(--dur-fast) var(--ease);}
+.artist-item .a-name{font:400 12px/1.33 var(--font-ui); color:var(--ink-2); margin-top:var(--sp-2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.artist-item:hover .avatar-sm{border-color:var(--line-strong);}
+
+/* 搜尋框 */
+.search-box{
+  display:flex; align-items:center; gap:var(--sp-2);
+  border:var(--border); border-radius:var(--radius-md);
+  padding:var(--sp-3); margin-bottom:var(--sp-2); cursor:text; background:var(--paper);
+}
+.search-box .magnifier{
+  width:15px; height:15px; border:var(--bw-strong) solid var(--ink-3); border-radius:50%;
+  position:relative; flex:0 0 auto;
+}
+.search-box .magnifier::after{content:""; position:absolute; right:-5px; bottom:-4px; width:7px; height:2px; background:var(--ink-3); transform:rotate(45deg); border-radius:1px;}
+.search-box .ph-text{font:400 15px/1 var(--font-ui); color:var(--ink-3);}
+
+/* 功能露出條 */
+.feature-strip{
+  margin-top:var(--sp-6); padding-top:var(--sp-4); border-top:var(--border-dash);
+}
+.feature-strip .fs-head{font:11px/1.4 var(--font-note); color:var(--note); margin-bottom:var(--sp-3); display:block;}
+.feature-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:var(--sp-2);}
+.feature-pill{
+  border:var(--border-dash); border-radius:var(--radius-sm); padding:var(--sp-2) var(--sp-3);
+  font:500 12px/1.3 var(--font-ui); color:var(--ink-2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* ===== dock：mini-player + tab-bar ===== */
+.dock{flex:0 0 auto; background:var(--paper); position:relative; z-index:2;}
+/* player 為覆蓋全屏：進入時隱藏整個底部 dock */
+.device[data-active-screen="player"] .dock{display:none;}
+.miniplayer{
+  display:flex; align-items:center; gap:var(--sp-3);
+  height:var(--miniplayer-h); padding:0 var(--content-pad);
+  border-top:var(--border); cursor:pointer;
+  transition:background var(--dur-fast) var(--ease);
+}
+.miniplayer:hover{background:var(--fill);}
+.miniplayer:active{background:var(--fill-3);}
+.miniplayer .meta{flex:1 1 auto; min-width:0;}
+.miniplayer .title{font:600 13px/1.3 var(--font-ui); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.miniplayer .artist{font:400 11px/1.3 var(--font-ui); color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.miniplayer .mp-play{
+  width:34px; height:34px; border:var(--border); border-radius:50%;
+  display:grid; place-items:center; cursor:pointer; flex:0 0 auto; color:var(--ink);
+  font:400 12px/1 var(--font-ui);
+  transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease);
+}
+.miniplayer .mp-play:hover{border-color:var(--line-strong);}
+.miniplayer .mp-play:active{background:var(--fill-3);}
+
+/* tab-bar */
+.tabbar{
+  display:flex; height:calc(var(--tabbar-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom); border-top:var(--border); background:var(--paper);
+}
+.tab{
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:var(--sp-1); font:500 11px/1 var(--font-ui); color:var(--ink-3); cursor:pointer;
+  transition:color var(--dur-fast) var(--ease);
+  padding-top:var(--sp-2);
+}
+.tab:active{background:var(--fill);}
+.tab[aria-current="page"]{color:var(--ink); font-weight:600;}
+.tab .ic{width:22px; height:22px; position:relative;}
+.tab[aria-current="page"] .ic::before,
+.tab[aria-current="page"] .ic::after{border-color:var(--ink) !important;}
+.tab[aria-current="page"] .ic-home::after{background:transparent;}
+/* 屋形 */
+.ic-home::before{content:""; position:absolute; left:50%; top:1px; transform:translateX(-50%) rotate(45deg); width:13px; height:13px; border:var(--bw) solid var(--ink-3); border-bottom:none; border-right:none; border-top-left-radius:2px; background:transparent;}
+.ic-home::after{content:""; position:absolute; left:50%; bottom:1px; transform:translateX(-50%); width:15px; height:11px; border:var(--bw) solid var(--ink-3); border-top:none; background:transparent;}
+/* 放大鏡 */
+.ic-search::before{content:""; position:absolute; left:3px; top:3px; width:13px; height:13px; border:var(--bw) solid var(--ink-3); border-radius:50%; background:transparent;}
+.ic-search::after{content:""; position:absolute; right:2px; bottom:2px; width:7px; height:2px; background:var(--ink-3); transform:rotate(45deg); border-radius:1px;}
+.tab[aria-current="page"] .ic-search::after{background:var(--ink) !important;}
+/* 方塊堆（音樂庫） */
+.ic-lib::before{content:""; position:absolute; left:3px; top:4px; width:16px; height:5px; border:var(--bw) solid var(--ink-3); border-radius:1px; background:transparent;}
+.ic-lib::after{content:""; position:absolute; left:5px; top:12px; width:12px; height:7px; border:var(--bw) solid var(--ink-3); border-radius:1px; background:transparent;}
+/* 圓圈（我的） */
+.ic-me::before{content:""; position:absolute; left:50%; top:1px; transform:translateX(-50%); width:9px; height:9px; border:var(--bw) solid var(--ink-3); border-radius:50%; background:transparent;}
+.ic-me::after{content:""; position:absolute; left:50%; bottom:1px; transform:translateX(-50%); width:17px; height:9px; border:var(--bw) solid var(--ink-3); border-bottom:none; border-top-left-radius:9px; border-top-right-radius:9px; background:transparent;}
+
+/* ===== reduced motion ===== */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important;}
+  .reveal{opacity:1 !important; transform:none !important;}
+  .btn-primary:active,.btn-ghost:active,.playlist-card:active,.btn-sm:active,
+  .chip:active,.nav-btn:active,.ctrl-play:active,.ctrl-btn:active,.plan-btn:active,
+  .banner:active,.feature-card:active,.more:active,.uc-edit:active{transform:none !important;}
+}
+</style>
+</head>
+<body data-viewport="mobile">
+
+<div class="device" id="device" data-active-screen="home">
+
+  <!-- ===== 1. status-bar（固定頂部，常駐） ===== -->
+  <section data-screen="status-bar" class="statusbar" aria-label="狀態列">
+    <span class="sb-time">9:41</span>
+    <span class="sb-right">
+      <span class="signal" aria-label="訊號"><i></i><i></i><i></i><i></i></span>
+      <span class="wifi" aria-label="Wi-Fi"><i></i></span>
+      <span class="battery" aria-label="電量"><i></i></span>
+    </span>
+  </section>
+
+  <!-- ===== 中間舞台：可捲動內容區 + player 覆蓋層 ===== -->
+  <div class="stage">
+
+    <div class="viewport" id="viewport">
+
+      <!-- ===== 2. home ===== -->
+      <section data-screen="home" class="screen is-active" id="scr-home">
+        <div class="screen-note">// ───── SCREEN: home · 草稿 greybox ─────</div>
+
+        <div class="app-head reveal">
+          <h1 class="brand">迴聲 <span class="en">Resona</span></h1>
+          <p class="slogan">讓每首歌，回到你身上</p>
+          <div class="ver"><span class="note-tag">〔v3.2.0 草稿〕</span></div>
+        </div>
+
+        <!-- 區段 A：每日迴聲 -->
+        <div class="reveal">
+          <div class="section-head">
+            <h2>每日迴聲</h2>
+            <span class="more" data-go="detail">查看全部 ›</span>
+          </div>
+          <div class="ph banner" data-label="[ Banner ]" data-go="detail">
+            <span class="b-note">// 個人化每日推薦 · 每天 06:00 更新</span>
+          </div>
+          <!-- 推薦歌單卡：整塊可點 → detail -->
+          <div class="feature-card" data-go="detail">
+            <div class="fc-body">
+              <div class="fc-name">浪潮回聲 · 為今天精選</div>
+              <div class="fc-sub">28 首 · 依今天的你挑選</div>
+            </div>
+            <button class="btn-sm" data-play="〈晚風練習曲〉" data-go="player">▶ 立即播放</button>
+          </div>
+        </div>
+
+        <!-- 區段 B：為你精選歌單 -->
+        <div class="reveal">
+          <div class="section-head">
+            <h2>為你精選歌單</h2>
+            <span class="more" data-go="detail">查看全部 ›</span>
+          </div>
+          <div class="chip-row" role="tablist" aria-label="分類">
+            <span class="chip" role="tab" aria-selected="true">華語</span>
+            <span class="chip" role="tab" aria-selected="false">獨立</span>
+            <span class="chip" role="tab" aria-selected="false">電子</span>
+            <span class="chip" role="tab" aria-selected="false">放鬆</span>
+          </div>
+          <div class="grid-2">
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">浪潮回聲</div>
+              <div class="sub">28 首 · 1 小時 52 分</div>
+            </div>
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">深夜公路</div>
+              <div class="sub">34 首 · 2 小時 09 分</div>
+            </div>
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">島嶼晨光</div>
+              <div class="sub">9 首 · 34 分鐘</div>
+            </div>
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">雨後散步</div>
+              <div class="sub">21 首 · 1 小時 18 分</div>
+            </div>
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">城市心跳</div>
+              <div class="sub">40 首 · 2 小時 31 分</div>
+            </div>
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">山海之間</div>
+              <div class="sub">18 首 · 1 小時 04 分</div>
+            </div>
+            <div class="playlist-card" data-go="detail">
+              <div class="ph cover-grid" data-label="[ 封面 ]"></div>
+              <div class="name">失重時刻</div>
+              <div class="sub">25 首 · 1 小時 41 分</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 區段 C：熱門排行 -->
+        <div class="reveal">
+          <div class="section-head">
+            <h2>熱門排行</h2>
+            <span class="more" data-go="detail">查看全部 ›</span>
+          </div>
+          <div class="rank-list">
+            <div class="song-row" data-play="〈藍色信號〉" data-go="player">
+              <span class="idx">01</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">藍色信號</div><div class="artist">海平面樂團</div></div>
+              <span class="time">3:42</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈霓虹巷弄〉" data-go="player">
+              <span class="idx">02</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">霓虹巷弄</div><div class="artist">夜行列車</div></div>
+              <span class="time">4:05</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈候鳥地圖〉" data-go="player">
+              <span class="idx">03</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">候鳥地圖</div><div class="artist">Echo Lab</div></div>
+              <span class="time">3:18</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈靜電〉" data-go="player">
+              <span class="idx">04</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">靜電</div><div class="artist">何遠</div></div>
+              <span class="time">2:56</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈晚風練習曲〉" data-go="player">
+              <span class="idx">05</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">晚風練習曲</div><div class="artist">林知夏</div></div>
+              <span class="time">4:12</span>
+              <span class="play-ic">▷</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 功能露出條（6 核心功能名） -->
+        <div class="feature-strip reveal">
+          <span class="fs-head">// 待設計區塊 — 核心功能露出（design TODO）</span>
+          <div class="feature-grid">
+            <div class="feature-pill">個人化每日推薦</div>
+            <div class="feature-pill">無損音質串流</div>
+            <div class="feature-pill">離線下載</div>
+            <div class="feature-pill">歌詞同步</div>
+            <div class="feature-pill">跨裝置接續播放</div>
+            <div class="feature-pill">共享音樂庫</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 3. search ===== -->
+      <section data-screen="search" class="screen" id="scr-search">
+        <div class="screen-note">// ───── SCREEN: search · 草稿 greybox ─────</div>
+
+        <h1 class="screen-title reveal">搜尋</h1>
+
+        <div class="search-box reveal">
+          <span class="magnifier"></span>
+          <span class="ph-text">搜尋歌曲、藝人、歌單</span>
+        </div>
+
+        <div class="chip-row reveal" role="tablist" aria-label="分類">
+          <span class="chip" role="tab" aria-selected="true">華語</span>
+          <span class="chip" role="tab" aria-selected="false">獨立</span>
+          <span class="chip" role="tab" aria-selected="false">電子</span>
+          <span class="chip" role="tab" aria-selected="false">放鬆</span>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head">
+            <h2>熱門歌曲</h2>
+            <span class="more" data-go="detail">查看全部 ›</span>
+          </div>
+          <div class="rank-list">
+            <div class="song-row" data-play="〈無人車站〉" data-go="player">
+              <span class="idx">01</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">無人車站</div><div class="artist">夜行列車</div></div>
+              <span class="time">3:51</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈潮間帶〉" data-go="player">
+              <span class="idx">02</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">潮間帶</div><div class="artist">海平面樂團</div></div>
+              <span class="time">4:28</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈第七個夏天〉" data-go="player">
+              <span class="idx">03</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">第七個夏天</div><div class="artist">林知夏</div></div>
+              <span class="time">3:33</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈月台九又四分之三〉" data-go="player">
+              <span class="idx">04</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">月台九又四分之三</div><div class="artist">Echo Lab</div></div>
+              <span class="time">5:02</span>
+              <span class="play-ic">▷</span>
+            </div>
+            <div class="song-row" data-play="〈藍色信號〉" data-go="player">
+              <span class="idx">05</span>
+              <div class="ph cover-sm" data-label=""></div>
+              <div class="meta"><div class="title">藍色信號</div><div class="artist">海平面樂團</div></div>
+              <span class="time">3:42</span>
+              <span class="play-ic">▷</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head">
+            <h2>熱門藝人</h2>
+            <span class="more" data-go="detail">查看全部 ›</span>
+          </div>
+          <div class="artist-row">
+            <div class="artist-item" data-go="detail">
+              <div class="ph avatar-sm" data-label=""></div>
+              <div class="a-name">海平面樂團</div>
+            </div>
+            <div class="artist-item" data-go="detail">
+              <div class="ph avatar-sm" data-label=""></div>
+              <div class="a-name">林知夏</div>
+            </div>
+            <div class="artist-item" data-go="detail">
+              <div class="ph avatar-sm" data-label=""></div>
+              <div class="a-name">夜行列車</div>
+            </div>
+            <div class="artist-item" data-go="detail">
+              <div class="ph avatar-sm" data-label=""></div>
+              <div class="a-name">Echo Lab</div>
+            </div>
+            <div class="artist-item" data-go="detail">
+              <div class="ph avatar-sm" data-label=""></div>
+              <div class="a-name">何遠</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 4. detail ===== -->
+      <section data-screen="detail" class="screen" id="scr-detail">
+        <nav class="nav-bar reveal">
+          <span class="nav-btn" data-back aria-label="返回">‹</span>
+          <span class="nav-label">專輯</span>
+          <span class="nav-btn" aria-label="更多">⋯</span>
+        </nav>
+        <div class="screen-note">// ───── SCREEN: detail · 草稿 greybox ─────</div>
+
+        <div class="detail-cover-wrap reveal">
+          <div class="ph cover-md" data-label="[ 專輯封面 ]"></div>
+          <div class="detail-info">
+            <h1 class="album">島嶼晨光</h1>
+            <div class="meta-line">林知夏 · 2026 · 9 首 · 34 分鐘</div>
+          </div>
+        </div>
+
+        <div class="detail-actions reveal">
+          <button class="btn-primary" data-play="〈藍色信號〉" data-go="player">▶ 播放全部</button>
+          <button class="btn-ghost" data-play="〈靜電〉" data-go="player">⤮ 隨機播放</button>
+        </div>
+
+        <div class="reveal">
+          <span class="note">// 完整曲目 · 9 首 · 拖曳可排序</span>
+          <div class="track-list" style="margin-top:var(--sp-2);">
+            <div class="song-row" data-play="〈藍色信號〉" data-go="player">
+              <span class="idx">01</span>
+              <div class="meta"><div class="title">藍色信號</div><div class="artist">林知夏</div></div>
+              <span class="time">3:42</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈霓虹巷弄〉" data-go="player">
+              <span class="idx">02</span>
+              <div class="meta"><div class="title">霓虹巷弄</div><div class="artist">林知夏</div></div>
+              <span class="time">4:05</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈候鳥地圖〉" data-go="player">
+              <span class="idx">03</span>
+              <div class="meta"><div class="title">候鳥地圖</div><div class="artist">林知夏</div></div>
+              <span class="time">3:18</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈靜電〉" data-go="player">
+              <span class="idx">04</span>
+              <div class="meta"><div class="title">靜電</div><div class="artist">林知夏</div></div>
+              <span class="time">2:56</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈晚風練習曲〉" data-go="player">
+              <span class="idx">05</span>
+              <div class="meta"><div class="title">晚風練習曲</div><div class="artist">林知夏</div></div>
+              <span class="time">4:12</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈無人車站〉" data-go="player">
+              <span class="idx">06</span>
+              <div class="meta"><div class="title">無人車站</div><div class="artist">林知夏</div></div>
+              <span class="time">3:51</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈潮間帶〉" data-go="player">
+              <span class="idx">07</span>
+              <div class="meta"><div class="title">潮間帶</div><div class="artist">林知夏</div></div>
+              <span class="time">4:28</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈第七個夏天〉" data-go="player">
+              <span class="idx">08</span>
+              <div class="meta"><div class="title">第七個夏天</div><div class="artist">林知夏</div></div>
+              <span class="time">3:33</span><span class="more-ic">⋮</span>
+            </div>
+            <div class="song-row" data-play="〈月台九又四分之三〉" data-go="player">
+              <span class="idx">09</span>
+              <div class="meta"><div class="title">月台九又四分之三</div><div class="artist">林知夏</div></div>
+              <span class="time">5:02</span><span class="more-ic">⋮</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 6. library ===== -->
+      <section data-screen="library" class="screen" id="scr-library">
+        <div class="screen-note">// ───── SCREEN: library · 草稿 greybox ─────</div>
+
+        <h1 class="screen-title reveal">音樂庫</h1>
+
+        <div class="lib-tabs reveal" role="tablist" aria-label="音樂庫分頁">
+          <span class="lib-tab" role="tab" aria-selected="true">歌單</span>
+          <span class="lib-tab" role="tab" aria-selected="false">專輯</span>
+          <span class="lib-tab" role="tab" aria-selected="false">已下載</span>
+        </div>
+
+        <div class="reveal">
+          <div class="lib-row" data-go="detail">
+            <div class="ph cover-sm" data-label=""></div>
+            <div class="meta"><div class="name">浪潮回聲</div><div class="sub">歌單 · 28 首</div></div>
+            <span class="handle" aria-label="拖曳排序"><i></i><i></i><i></i></span>
+          </div>
+          <div class="lib-row" data-go="detail">
+            <div class="ph cover-sm" data-label=""></div>
+            <div class="meta"><div class="name">深夜公路</div><div class="sub">歌單 · 34 首</div></div>
+            <span class="handle" aria-label="拖曳排序"><i></i><i></i><i></i></span>
+          </div>
+          <div class="lib-row" data-go="detail">
+            <div class="ph cover-sm" data-label=""></div>
+            <div class="meta"><div class="name">島嶼晨光</div><div class="sub">專輯 · 9 首</div></div>
+            <span class="handle" aria-label="拖曳排序"><i></i><i></i><i></i></span>
+          </div>
+          <div class="lib-row" data-go="detail">
+            <div class="ph cover-sm" data-label=""></div>
+            <div class="meta"><div class="name">雨後散步</div><div class="sub">歌單 · 21 首</div></div>
+            <span class="handle" aria-label="拖曳排序"><i></i><i></i><i></i></span>
+          </div>
+          <div style="margin-top:var(--sp-2);"><span class="note">// 拖曳排序 · 長按移動列</span></div>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head"><h2>離線下載</h2></div>
+          <div class="feature-block">
+            <span class="fb-ic">↓</span>
+            <div class="fb-body">
+              <div class="fb-title">離線下載</div>
+              <div class="fb-sub">已下載 12 首 · 約 86 MB</div>
+              <div class="dl-bar"></div>
+            </div>
+            <span class="note-tag">〔自動更新〕</span>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head"><h2>共享音樂庫</h2></div>
+          <div class="feature-block">
+            <span class="fb-ic">⚇</span>
+            <div class="fb-body">
+              <div class="fb-title">共享音樂庫</div>
+              <div class="fb-sub">與家庭成員共建一座音樂庫（最多 6 人）</div>
+            </div>
+            <span class="toggle" role="switch" aria-checked="true" data-toggle><i></i></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 7. profile ===== -->
+      <section data-screen="profile" class="screen" id="scr-profile">
+        <div class="screen-note">// ───── SCREEN: profile · 草稿 greybox ─────</div>
+
+        <h1 class="screen-title reveal">我的</h1>
+
+        <div class="user-card reveal">
+          <div class="ph avatar" data-label=""></div>
+          <div class="uc-body">
+            <div class="uc-name">回聲聽眾</div>
+            <div class="uc-sub">迴聲 Resona Plus 會員</div>
+          </div>
+          <span class="uc-edit">編輯 ›</span>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head"><h2>播放偏好</h2></div>
+          <div class="setting-row">
+            <span class="sr-label">跨裝置接續播放</span>
+            <span class="toggle" role="switch" aria-checked="true" data-toggle><i></i></span>
+          </div>
+          <div class="setting-row">
+            <span class="sr-label">無損音質串流</span>
+            <span class="toggle" role="switch" aria-checked="true" data-toggle><i></i></span>
+          </div>
+          <div class="setting-row">
+            <span class="sr-label">歌詞同步</span>
+            <span class="toggle" role="switch" aria-checked="true" data-toggle><i></i></span>
+          </div>
+          <div class="setting-row">
+            <span class="sr-label">離線下載品質</span>
+            <span class="sr-val">無損 ›</span>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head"><h2>訂閱方案</h2></div>
+          <span class="note">// 三層方案卡 · Plus 推薦</span>
+
+          <div class="plan-card" style="margin-top:var(--sp-3);">
+            <div class="plan-head">
+              <span class="plan-name">免費</span>
+              <span class="price">NT$ 0</span>
+              <span class="unit">／月</span>
+            </div>
+            <ul class="plan-perks">
+              <li>隨機播放</li>
+              <li>含廣告插播</li>
+              <li>標準音質</li>
+            </ul>
+            <button class="plan-btn">選擇方案</button>
+          </div>
+
+          <div class="plan-card" data-recommend>
+            <div class="plan-head">
+              <span class="plan-name">Plus</span>
+              <span class="price">NT$ 149</span>
+              <span class="unit">／月</span>
+            </div>
+            <ul class="plan-perks">
+              <li>無廣告 · 指定單曲播放</li>
+              <li>無損音質串流</li>
+              <li>離線下載</li>
+            </ul>
+            <button class="plan-btn" data-current>目前方案</button>
+          </div>
+
+          <div class="plan-card">
+            <div class="plan-head">
+              <span class="plan-name">Family</span>
+              <span class="price">NT$ 249</span>
+              <span class="unit">／月</span>
+            </div>
+            <ul class="plan-perks">
+              <li>6 個帳號</li>
+              <li>共享音樂庫 · 家長控制</li>
+              <li>涵蓋全部 Plus 權益</li>
+            </ul>
+            <button class="plan-btn">選擇方案</button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /.viewport -->
+
+    <!-- ===== 5. player（覆蓋全屏，固定不靠捲動） ===== -->
+    <section data-screen="player" class="player-screen" id="scr-player">
+      <nav class="nav-bar">
+        <span class="nav-btn" data-back aria-label="收合">⌄</span>
+        <span class="nav-label">正在播放</span>
+        <span class="nav-btn" aria-label="更多">⋯</span>
+      </nav>
+
+      <div class="player-cover-wrap">
+        <div class="ph cover-lg" data-label="[ 正在播放封面 ]"></div>
+      </div>
+
+      <div class="player-info">
+        <h1 class="pl-title" id="player-title">晚風練習曲</h1>
+        <p class="pl-artist">林知夏</p>
+        <p class="pl-album">島嶼晨光</p>
+      </div>
+
+      <div class="lyrics">
+        <div class="line-wrap"><span class="line">霓虹熄了，街角還亮著</span></div>
+        <div class="line-wrap"><span class="line active">晚風吹過，把白天輕輕收走</span></div>
+        <div class="line-wrap"><span class="line">而我練習，讓自己慢下來</span></div>
+        <div class="lyr-note"><span class="note">// 逐字高亮 · 滾動同步</span></div>
+      </div>
+
+      <div class="player-bottom">
+        <div class="progress">
+          <div class="played"></div>
+          <div class="knob"></div>
+        </div>
+        <div class="progress-time"><span>02:47</span><span>04:12</span></div>
+
+        <div class="controls">
+          <button class="ctrl-btn" aria-label="隨機">⤮</button>
+          <button class="ctrl-btn" aria-label="上一首">◁◁</button>
+          <button class="ctrl-play" id="ctrl-play" aria-label="播放/暫停">⏸</button>
+          <button class="ctrl-btn" aria-label="下一首">▷▷</button>
+          <button class="ctrl-btn" aria-label="循環">↻</button>
+        </div>
+
+        <div class="player-foot">
+          <span class="badge">Hi-Res 無損</span>
+          <span class="vol">
+            <span class="vol-ic">◁</span>
+            <span class="vol-track"><span class="vol-fill"></span><span class="vol-knob"></span></span>
+            <span class="vol-ic">◁))</span>
+          </span>
+        </div>
+        <div class="player-foot-note"><span class="note">// 音質徽章 + 音量</span></div>
+      </div>
+    </section>
+
+  </div><!-- /.stage -->
+
+  <!-- ===== dock：mini-player + tab-bar ===== -->
+  <div class="dock">
+    <div class="miniplayer" id="miniplayer" data-play="〈晚風練習曲〉" data-go="player">
+      <div class="ph cover-xs" data-label=""></div>
+      <div class="meta">
+        <div class="title">晚風練習曲</div>
+        <div class="artist">林知夏</div>
+      </div>
+      <span class="mp-play" id="mp-play" aria-label="播放/暫停">⏸</span>
+    </div>
+
+    <!-- ===== 8. tab-bar ===== -->
+    <nav data-screen="tab-bar" class="tabbar" aria-label="主導覽">
+      <span class="tab" data-tab="home" aria-current="page">
+        <span class="ic ic-home"></span>首頁
+      </span>
+      <span class="tab" data-tab="search">
+        <span class="ic ic-search"></span>搜尋
+      </span>
+      <span class="tab" data-tab="library">
+        <span class="ic ic-lib"></span>音樂庫
+      </span>
+      <span class="tab" data-tab="profile">
+        <span class="ic ic-me"></span>我的
+      </span>
+    </nav>
+  </div>
+
+</div><!-- /.device -->
+
+<script>
+(function(){
+  var device = document.getElementById('device');
+  var viewport = document.getElementById('viewport');
+  // 全部畫面（含覆蓋式 player）皆以 data-screen 為索引
+  var screens = {};
+  document.querySelectorAll('.screen, .player-screen').forEach(function(s){
+    screens[s.getAttribute('data-screen')] = s;
+  });
+  var tabs = document.querySelectorAll('.tab');
+  // 各畫面對應底部 tab 的高亮歸屬
+  var tabFor = { home:'home', search:'search', detail:'library', player:'home', library:'library', profile:'profile' };
+  var current = 'home';
+  var hist = [];
+
+  function setTab(name){
+    tabs.forEach(function(t){
+      if (t.getAttribute('data-tab') === name) t.setAttribute('aria-current','page');
+      else t.removeAttribute('aria-current');
+    });
+  }
+
+  function activate(name){
+    Object.keys(screens).forEach(function(k){
+      screens[k].classList.toggle('is-active', k === name);
+    });
+    device.setAttribute('data-active-screen', name);
+    setTab(tabFor[name] || name);
+    current = name;
+    if (viewport) viewport.scrollTop = 0;
+  }
+
+  function show(name, isBack){
+    if (!screens[name] || name === current) return;
+    if (!isBack && current) hist.push(current);
+    activate(name);
+  }
+
+  function goBack(){
+    var prev = hist.length ? hist.pop() : 'home';
+    activate(prev);
+  }
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){ show(t.getAttribute('data-tab')); });
+  });
+
+  document.addEventListener('click', function(e){
+    var backEl = e.target.closest('[data-back]');
+    if (backEl){ e.preventDefault(); goBack(); return; }
+
+    var toggleEl = e.target.closest('[data-toggle]');
+    if (toggleEl){
+      var on = toggleEl.getAttribute('aria-checked') === 'true';
+      toggleEl.setAttribute('aria-checked', on ? 'false' : 'true');
+      return;
+    }
+
+    var goEl = e.target.closest('[data-go]');
+    if (goEl){
+      var playName = goEl.getAttribute('data-play');
+      if (playName){
+        var clean = playName.replace(/[〈〉]/g,'');
+        var titleEl = document.getElementById('player-title');
+        var mpTitle = document.querySelector('#miniplayer .title');
+        if (titleEl) titleEl.textContent = clean;
+        if (mpTitle) mpTitle.textContent = clean;
+      }
+      show(goEl.getAttribute('data-go'));
+    }
+  });
+
+  document.querySelectorAll('.chip-row').forEach(function(row){
+    var chips = row.querySelectorAll('.chip');
+    chips.forEach(function(c){
+      c.addEventListener('click', function(){
+        chips.forEach(function(x){ x.setAttribute('aria-selected','false'); });
+        c.setAttribute('aria-selected','true');
+      });
+    });
+  });
+  document.querySelectorAll('.lib-tabs').forEach(function(row){
+    var lt = row.querySelectorAll('.lib-tab');
+    lt.forEach(function(c){
+      c.addEventListener('click', function(){
+        lt.forEach(function(x){ x.setAttribute('aria-selected','false'); });
+        c.setAttribute('aria-selected','true');
+      });
+    });
+  });
+
+  function togglePlay(el){
+    var isPlay = el.textContent.trim() === '⏸';
+    el.textContent = isPlay ? '▶' : '⏸';
+  }
+  var ctrlPlay = document.getElementById('ctrl-play');
+  if (ctrlPlay) ctrlPlay.addEventListener('click', function(e){ e.stopPropagation(); togglePlay(ctrlPlay); });
+  var mpPlay = document.getElementById('mp-play');
+  if (mpPlay) mpPlay.addEventListener('click', function(e){ e.stopPropagation(); togglePlay(mpPlay); });
+})();
+</script>
+
+</body>
+</html>

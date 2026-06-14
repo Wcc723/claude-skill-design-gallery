@@ -1,0 +1,35 @@
+{
+  "style": "iOS 淺色 HIG",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, soft minimal iOS aesthetic, calm coastal morning light, pale blue and warm cream gradient with gentle ocean wave shapes, clean Apple-like product feel, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, late-night highway mood, deep indigo and violet gradient with subtle motion blur light streaks, moody yet refined, minimal modern, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, island dawn glow, peach apricot and soft gold gradient with faint sun-on-water shimmer, serene and bright, clean editorial minimal, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, after-the-rain walk, muted sage green and misty grey gradient with soft water-droplet bokeh, quiet and contemplative, gentle pastel palette, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, city heartbeat at dusk, magenta and electric blue gradient with subtle pulsing neon glow, energetic but tasteful, sleek modern minimal, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, between mountain and sea, layered teal and slate blue gradient with soft horizon banding, spacious and airy, refined minimal Apple-like, abstract, no text, no logo"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "style": "鴻蒙 HarmonyOS",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, clean luminous tech-blue gradient flowing through translucent glass-like layers, calm morning light, HarmonyOS aesthetic with airy negative space, soft cyan to electric blue, abstract, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, abstract ocean wave echo ripples rendered as smooth concentric translucent rings, cool teal and deep navy, serene minimal composition with lots of breathing space, soft frosted texture, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, late-night highway mood, dark indigo gradient with a single thin glowing electric-blue light streak cutting across, moody neon reflection, sleek and quiet, abstract, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, island dawn light over a calm sea horizon abstracted into soft pastel blue and warm peach gradient bands, gentle gridded haze, fresh and airy HarmonyOS feel, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, rain-after-walk atmosphere, blurred soft droplets and misty grey-blue bokeh with a single clear blue accent, quiet melancholic warmth, abstract painterly texture, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, city heartbeat pulse visualized as an abstract glowing equalizer waveform in vivid electric blue over a clean light-grey field, modern minimal energetic, lots of negative space, no text, no logo, suitable for a music streaming app"
+    }
+  ]
+}

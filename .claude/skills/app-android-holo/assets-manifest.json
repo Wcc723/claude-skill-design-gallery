@@ -1,0 +1,35 @@
+{
+  "style": "Holo 復古（Android Holo Dark / ICS）",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, dark moody nocturnal ocean wave at midnight with a single faint cyan glow on the horizon, deep black and teal, glassy reflective surface, ambient electronic mood, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, empty neon highway at night seen from above, long cyan light streaks on pure black asphalt, retro tech minimal, late-night drive atmosphere, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, soft dawn light breaking over a quiet island coastline, muted cool blues and pale grey mist, calm hopeful morning mood, gentle gradient, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, rain droplets on a dark window with blurred bokeh city lights, melancholic after-rain walk mood, deep indigo and faint cyan highlights, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, pulsing abstract cityscape of dark glass towers with electric blue accents, urban heartbeat energy, geometric vertical lines, night skyline silhouette, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, layered mountains meeting a calm sea at dusk, gradient from dark slate to soft teal, expansive serene between-land-and-sea mood, minimal, abstract, no text, no logo"
+    }
+  ]
+}

@@ -24,6 +24,12 @@ tools: Read, Write, Bash, Glob, Grep
 
 若輸入不是合法 JSON，立刻回覆 `{"ok": false, "error": "invalid_input"}` 並停止。
 
+**內容模式分流（三選一）：** 依下列規則決定產出契約：
+
+- slug 以 `motion-` 開頭 → **動態模式**（festival 內容 + 末段「動態風格額外要求」8 條）。
+- slug 以 `app-` 開頭，或輸入帶可選欄位 `"content_type": "app"` → **App 模式**：`brief_path` 必為 `.claude/content/app-brief.md`，產出契約套用末段「**App 風格額外要求**」（以 8 個 `data-screen` 取代第 3、4 條的 9 個 festival `data-block`）。
+- 其餘（`design-` 開頭）→ **festival 靜態模式**（下列 12 條硬性規範）。
+
 ## 工作流（6 步驟，必須依序執行）
 
 ### 1. 讀 Skill 規範
@@ -132,3 +138,101 @@ grep -c "data-block=" <output_path>   # 檢查 9 個 section
 - `grep -iE 'gsap|lottie|framer-motion|popmotion|tween\.js|anime\.js' <output>` 無結果
 
 任一項失敗就修正後重寫，最多重做 2 次。
+
+---
+
+## App 風格額外要求（slug 以 `app-` 開頭，或輸入帶 `content_type: "app"` 時）
+
+當進入 **App 模式**，本頁是虛構音樂串流 App「**迴聲 Resona**」的單頁互動 demo（**不是音樂節**）。此時 **`brief_path` 為 `.claude/content/app-brief.md`**，並以下列契約**取代** festival 第 3、4 條；第 1、2、5、6、7、8、9、10、11、12 條（單檔 / doctype+viewport meta / ≤200KB / 無 CDN / 相對圖 / WCAG AA / 響應式 / design tokens / 繁中 / 無 framework / 無自白）**仍適用**。
+
+### A. brief 與內容
+
+- 用 Read 讀 `.claude/content/app-brief.md`，萃取品牌、6 功能、3 方案、7 歌單、9 歌名、5 藝人、4 分類 chip、正在播放。
+- 所有「必抄」字串必須出現在**可見 body 文字**中（不可只放在 `aria-label` / `data-*` 屬性）。
+- 三層定價須一字不差出現於同一畫面（建議 profile）：`免費 NT$ 0`、`Plus NT$ 149`、`Family NT$ 249`（後綴「／月」）。
+
+### B. 8 個必含畫面區塊（取代 9 個 `data-block`）
+
+固定 id 與順序，每屏用 `<section data-screen="<id>">` 包起來，**8 個唯一 id、各出現恰一次**：
+
+`status-bar` → `home` → `search` → `detail` → `player` → `library` → `profile` → `tab-bar`
+
+- `status-bar`：頂部狀態列（持久外框，永遠可見），必含文字 `9:41` + 訊號 + 電量符號。
+- `tab-bar`：底部 4 tab（持久外框，永遠可見），可見文字含「首頁」「搜尋」「音樂庫」「我的」（標示 active 態）。
+- 其餘 6 個（home / search / detail / player / library / profile）是**可切換的內容畫面**，見下方「互動模型」。
+- 各屏內容對應見 app-brief 第 6 節「標準畫面區塊契約」。
+
+### B2. 互動模型（多畫面可導覽 — 必做，非單頁堆疊）
+
+本頁是一個**可操作的多畫面 App**，不是把 8 屏垂直堆疊捲動。用 **vanilla JS（inline `<script>`，禁外部庫）** 實作畫面切換：
+
+1. **持久外框 + 單一活躍畫面**：`status-bar`（頂）與 `tab-bar`（底）永遠顯示；6 個內容畫面**同時只顯示一個**（其餘 `hidden` 或 `display:none`），**預設顯示 `home`**。
+2. **底部 tab-bar 導覽**：4 個 tab 分別切到 `home`（首頁）/ `search`（搜尋）/ `library`（音樂庫）/ `profile`（我的），點擊切換活躍畫面並同步 active 態。
+3. **內容導覽**：
+   - 點 home / library / search 裡的歌單或專輯卡 → 切到 `detail`。
+   - 點 detail 的曲目、或任一處「正在播放」列 / 播放鍵 → 切到 `player`。
+   - `detail` 與 `player` 頂部要有**返回鍵**回到上一個畫面。
+4. **「看起來可點的都要能點」**：所有 tab / 卡片 / 歌曲列 / chip / 按鈕 / 播放控制都要有**真實 click handler**、`cursor: pointer`、明確的 `:hover` / `:active` 視覺回饋。沒有任何「看似可點卻沒反應」的死元素。
+5. **至少 5 個可達畫面**：home / search / detail / player / library / profile 共 6 個皆需可由互動到達。
+6. **韌性**：inline `<script>` ≤ 8 KB；JS 失敗時 `home` 內容仍可讀（預設可見的就是 home）。切換建議用 class toggle；若加切換 transition，必附 `prefers-reduced-motion`（見 D）。
+7. **畫面切換 CSS 規則（防永久疊層 bug，務必遵守）**：基礎規則 `.screen { display: none }`，**只有** `.screen.is-active { display: flex }`（或 block）。**嚴禁**任何「畫面專屬 class」無條件設 `display`（例如 `.player-screen { display: flex }`）——那會蓋過 `display:none` 讓該畫面永遠顯示、疊在其他畫面上。畫面專屬樣式只能設 padding/排版，不可設 display；要設 display 必須連帶 `.is-active`。產出後務必用 `getComputedStyle` 確認非 active 畫面為 `display:none`。
+8. **player 畫面必須在 390×844 內完整顯示（防控制列被推出視窗）**：`player` 為**覆蓋全屏的 now-playing**——進入時**隱藏底部 dock（tab-bar + mini-player）**，整個 player 用 `height:100%; display:flex; flex-direction:column`，封面用 `flex:1; min-height:0`（可壓縮），讓進度條、播放控制、徽章**永遠固定在可視區內、不依賴捲動、不超出 844、不被 tab-bar 遮擋**。返回時恢復 dock。絕對定位的浮動元素（FAB 等）不可與其他可點元素重疊。
+9. **導覽用結構屬性**：可導覽元素加 `data-go="<target-screen>"`（如歌單卡 `data-go="detail"`、曲目/迷你播放列 `data-go="player"`、返回鍵 `data-go="back"`），JS 以此委派 click。確保「可見、可點、會導覽」三者一致（不要讓不可點的文字長得像可點）。
+
+### C. 手機外觀規範（Mobile Chrome）
+
+1. `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`（**漏 viewport meta 是常見錯**）。
+2. **`<body data-viewport="mobile">` 必須在**（驗證辨識依據，等同 motion 的 `data-motion-type`）。
+3. 版面基準 **390×844**（iPhone 直式）；最外層裝置容器寬度鎖 390px、最小高 844px、置中、`overflow: hidden`、模擬螢幕圓角。
+4. 安全區：頂部 status-bar、底部 tab-bar 固定；中間是**當前活躍畫面的可捲動區**（依 B2 切換），內容不被 status-bar / tab-bar 遮住（用 `padding` 或 `env(safe-area-inset-bottom)` 預留）。
+5. tab-bar 固定於底（`position: sticky` 或 `absolute`/`fixed` 於裝置容器內）。
+
+### D. 動畫政策（可選但有條件）
+
+App 頁**預設靜態**即可。若使用任何裝飾性動畫（`@keyframes` / `transition` / Web Animations），**就必須**附 `@media (prefers-reduced-motion: reduce)` 區塊把動畫關閉或簡化，並只動 `transform` / `opacity`。
+
+### E. App 模式 self-check（取代 festival self-check 對應項）
+
+寫完後用 Bash 跑：
+```
+wc -c <output_path>
+grep -o 'data-screen="[^"]*"' <output_path> | sort | uniq -c    # 應為 8 個唯一 id，各 1 次
+grep -c '9:41' <output_path>                                    # ≥ 1
+grep -c 'data-viewport="mobile"' <output_path>                  # ≥ 1
+grep -c '<script' <output_path>                                 # ≥ 1（導覽 JS）
+grep -cE "addEventListener\(\s*['\"]click|onclick=" <output_path>  # ≥ 1（可點擊）
+```
+逐一比對：
+- 8 個 `data-screen` id 齊全、各出現一次（status-bar/home/search/detail/player/library/profile/tab-bar）。
+- 可見文字含「迴聲」「Resona」、6 功能名、7 歌單、9 歌名、5 藝人、4 分類 chip。
+- 三層定價精確字串（`NT$ 0` / `NT$ 149` / `NT$ 249`）與方案名（免費 / Plus / Family）齊全。
+- **有 inline `<script>` 且有 click handler**；預設只 `home` 可見、tab-bar 可切換、卡片/曲目可導覽到 detail/player、detail/player 有返回鍵。
+- 仍通過 ≤200KB + 無 `http(s)://` CDN。
+
+### F. 三個 App 常見漏洞（產出前自我複查）
+
+1. 只給 `<section id="home">` 卻**漏寫 `data-screen="home"`** → 驗證抓不到（最高頻錯）。
+2. 把「迴聲 / Resona / 歌名 / NT$ 149」等權威字串**只放在 `aria-label` / `data-*` 屬性**，未進可見 body 文字 → 純圖示風格易踩。
+3. 漏寫 `viewport` meta 或 `<body data-viewport="mobile">`。
+
+### App 模式結構化回報
+
+回傳單行 JSON（`sections_found` 改回報 8 個 `data-screen`）：
+```json
+{
+  "ok": true,
+  "slug": "app-ios-hig",
+  "file_path": "public/works/app-ios-hig/index.html",
+  "file_size_bytes": 91234,
+  "content_type": "app",
+  "screens_found": ["status-bar","home","search","detail","player","library","profile","tab-bar"],
+  "brand_found": true,
+  "features_found": 6,
+  "plans_found": ["免費 NT$ 0","Plus NT$ 149","Family NT$ 249"],
+  "playlists_found": 7,
+  "tracks_found": 9,
+  "artists_found": 5,
+  "external_resources": [],
+  "warnings": []
+}
+```

@@ -1,6 +1,6 @@
 # Claude Code Skill 設計風格圖鑑 · 島嶼共鳴 2026
 
-> 一個音樂節，**40 種設計語言**。
+> 一個音樂節 + 一個 App，**52 種設計語言**。
 > 由 Claude Code 主執行緒撰寫 Skill，再交給 SubAgent 透過 Skill 完成單檔網頁。
 > 內容相同、視覺各異——這就是設計風格的本體。
 
@@ -12,10 +12,11 @@
 
 ## 這是什麼
 
-40 份單檔 HTML 網頁，每一份都是同一個虛構音樂節「**島嶼共鳴 2026**」（12 樂團 / 3 舞台 / 3 票價 / 9 贊助商 / 9 個標準區塊），但用 40 種**完全不同的設計語言**重新詮釋。
+52 份單檔 HTML 網頁，分三輪。前兩輪是同一個虛構音樂節「**島嶼共鳴 2026**」（12 樂團 / 3 舞台 / 3 票價 / 9 贊助商 / 9 個標準區塊）；第三輪則換成同一個虛構音樂串流 App「**迴聲 Resona**」（6 功能 / 3 訂閱方案 / 8 個標準畫面）。同一份內容，用 52 種**完全不同的設計語言**重新詮釋。
 
 - 🎨 **第一輪 · 25 種靜態風格**：玻璃擬態、新擬物化、Material You、極簡、暗黑、蒸氣波、Y2K、Web 1.0、美式復古印刷、Synthwave、包浩斯、野獸派、故障藝術、賽博龐克、構成主義、ASCII 終端機、雜誌排版、日式禪意、中國風國潮、北歐極簡、瑞士國際、台灣廟會、等距 3D、手繪塗鴉、漸層 Mesh
 - 🎬 **第二輪 · 15 種動態效果**：視差滾動 × 3、Scroll-driven × 3、入場動畫 × 3、循環動畫 × 3、指標互動 × 3
+- 📱 **第三輪 · 12 種行動 App 介面**：iOS HIG、iOS 深色、Material You、One UI、Fluent、鴻蒙、iOS6 擬物、Android Holo（8 原生平台）＋ 新野獸派、玻璃擬態、Y2K、線框 lo-fi（4 風格化）。在圖鑑中以**手機外框 + 即時 iframe** 呈現直式 App 畫面。
 
 每份 Skill 都是**可下載的單一目錄** `.claude/skills/<slug>/`——複製到任意 Claude Code 專案即可被 Claude 召喚並重現該風格網頁。
 
@@ -67,7 +68,7 @@ npm run dev
 | `npm run build` | 產 production build |
 | `npm run preview` | 預覽 build 結果（含 base path） |
 | `npm run deploy` | build + 推到 gh-pages 分支（手動部署備案） |
-| `node scripts/verify-page.mjs --all` | 驗證 40 份頁面（9 區塊、樂團名、票價、無 CDN、motion 檢查） |
+| `node scripts/verify-page.mjs --all` | 驗證全部頁面（festival 9 區塊／樂團／票價、app 8 畫面／App 內容、無 CDN、motion 檢查） |
 | `node scripts/screenshot-pages.mjs --slug <slug>` | 截單張縮圖 |
 | `node scripts/record-webm.mjs --slug motion-<slug>` | 錄 3s WebM hover 預覽 |
 | `node scripts/gen-images.mjs --slug <slug>` | 透過 codex imagegen 批次產圖 |
@@ -99,6 +100,24 @@ build 後把 `dist/` 推到 `gh-pages` 分支。在 Pages → Source 選 `gh-pag
 
 ---
 
+## 分析與廣告（選用）
+
+本站支援 **GA4** 與 **Google AdSense**，全部由環境變數控制——**未設定就完全不載入、不送任何請求**（build 產物也不含任何 Google loader URL）。
+
+| 變數 | 用途 |
+| --- | --- |
+| `VITE_GA_ID` | GA4 評估 ID（`G-XXXXXXXXXX`） |
+| `VITE_ADSENSE_CLIENT` | AdSense 發布商 ID（`ca-pub-…`） |
+| `VITE_ADSENSE_SLOT_INFEED` | 作品 grid 內每 8 張卡插入的 in-feed 版位 |
+| `VITE_ADSENSE_SLOT_SIDEBAR` | footer 版位（可選） |
+
+- **本機**：`cp .env.example .env.local` 後填值（未填的功能不啟用；dev 會顯示虛線「廣告版位」佔位框）。
+- **部署**：在 repo **Settings → Secrets and variables → Actions → Variables** 設同名 `vars`（這些 ID 本就公開，用 Variables 而非 Secrets）。
+- **邊界**：GA / AdSense 只存在於外層 gallery，作品頁 `public/works/*/index.html` 維持單檔自足、無外部 CDN。
+- ⚠️ 正式投放 AdSense 前，需自行補上隱私權政策頁與 cookie 同意機制（本專案僅接好線路與預留版位）。
+
+---
+
 ## 下載任一 Skill 給自己用
 
 兩種方式：
@@ -113,9 +132,9 @@ build 後把 `dist/` 推到 `gh-pages` 分支。在 Pages → Source 選 `gh-pag
 
 ---
 
-## 標準 9 區塊
+## 標準 9 區塊（festival）
 
-所有 40 頁都用同一份 HTML 結構骨架，每個區塊用 `<section data-block="<id>">` 包起來：
+前兩輪 40 份音樂節頁都用同一份 HTML 結構骨架，每個區塊用 `<section data-block="<id>">` 包起來：
 
 | # | data-block | 內容 |
 |---|---|---|
@@ -130,6 +149,8 @@ build 後把 `dist/` 推到 `gh-pages` 分支。在 Pages → Source 選 `gh-pag
 | 9 | `footer-faq` | 7 條 FAQ + 聯絡 |
 
 差異**只在視覺設計**，便於並列比較不同風格的詮釋。
+
+第三輪 12 份行動 App 頁則改用 8 個 `<section data-screen="<id>">`（`status-bar → home → search → detail → player → library → profile → tab-bar`），內容換成「迴聲 Resona」App，並要求 `<body data-viewport="mobile">` 與 390×844 直式版面。
 
 ---
 

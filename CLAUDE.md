@@ -4,10 +4,13 @@
 
 ## 專案本質
 
-「**Claude Code Skill 設計風格圖鑑**」——示範規模化工作流：**主執行緒寫 Skill、SubAgent 透過 Skill 產出單檔網頁**。所有作品圍繞同一個虛構主題「島嶼共鳴 2026」音樂節，目前共 40 份：
+「**Claude Code Skill 設計風格圖鑑**」——示範規模化工作流：**主執行緒寫 Skill、SubAgent 透過 Skill 產出單檔網頁**。目前共 52 份，分三輪、兩種內容主題：
 
-- **第一輪 25 份靜態**（`design-*` slug）
-- **第二輪 15 份動態**（`motion-*` slug），分 5 類 motionType：`parallax / scroll-driven / reveal / loop / pointer`
+- **第一輪 25 份靜態**（`design-*` slug）——音樂節「島嶼共鳴 2026」
+- **第二輪 15 份動態**（`motion-*` slug），分 5 類 motionType：`parallax / scroll-driven / reveal / loop / pointer`——音樂節
+- **第三輪 12 份行動 App**（`app-*` slug）——虛構音樂串流 App「迴聲 Resona」，8 原生平台（`native-ui`）＋ 4 風格化（`stylized-mobile`）。內容主題改用 `app-brief.md`，畫面契約改用 8 個 `data-screen`（非音樂節 9 個 `data-block`），gallery 以手機外框 + iframe 呈現。
+
+> **兩套內容主題並存**：`design-*` / `motion-*` 用 `festival-brief.md`（音樂節）；`app-*` 用 `app-brief.md`（App）。verify 與 SubAgent 契約皆以 slug 前綴分流（`app-` / `motion-` / 其餘）。
 
 線上版：https://www.casper.tw/claude-skill-design-gallery/
 
@@ -17,25 +20,31 @@
 
 ```
 .claude/
-  agents/style-page-builder.md     # SubAgent 契約，改規則就改這
-  content/festival-brief.md        # 共用內容資料庫（唯讀，所有頁面共用）
+  agents/style-page-builder.md     # SubAgent 契約（festival / motion / app 三模式），改規則就改這
+  content/festival-brief.md        # 音樂節內容資料庫（唯讀，design-* / motion-* 共用）
+  content/app-brief.md             # App「迴聲 Resona」內容資料庫（唯讀，app-* 共用）
   skills/<slug>/                   # 每個風格的 Skill
     SKILL.md                       # frontmatter + 完整風格規範
     assets-manifest.json           # AI 圖像生成 prompt 清單
 public/works/<slug>/               # SubAgent 產出的成品
   index.html                       # 單檔網頁 ≤ 200 KB
-  thumb.webp                       # 1280×800 截圖
+  thumb.webp                       # 1280×800 截圖（app-* 為 390×844 直式）
   thumb.webm                       # （motion 限定）3s loop hover 預覽
   assets/                          # AI 生成圖
 src/
-  App.vue                          # gallery 主頁
-  data/works.ts                    # 40 份 metadata（slug / 分類 / round / motionType / status）
+  App.vue                          # gallery 主頁（含 in-feed AdSlot 插入）
+  main.ts                          # 掛載 + 條件式 initGA4() / loadAdSense()
+  lib/analytics.ts                 # GA4 條件式 loader（VITE_GA_ID）
+  lib/adsense.ts                   # AdSense 條件式 loader（VITE_ADSENSE_CLIENT）
+  data/works.ts                    # 52 份 metadata（slug / 分類 / round / motionType / viewport / status）
   data/skill-content.ts            # import.meta.glob 讀 SKILL.md 給 drawer
   components/
-    WorkCard.vue                   # 縮圖卡（hover WebM lazy-load）
-    FilterBar.vue                  # 6 個分類 chip
-    RoundTab.vue                   # 「全部 / 靜態 25 / 動態 15」
-    SkillDrawer.vue                # 點卡開 drawer 顯示 SKILL.md + 複製
+    WorkCard.vue                   # 縮圖卡（hover WebM lazy-load；app 用直式手機外框縮圖）
+    FilterBar.vue                  # 分類 chip（含 native-ui / stylized-mobile）
+    RoundTab.vue                   # 「全部 / 靜態 25 / 動態 15 / 行動 12」
+    SkillDrawer.vue                # 點卡開 drawer 顯示 SKILL.md + 複製（app 加左側手機預覽）
+    PhonePreview.vue               # 手機外框 + 即時 iframe（app 限定）
+    AdSlot.vue                     # AdSense 版位（未設 client 時 dev 顯示佔位框、prod 不渲染）
 scripts/
   gen-images.mjs                   # codex imagegen 批次產圖
   verify-page.mjs                  # cheerio 驗證（9 區塊 / 12 樂團 / 票價 / motion 額外）
@@ -232,6 +241,10 @@ push 到 `main` 觸發 `.github/workflows/deploy.yml`：
 
 手動部署：`npm run deploy`（用 `gh-pages` 套件推到 `gh-pages` 分支）。
 
+#### 分析與廣告環境變數（選用）
+
+`VITE_GA_ID` / `VITE_ADSENSE_CLIENT` / `VITE_ADSENSE_SLOT_INFEED` / `VITE_ADSENSE_SLOT_SIDEBAR`：皆選用，**任一留空即停用對應功能且不載入任何外部腳本、不送請求**（build 產物經 DCE 後也不含 Google loader URL）。本機放 `.env.local`（範本見 `.env.example`）；CI 放 GitHub **Variables**（`vars.*`，非 secrets，因為這些 ID 本就公開）。GA4 在 `src/lib/analytics.ts`、AdSense 在 `src/lib/adsense.ts`，由 `main.ts` 條件式呼叫；版位元件為 `AdSlot.vue`。
+
 ### 重拍 README 封面
 
 ```bash
@@ -252,6 +265,8 @@ node scripts/cover-shot.mjs http://localhost:5173/   # 從本機拍
 - ❌ **不要動 `WorkCard.vue` 的 `import.meta.env.BASE_URL` 拼接**——這是 GitHub Pages base path 正確運作的關鍵。
 - ❌ **不要 commit `dist/`**——`.gitignore` 已含。
 - ❌ **不要在 `public/.nojekyll` 加內容**——必須是空檔，Vite 才會原樣 copy 給 gh-pages。
+- ❌ **不要把 GA / AdSense / 任何外部腳本加進 `public/works/<slug>/index.html`**——只能在外層 gallery（`main.ts` / `App.vue` / `AdSlot.vue` / `lib/*`）。作品頁必須維持單檔自足、無外部 CDN（verify 的 CDN 檢查對 app-* 仍生效）。
+- ❌ **不要在 `app-*` 頁寫死樂團 / 票價，或把音樂節 9 個 `data-block` 用在 App**——app 頁用 `app-brief.md` 內容與 8 個 `data-screen`。
 
 ---
 

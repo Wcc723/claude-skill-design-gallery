@@ -1,0 +1,35 @@
+{
+  "style": "One UI",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, soft pastel blue and grey gradient with calm flowing waves, gentle morning light, minimal and airy, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, deep midnight highway mood with cool indigo and teal tones, faint motion-blur light streaks, moody and serene, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, warm sunrise over an island coastline, soft peach to soft blue gradient, gentle hazy glow, hopeful and tranquil, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, after-rain city walk atmosphere, muted greens and soft grey with subtle water reflections and bokeh, contemplative and fresh, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, electronic city heartbeat with soft neon blue and violet pulses on a clean dark canvas, rhythmic and modern, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, mountains meeting sea, layered soft gradient bands of slate blue and warm sand, expansive and weightless, calm and spacious, abstract, no text, no logo"
+    }
+  ]
+}

@@ -34,6 +34,13 @@ jobs:
         env:
           # 若改了儲存庫名稱，把這裡改為 /<repo-name>/
           VITE_BASE: /${{ github.event.repository.name }}/
+          # 分析與廣告 ID（皆為公開值）。來源用 Repository/Org Variables（vars.*），非 secrets。
+          # 未在 repo 設定時，vars.* 展開為空字串＝停用，build 仍正常。
+          # 設定位置：Settings → Secrets and variables → Actions → Variables。
+          VITE_GA_ID: ${{ vars.VITE_GA_ID }}
+          VITE_ADSENSE_CLIENT: ${{ vars.VITE_ADSENSE_CLIENT }}
+          VITE_ADSENSE_SLOT_INFEED: ${{ vars.VITE_ADSENSE_SLOT_INFEED }}
+          VITE_ADSENSE_SLOT_SIDEBAR: ${{ vars.VITE_ADSENSE_SLOT_SIDEBAR }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -17,6 +17,8 @@ function arg(name, fallback) {
 const slugArg = arg('slug');
 const allMode = process.argv.includes('--all');
 const motionOnly = process.argv.includes('--motion-only');
+// app-* 預設靜態、不錄 webm（直式頁用橫式 viewport 錄製無意義）。除非顯式 --app-scroll。
+const appScroll = process.argv.includes('--app-scroll');
 const WIDTH = Number(arg('width', 1280));
 const HEIGHT = Number(arg('height', 800));
 const SECONDS = Number(arg('seconds', 3));
@@ -160,6 +162,8 @@ async function main() {
     process.exit(1);
   }
   if (motionOnly) slugs = slugs.filter((s) => s.startsWith('motion-'));
+  // 預設把 app-* 排除（除非顯式 --app-scroll 或單獨指定 --slug）
+  if (!appScroll && !slugArg) slugs = slugs.filter((s) => !s.startsWith('app-'));
 
   const browser = await chromium.launch();
   let ok = 0;

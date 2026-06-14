@@ -19,6 +19,9 @@ const order: (Category | 'all')[] = [
   'cultural',
   'decorative',
   'motion',
+  // 第三輪行動 App 分類（counts 依 activeRound 計算，非第三輪時 count=0 自動隱藏）
+  'native-ui',
+  'stylized-mobile',
 ];
 const allLabel = (key: Category | 'all') => (key === 'all' ? '全部' : categoryLabels[key]);
 </script>

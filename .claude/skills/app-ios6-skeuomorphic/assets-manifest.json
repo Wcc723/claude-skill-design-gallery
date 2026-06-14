@@ -1,0 +1,35 @@
+{
+  "style": "iOS6 Skeuomorphic / iOS6 擬物",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, soft dawn light over a misty island coastline, warm amber and pale teal gradient, gentle morning haze, abstract, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, late-night empty highway under deep indigo sky, distant red tail-light streaks, moody cinematic blur, abstract, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, ocean waves and rolling mountain ridges blending into one horizon, muted sage green and slate blue, calm panoramic abstraction, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, rain-soaked city street after a shower, wet reflective pavement, soft neon glow in puddles, melancholic teal and warm grey, abstract, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, abstract pulsing city heartbeat, layered concentric magenta and electric blue light rings, energetic nocturnal glow, no text, no logo, suitable for a music streaming app"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, weightless floating particles drifting in a soft pastel void, dreamy lavender and cream gradient, serene zero-gravity feeling, abstract, no text, no logo, suitable for a music streaming app"
+    }
+  ]
+}

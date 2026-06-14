@@ -6,6 +6,7 @@ defineProps<{
   totalAll: number;
   totalR1: number;
   totalR2: number;
+  totalR3: number;
 }>();
 
 defineEmits<{
@@ -32,6 +33,11 @@ defineEmits<{
       <span class="tab-name">動態</span>
       <span class="tab-tag">第二輪</span>
       <span class="tab-count">{{ totalR2 }}</span>
+    </button>
+    <button class="tab" :class="{ 'is-active': active === 3 }" @click="$emit('change', 3)">
+      <span class="tab-name">行動</span>
+      <span class="tab-tag">第三輪</span>
+      <span class="tab-count">{{ totalR3 }}</span>
     </button>
   </nav>
 </template>

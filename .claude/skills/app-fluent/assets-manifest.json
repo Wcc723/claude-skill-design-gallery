@@ -1,0 +1,35 @@
+{
+  "style": "Microsoft Fluent / WinUI",
+  "images": [
+    {
+      "filename": "cover-1.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, Microsoft Fluent design mood, soft frosted-glass acrylic translucency, clean corporate blue gradient #0067C0 fading into cool neutral grey, subtle layered depth and gentle edge light, calm and orderly, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-2.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, late-night highway atmosphere, deep slate grey with a single cool blue reveal-highlight glow, smooth gradient blur like Mica material, minimal abstract bands of soft light, restrained and moody, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-3.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, island morning light mood, pale misty grey-white acrylic haze with a faint warm-to-cool blue gradient sunrise, soft translucent layers and subtle grain, airy and serene, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-4.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, after-the-rain walk mood, muted neutral greys with a quiet teal-blue accent, soft reflective glass surfaces and gentle blur, fresh and clean minimalism, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-5.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, city heartbeat mood, layered translucent grey panels with a pulsing electric blue #0067C0 core, Fluent acrylic depth and crisp edge light, energetic yet corporate-clean, abstract, no text, no logo"
+    },
+    {
+      "filename": "cover-6.webp",
+      "size": "600x600",
+      "prompt": "Square album cover artwork, between mountains and sea mood, cool grey-blue gradient horizon with soft frosted-glass mist, smooth depth layers and subtle noise texture, expansive and tranquil, abstract, no text, no logo"
+    }
+  ]
+}
