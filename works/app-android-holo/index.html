@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>迴聲 Resona — Holo 復古</title>
+<style>
+:root {
+  --screen-w: 390px;
+  --screen-h: 844px;
+  --statusbar-h: 24px;
+  --actionbar-h: 48px;
+  --tab-h: 40px;
+  --miniplayer-h: 56px;
+  --tabbar-h: 52px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --screen-radius: 28px;
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --gutter: 16px;
+
+  --holo-bg: #000000;
+  --holo-surface: #0a0a0a;
+  --holo-surface-2: #141414;
+  --holo-surface-3: #1c1c1c;
+  --holo-blue: #33b5e5;
+  --holo-blue-dim: #2a93b8;
+  --holo-blue-soft: rgba(51, 181, 229, 0.12);
+  --holo-blue-glow: rgba(51, 181, 229, 0.22);
+
+  --holo-text: #e8e8e8;
+  --holo-text-2: #a0a0a0;
+  --holo-text-3: #6a6a6a;
+  --holo-label: #808080;
+
+  --holo-line: #222222;
+  --holo-line-2: #1a1a1a;
+  --holo-divider-blue: #33b5e5;
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-card: 4px;
+  --radius-none: 0px;
+  --radius-pill: 999px;
+
+  --shadow-bar: 0 1px 0 rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.5);
+  --shadow-mini: 0 -1px 0 rgba(0,0,0,0.9), 0 -2px 6px rgba(0,0,0,0.5);
+  --glow-blue: 0 0 8px var(--holo-blue-glow);
+
+  --font-base: 'Roboto', 'Noto Sans TC', 'PingFang TC', 'Helvetica Neue', system-ui, sans-serif;
+  --font-light: 'Roboto Light', 'Roboto', 'Noto Sans TC', system-ui, sans-serif;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --tracking-caps: 0.12em;
+  --tracking-tight: -0.01em;
+
+  --dur-fast: 90ms;
+  --dur-base: 140ms;
+  --ease-holo: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background:
+    radial-gradient(120% 80% at 50% -10%, #07151b 0%, #000 60%),
+    #000;
+  min-height: 100%;
+}
+body {
+  font-family: var(--font-base);
+  color: var(--holo-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── 手機外殼 ── */
+.device {
+  width: var(--screen-w);
+  height: var(--screen-h);
+  margin: 0 auto;
+  background: var(--holo-bg);
+  color: var(--holo-text);
+  font-family: var(--font-base);
+  border-radius: var(--screen-radius);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 0 0 2px #0d0d0d,
+    0 0 0 11px #050505,
+    0 0 0 12px #1a1a1a,
+    0 30px 80px rgba(0,0,0,0.8),
+    0 0 60px rgba(51,181,229,0.06);
+}
+.device::before {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none; z-index: 50;
+  background: radial-gradient(100% 50% at 50% 0%, rgba(51,181,229,0.05), transparent 55%);
+  border-radius: var(--screen-radius);
+}
+
+/* ── 狀態列 ── */
+.statusbar {
+  height: var(--statusbar-h);
+  flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--sp-4);
+  font-size: 11px; color: var(--holo-text);
+  background: var(--holo-bg);
+  position: relative; z-index: 30;
+  letter-spacing: 0.01em;
+}
+.statusbar .time { font-weight: var(--weight-medium); }
+.statusbar .right { display: flex; gap: var(--sp-2); align-items: center; }
+.statusbar .right .sig { display: inline-flex; align-items: flex-end; gap: 1px; height: 9px; }
+.statusbar .right .sig i { width: 2px; background: var(--holo-text); display: inline-block; border-radius: 1px; }
+.statusbar .right .sig i:nth-child(1){ height: 3px; }
+.statusbar .right .sig i:nth-child(2){ height: 5px; }
+.statusbar .right .sig i:nth-child(3){ height: 7px; }
+.statusbar .right .sig i:nth-child(4){ height: 9px; opacity: 0.4; }
+.statusbar .right .wifi { font-size: 10px; }
+.statusbar .right .batt { display: inline-flex; align-items: center; gap: 3px; }
+.statusbar .right .batt .cell {
+  width: 18px; height: 9px; border: 1px solid var(--holo-text); border-radius: 2px;
+  position: relative; display: inline-block;
+}
+.statusbar .right .batt .cell::after {
+  content: ""; position: absolute; right: -3px; top: 2px; width: 2px; height: 3px;
+  background: var(--holo-text); border-radius: 0 1px 1px 0;
+}
+.statusbar .right .batt .cell::before {
+  content: ""; position: absolute; left: 1px; top: 1px; bottom: 1px; width: 72%;
+  background: var(--holo-text); border-radius: 1px;
+}
+.statusbar .right .batt .pct { font-size: 11px; }
+
+/* ── 可捲動內容區 ── */
+.content {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  position: relative; z-index: 10;
+  background: var(--holo-bg);
+  padding-bottom: var(--sp-3);
+  scrollbar-width: none;
+}
+.content::-webkit-scrollbar { width: 0; height: 0; }
+
+.screen { display: none; animation: screenIn var(--dur-base) var(--ease-holo); }
+.screen.active { display: block; }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── action bar ── */
+.actionbar {
+  height: var(--actionbar-h); flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--gutter);
+  box-shadow: var(--shadow-bar);
+  position: sticky; top: 0; z-index: 20; background: var(--holo-bg);
+}
+.actionbar .title {
+  font-family: var(--font-light); font-weight: var(--weight-light);
+  font-size: 22px; letter-spacing: var(--tracking-tight);
+  display: flex; align-items: center; gap: var(--sp-2); min-width: 0;
+}
+.actionbar .title .brand-en {
+  font-size: 12px; color: var(--holo-blue); letter-spacing: var(--tracking-caps);
+  text-transform: uppercase; font-weight: var(--weight-medium);
+  border: 1px solid var(--holo-blue); border-radius: var(--radius-xs);
+  padding: 1px 5px; transform: translateY(-1px);
+}
+.actionbar .lead { display: flex; align-items: center; gap: var(--sp-3); min-width: 0; }
+.actionbar .icons { display: flex; gap: var(--sp-5); color: var(--holo-blue); font-size: 19px; }
+.actionbar .ib {
+  cursor: pointer; transition: opacity var(--dur-fast) var(--ease-holo), transform var(--dur-fast) var(--ease-holo);
+  line-height: 1; user-select: none;
+}
+.actionbar .ib:hover { opacity: 0.8; }
+.actionbar .ib:active { opacity: 0.6; transform: scale(0.92); }
+.actionbar .back {
+  color: var(--holo-blue); cursor: pointer; font-size: 24px; line-height: 1;
+  transition: transform var(--dur-fast) var(--ease-holo); user-select: none;
+}
+.actionbar .back:active { transform: translateX(-2px) scale(0.95); }
+
+/* ── 底線式分頁 ── */
+.tabline { display: flex; height: var(--tab-h); border-bottom: 1px solid var(--holo-line); }
+.tabline .tab {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  color: var(--holo-text-3); border-bottom: 2px solid transparent; cursor: pointer;
+  transition: color var(--dur-base) var(--ease-holo), border-color var(--dur-base) var(--ease-holo);
+  user-select: none;
+}
+.tabline .tab:hover { color: var(--holo-text-2); }
+.tabline .tab:active { color: var(--holo-text); }
+.tabline .tab.active { color: var(--holo-blue); border-bottom-color: var(--holo-divider-blue); }
+
+/* ── 區塊標籤 + 區段標題 ── */
+.section-label {
+  font-size: 11px; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  color: var(--holo-label); padding: var(--sp-4) var(--gutter) var(--sp-1);
+}
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: var(--sp-5) var(--gutter) var(--sp-2);
+}
+.section-head h2 { font-size: 19px; font-weight: var(--weight-regular); letter-spacing: var(--tracking-tight); }
+.section-head .more {
+  font-size: 13px; color: var(--holo-blue); cursor: pointer; user-select: none;
+  transition: opacity var(--dur-fast) var(--ease-holo);
+}
+.section-head .more:hover { opacity: 0.8; }
+.section-head .more:active { color: var(--holo-blue-dim); }
+
+/* ── chip ── */
+.chips { display: flex; gap: var(--sp-2); padding: 0 var(--gutter) var(--sp-3); flex-wrap: wrap; }
+.chip {
+  padding: var(--sp-1) var(--sp-3); font-size: 11px;
+  letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  color: var(--holo-blue); border: 1px solid var(--holo-blue);
+  background: transparent; border-radius: var(--radius-xs); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-holo), color var(--dur-fast) var(--ease-holo);
+  user-select: none;
+}
+.chip:hover { background: var(--holo-blue-soft); }
+.chip.active { background: var(--holo-blue); color: var(--holo-bg); }
+
+/* ── 搜尋框 ── */
+.search-field {
+  display: flex; align-items: center; gap: var(--sp-2);
+  margin: var(--sp-3) var(--gutter) var(--sp-2);
+  padding: var(--sp-2) 2px; color: var(--holo-text-2);
+  background: transparent; border: none; border-bottom: 2px solid var(--holo-blue);
+}
+.search-field .ic { color: var(--holo-blue); font-size: 16px; }
+.search-field .ph { color: var(--holo-text-3); font-size: 15px; }
+
+/* ── 封面 + fallback ── */
+.cover {
+  aspect-ratio: 1; width: 100%; border-radius: var(--radius-card);
+  background: linear-gradient(135deg, #0d1b24, #1a2b33); overflow: hidden;
+  position: relative;
+}
+.cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── home banner ── */
+.banner {
+  margin: var(--sp-4) var(--gutter) 0;
+  border: 1px solid var(--holo-line); border-radius: var(--radius-card);
+  overflow: hidden; position: relative; cursor: pointer;
+  transition: border-color var(--dur-base) var(--ease-holo), transform var(--dur-fast) var(--ease-holo);
+}
+.banner:hover { border-color: var(--holo-blue); }
+.banner:active { transform: scale(0.995); }
+.banner .bg {
+  height: 168px; background: linear-gradient(135deg, #06141c, #0d2b38);
+  position: relative; overflow: hidden;
+}
+.banner .bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+.banner .veil {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.85));
+}
+.banner .copy { position: absolute; left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-3); }
+.banner .copy .lbl {
+  font-size: 11px; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  color: var(--holo-blue);
+}
+.banner .copy .t { font-family: var(--font-light); font-weight: 300; font-size: 24px; margin-top: 2px; letter-spacing: var(--tracking-tight); }
+.banner .copy .s { font-size: 13px; color: var(--holo-text-2); margin-top: 2px; }
+.banner .pbtn {
+  position: absolute; right: var(--sp-4); bottom: var(--sp-4);
+  width: 44px; height: 44px; border: 2px solid var(--holo-blue); border-radius: var(--radius-pill);
+  display: flex; align-items: center; justify-content: center; color: var(--holo-blue);
+  font-size: 18px; background: rgba(0,0,0,0.4); box-shadow: var(--glow-blue);
+  transition: transform var(--dur-fast) var(--ease-holo);
+}
+.banner:active .pbtn { transform: scale(0.92); }
+
+/* ── 歌單卡 2 欄網格 ── */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); padding: 0 var(--gutter) var(--sp-4); }
+.pcard { cursor: pointer; transition: transform var(--dur-fast) var(--ease-holo); }
+.pcard:hover { transform: translateY(-2px); }
+.pcard:active { transform: scale(0.98); }
+.pcard .cover { box-shadow: 0 4px 14px rgba(0,0,0,0.6); }
+.pcard .name { font-size: 17px; margin-top: var(--sp-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pcard .sub { font-size: 13px; color: var(--holo-text-2); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── song-row ── */
+.song-row {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--gutter);
+  border-bottom: 1px solid var(--holo-line); font-size: 15px;
+  cursor: pointer; transition: background var(--dur-fast) var(--ease-holo);
+}
+.song-row:hover { background: var(--holo-surface-3); }
+.song-row:active { background: var(--holo-surface-2); }
+.song-row .num { width: 22px; color: var(--holo-text-3); font-size: 14px; text-align: right; flex: none; }
+.song-row .num.rank { color: var(--holo-blue); font-family: var(--font-light); font-weight: 300; font-size: 17px; }
+.song-row .body { flex: 1; min-width: 0; }
+.song-row .title { color: var(--holo-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.song-row .artist { color: var(--holo-text-2); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 1px; }
+.song-row .meta { color: var(--holo-text-2); font-size: 13px; flex: none; }
+.song-row .play { color: var(--holo-blue); cursor: pointer; font-size: 16px; flex: none; transition: transform var(--dur-fast) var(--ease-holo); }
+.song-row .play:active { transform: scale(0.85); }
+.song-row .more-ic { color: var(--holo-text-3); flex: none; font-size: 18px; transform: translateY(-2px); }
+
+/* ── 一般 list-item ── */
+.list-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--gutter);
+  border-bottom: 1px solid var(--holo-line);
+  cursor: pointer; transition: background var(--dur-fast) var(--ease-holo);
+}
+.list-item:hover { background: var(--holo-surface-3); }
+.list-item:active { background: var(--holo-surface-2); }
+.list-item .li-ic { width: 24px; flex: none; color: var(--holo-blue); font-size: 17px; text-align: center; }
+.list-item .li-body { flex: 1; min-width: 0; }
+.list-item .li-title { font-size: 15px; color: var(--holo-text); }
+.list-item .li-sub { font-size: 13px; color: var(--holo-text-2); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-item .li-end { flex: none; color: var(--holo-text-3); font-size: 14px; }
+.list-item .li-end.blue { color: var(--holo-blue); }
+
+/* ── 縮圖列 ── */
+.thumb-row {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-2) var(--gutter);
+  border-bottom: 1px solid var(--holo-line);
+  cursor: pointer; transition: background var(--dur-fast) var(--ease-holo);
+}
+.thumb-row:hover { background: var(--holo-surface-3); }
+.thumb-row:active { background: var(--holo-surface-2); }
+.thumb-row .th {
+  width: 44px; height: 44px; flex: none; border-radius: var(--radius-sm); overflow: hidden;
+  background: linear-gradient(135deg, #0d1b24, #1a2b33);
+}
+.thumb-row .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-row .tr-body { flex: 1; min-width: 0; }
+.thumb-row .tr-title { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thumb-row .tr-sub { font-size: 13px; color: var(--holo-text-2); margin-top: 1px; }
+.thumb-row .tr-end { flex: none; color: var(--holo-text-3); font-size: 18px; }
+
+/* 藝人橫向滑列 */
+.artist-rail {
+  display: flex; gap: var(--sp-4); overflow-x: auto; padding: var(--sp-2) var(--gutter) var(--sp-4);
+  scrollbar-width: none;
+}
+.artist-rail::-webkit-scrollbar { display: none; }
+.artist {
+  flex: none; width: 72px; text-align: center; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-holo);
+}
+.artist:active { transform: scale(0.96); }
+.artist .av {
+  width: 64px; height: 64px; margin: 0 auto var(--sp-1); border-radius: var(--radius-pill);
+  overflow: hidden; background: linear-gradient(135deg, #0d1b24, #1a2b33);
+  border: 1px solid var(--holo-line);
+}
+.artist .av img { width: 100%; height: 100%; object-fit: cover; }
+.artist .an { font-size: 12px; color: var(--holo-text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── detail 頂部 ── */
+.detail-hero { padding: 0 var(--gutter) var(--sp-2); }
+.detail-hero .big-cover {
+  width: 180px; aspect-ratio: 1; margin: var(--sp-4) auto var(--sp-3);
+  border-radius: var(--radius-card); overflow: hidden;
+  background: linear-gradient(135deg, #0d1b24, #1a2b33);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+.detail-hero .big-cover img { width: 100%; height: 100%; object-fit: cover; }
+.detail-hero .alb-name { font-family: var(--font-light); font-weight: 300; font-size: 22px; letter-spacing: var(--tracking-tight); text-align: center; }
+.detail-hero .alb-artist { font-size: 13px; color: var(--holo-text-2); text-align: center; margin-top: 2px; }
+.detail-hero .alb-meta { font-size: 12px; color: var(--holo-text-3); text-align: center; margin-top: var(--sp-1); letter-spacing: 0.02em; }
+.detail-actions { display: flex; gap: var(--sp-3); padding: var(--sp-4) var(--gutter); }
+.btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  padding: var(--sp-3); font-size: 13px; letter-spacing: var(--tracking-caps);
+  text-transform: uppercase; border-radius: var(--radius-xs); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-holo), transform var(--dur-fast) var(--ease-holo);
+  user-select: none;
+}
+.btn.primary { border: 1px solid var(--holo-blue); color: var(--holo-blue); }
+.btn.primary:hover { background: var(--holo-blue-soft); }
+.btn.primary:active { transform: scale(0.98); background: var(--holo-blue-soft); }
+.btn.ghost { border: 1px solid var(--holo-line); color: var(--holo-text-2); }
+.btn.ghost:hover { background: var(--holo-surface-3); }
+.btn.ghost:active { transform: scale(0.98); background: var(--holo-surface-2); }
+
+/* ── player ── */
+.now-playing { padding: var(--sp-4) var(--gutter) var(--sp-2); text-align: center; }
+.now-playing .art {
+  width: 240px; max-width: 70%; aspect-ratio: 1; margin: var(--sp-3) auto var(--sp-4);
+  border-radius: var(--radius-card); overflow: hidden;
+  background: linear-gradient(135deg, #0d1b24, #1a2b33);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.7), var(--glow-blue);
+}
+.now-playing .art img { width: 100%; height: 100%; object-fit: cover; }
+.now-playing .track { font-family: var(--font-light); font-weight: 300; font-size: 28px; letter-spacing: var(--tracking-tight); }
+.now-playing .np-artist { color: var(--holo-text-2); font-size: 13px; margin-top: 2px; }
+.now-playing .np-album { color: var(--holo-text-3); font-size: 12px; margin-top: 1px; }
+.progress { height: 2px; background: var(--holo-line); margin: var(--sp-5) var(--gutter) var(--sp-1); position: relative; }
+.progress .fill { height: 100%; width: 28%; background: var(--holo-blue); box-shadow: var(--glow-blue); }
+.progress .knob { position: absolute; top: -3px; left: 28%; width: 8px; height: 8px; background: var(--holo-blue); border-radius: var(--radius-pill); box-shadow: var(--glow-blue); transform: translateX(-50%); }
+.times { display: flex; justify-content: space-between; font-size: 12px; color: var(--holo-text-3); padding: 0 var(--gutter); }
+.controls { display: flex; align-items: center; justify-content: center; gap: var(--sp-6); margin: var(--sp-5) 0 var(--sp-4); }
+.controls .ctl { color: var(--holo-text); cursor: pointer; font-size: 22px; transition: transform var(--dur-fast) var(--ease-holo), opacity var(--dur-fast) var(--ease-holo); user-select: none; }
+.controls .ctl:hover { opacity: 0.85; }
+.controls .ctl:active { transform: scale(0.9); }
+.controls .ctl.on { color: var(--holo-blue); }
+.controls .pp {
+  width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--holo-blue); border-radius: var(--radius-pill);
+  color: var(--holo-blue); cursor: pointer; font-size: 22px; box-shadow: var(--glow-blue);
+  transition: transform var(--dur-fast) var(--ease-holo), background var(--dur-fast) var(--ease-holo);
+}
+.controls .pp:active { transform: scale(0.92); background: var(--holo-blue-soft); }
+.np-info {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-3) var(--gutter); border-top: 1px solid var(--holo-line); border-bottom: 1px solid var(--holo-line);
+}
+.np-info .lyr-lbl { font-size: 11px; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--holo-label); }
+.badge-hires {
+  display: inline-block; padding: 3px var(--sp-2); font-size: 10px;
+  letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  color: var(--holo-blue); border: 1px solid var(--holo-blue); border-radius: var(--radius-xs);
+}
+.lyrics { padding: var(--sp-5) var(--gutter) var(--sp-4); }
+.lyrics .line { color: var(--holo-text-3); font-size: 16px; text-align: center; padding: var(--sp-2) 0; transition: color var(--dur-base) var(--ease-holo); }
+.lyrics .line.active { color: var(--holo-blue); font-size: 18px; }
+
+/* ── profile ── */
+.user-card {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-5) var(--gutter);
+  border-bottom: 1px solid var(--holo-line);
+}
+.user-card .ava {
+  width: 56px; height: 56px; flex: none; border-radius: var(--radius-card);
+  background: linear-gradient(135deg, var(--holo-blue-dim), #14323d);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: var(--holo-bg); font-family: var(--font-light); font-weight: 300;
+}
+.user-card .uc-body { min-width: 0; }
+.user-card .uc-name { font-size: 19px; font-weight: var(--weight-regular); }
+.user-card .uc-acct { font-size: 13px; color: var(--holo-text-2); margin-top: 1px; }
+.user-card .uc-tier {
+  display: inline-block; margin-top: var(--sp-1); font-size: 11px;
+  letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--holo-blue);
+}
+
+/* Holo toggle */
+.toggle {
+  width: 40px; height: 20px; flex: none; border: 1px solid var(--holo-line);
+  border-radius: var(--radius-xs); background: var(--holo-surface-2); position: relative;
+  cursor: pointer; transition: background var(--dur-base) var(--ease-holo), border-color var(--dur-base) var(--ease-holo);
+}
+.toggle::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+  background: var(--holo-text-3); border-radius: var(--radius-xs);
+  transition: transform var(--dur-base) var(--ease-holo), background var(--dur-base) var(--ease-holo);
+}
+.toggle.on { border-color: var(--holo-blue); background: var(--holo-blue-soft); }
+.toggle.on::after { transform: translateX(20px); background: var(--holo-blue); box-shadow: var(--glow-blue); }
+
+/* 訂閱卡 */
+.plans { padding: var(--sp-2) 0 var(--sp-4); }
+.plan {
+  border: 1px solid var(--holo-line); border-radius: var(--radius-card);
+  padding: var(--sp-4); margin: var(--sp-2) var(--gutter); background: var(--holo-surface);
+  position: relative; transition: border-color var(--dur-base) var(--ease-holo);
+}
+.plan.featured { border-color: var(--holo-blue); box-shadow: var(--glow-blue); }
+.plan.featured .plan-name { color: var(--holo-blue); }
+.plan .plan-top { display: flex; align-items: baseline; justify-content: space-between; }
+.plan .plan-name { font-size: 17px; font-weight: var(--weight-medium); }
+.plan .plan-flag {
+  font-size: 10px; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  color: var(--holo-blue); border: 1px solid var(--holo-blue); border-radius: var(--radius-xs);
+  padding: 1px 5px;
+}
+.plan .plan-flag.muted { color: var(--holo-text-3); border-color: var(--holo-line); }
+.plan .plan-price { font-family: var(--font-light); font-weight: 300; font-size: 24px; margin-top: var(--sp-1); }
+.plan .plan-price .per { font-size: 13px; color: var(--holo-text-3); margin-left: var(--sp-1); }
+.plan .plan-perk { font-size: 13px; color: var(--holo-text-2); margin-top: var(--sp-1); line-height: 1.5; }
+.plan .plan-btn {
+  margin-top: var(--sp-3); padding: var(--sp-2) var(--sp-4); display: inline-block;
+  border: 1px solid var(--holo-line); border-radius: var(--radius-xs); color: var(--holo-text-2);
+  font-size: 12px; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+  cursor: pointer; transition: background var(--dur-fast) var(--ease-holo), transform var(--dur-fast) var(--ease-holo);
+  user-select: none;
+}
+.plan.featured .plan-btn { border-color: var(--holo-blue); color: var(--holo-blue); }
+.plan .plan-btn:hover { background: var(--holo-surface-2); }
+.plan.featured .plan-btn:hover { background: var(--holo-blue-soft); }
+.plan .plan-btn:active { background: var(--holo-surface-2); transform: scale(0.98); }
+
+/* feature 列表（home） */
+.feat-row {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--gutter);
+  border-bottom: 1px solid var(--holo-line);
+  cursor: pointer; transition: background var(--dur-fast) var(--ease-holo);
+}
+.feat-row:hover { background: var(--holo-surface-3); }
+.feat-row:active { background: var(--holo-surface-2); }
+.feat-row .fc {
+  width: 30px; height: 30px; flex: none; border: 1px solid var(--holo-blue); border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center; color: var(--holo-blue); font-size: 15px;
+}
+.feat-row .fb { flex: 1; min-width: 0; }
+.feat-row .ft { font-size: 15px; }
+.feat-row .fs { font-size: 13px; color: var(--holo-text-2); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── mini-player ── */
+.miniplayer {
+  flex: none; height: var(--miniplayer-h);
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 0 var(--sp-3); background: var(--holo-bg);
+  border-top: 1px solid var(--holo-line); box-shadow: var(--shadow-mini);
+  cursor: pointer; transition: background var(--dur-fast) var(--ease-holo);
+  position: relative; z-index: 25;
+}
+.miniplayer:hover { background: var(--holo-surface-2); }
+.miniplayer.hidden { display: none; }
+.miniplayer .mini-art {
+  width: 40px; height: 40px; flex: none; border-radius: var(--radius-sm); overflow: hidden;
+  background: linear-gradient(135deg, #0d1b24, #1a2b33);
+}
+.miniplayer .mini-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.miniplayer .mini-body { flex: 1; min-width: 0; }
+.miniplayer .mini-title { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.miniplayer .mini-artist { font-size: 12px; color: var(--holo-text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.miniplayer .mini-bar { width: 100%; height: 2px; background: var(--holo-line); margin-top: 3px; }
+.miniplayer .mini-bar i { display: block; height: 100%; width: 28%; background: var(--holo-blue); box-shadow: var(--glow-blue); }
+.miniplayer .mini-pp {
+  flex: none; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  color: var(--holo-blue); cursor: pointer; font-size: 18px;
+  transition: transform var(--dur-fast) var(--ease-holo);
+}
+.miniplayer .mini-pp:active { transform: scale(0.9); }
+
+/* ── tab-bar ── */
+.tabbar {
+  flex: none; height: var(--tabbar-h); display: flex;
+  background: var(--holo-bg); border-top: 1px solid var(--holo-line);
+  padding-bottom: var(--safe-bottom); position: relative; z-index: 25;
+}
+.tabbar .tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; font-size: 11px; color: var(--holo-text-3);
+  border-top: 2px solid transparent; cursor: pointer;
+  transition: color var(--dur-base) var(--ease-holo), border-color var(--dur-base) var(--ease-holo);
+  user-select: none;
+}
+.tabbar .tab .ic { font-size: 19px; line-height: 1; }
+.tabbar .tab:hover { color: var(--holo-text-2); }
+.tabbar .tab:active { color: var(--holo-blue-dim); }
+.tabbar .tab.active { color: var(--holo-blue); border-top-color: var(--holo-blue); }
+
+/* staggered 進場 */
+.stagger > * { opacity: 0; transform: translateY(8px); animation: rise var(--dur-base) var(--ease-holo) forwards; }
+.stagger > *:nth-child(1){ animation-delay: 30ms; }
+.stagger > *:nth-child(2){ animation-delay: 70ms; }
+.stagger > *:nth-child(3){ animation-delay: 110ms; }
+.stagger > *:nth-child(4){ animation-delay: 150ms; }
+.stagger > *:nth-child(5){ animation-delay: 190ms; }
+.stagger > *:nth-child(6){ animation-delay: 230ms; }
+.stagger > *:nth-child(7){ animation-delay: 270ms; }
+.stagger > *:nth-child(8){ animation-delay: 310ms; }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.spacer { height: var(--sp-5); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .screen { animation: none !important; }
+  .stagger > * { opacity: 1 !important; transform: none !important; }
+}
+
+@media (max-width: 430px) {
+  body { padding: 0; }
+  .device { width: 100vw; height: 100dvh; min-height: 100vh; border-radius: 0; box-shadow: none; }
+  .device::before { border-radius: 0; }
+}
+@media (min-width: 431px) and (max-width: 900px) {
+  body { padding: 16px 0; }
+}
+</style>
+</head>
+<body data-viewport="mobile">
+<div class="device" role="application" aria-label="迴聲 Resona 音樂串流 App">
+
+  <!-- STATUS BAR -->
+  <section data-screen="status-bar" class="statusbar">
+    <span class="time">9:41</span>
+    <span class="right">
+      <span class="sig" aria-label="訊號"><i></i><i></i><i></i><i></i></span>
+      <span class="wifi">Wi-Fi</span>
+      <span class="batt"><span class="cell"></span><span class="pct">84%</span></span>
+    </span>
+  </section>
+
+  <!-- 可捲動內容區（多畫面切換） -->
+  <div class="content" id="content">
+
+    <!-- HOME -->
+    <section data-screen="home" class="screen active" id="screen-home">
+      <div class="actionbar">
+        <span class="title">迴聲 <span class="brand-en">Resona</span></span>
+        <span class="icons">
+          <span class="ib" data-go="search" title="搜尋">&#9906;</span>
+          <span class="ib" title="更多">&#8942;</span>
+        </span>
+      </div>
+      <div class="tabline">
+        <div class="tab active">為你</div>
+        <div class="tab">最新</div>
+        <div class="tab">電台</div>
+      </div>
+
+      <div class="stagger">
+        <div class="section-label">每日迴聲 · Daily Mix</div>
+        <div class="banner" data-go="detail">
+          <div class="bg">
+            <img src="assets/cover-1.webp" alt="每日迴聲封面" onerror="this.style.display='none'">
+            <span class="veil"></span>
+          </div>
+          <div class="copy">
+            <div class="lbl">Daily Mix</div>
+            <div class="t">每日迴聲</div>
+            <div class="s">個人化每日推薦 · 依你的聆聽口味，每天 06:00 為你重新編排</div>
+          </div>
+          <div class="pbtn" data-play="banner">&#9654;</div>
+        </div>
+
+        <div class="section-head">
+          <h2>為你精選歌單</h2>
+          <span class="more" data-go="library">查看全部</span>
+        </div>
+        <div class="grid">
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-1.webp" alt="浪潮回聲" onerror="this.style.display='none'"></div>
+            <div class="name">浪潮回聲</div><div class="sub">18 首 · 海平面樂團</div>
+          </div>
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-2.webp" alt="深夜公路" onerror="this.style.display='none'"></div>
+            <div class="name">深夜公路</div><div class="sub">22 首 · 夜行列車</div>
+          </div>
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-3.webp" alt="島嶼晨光" onerror="this.style.display='none'"></div>
+            <div class="name">島嶼晨光</div><div class="sub">9 首 · 林知夏</div>
+          </div>
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-4.webp" alt="雨後散步" onerror="this.style.display='none'"></div>
+            <div class="name">雨後散步</div><div class="sub">14 首 · 何遠</div>
+          </div>
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-5.webp" alt="城市心跳" onerror="this.style.display='none'"></div>
+            <div class="name">城市心跳</div><div class="sub">20 首 · Echo Lab</div>
+          </div>
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-6.webp" alt="山海之間" onerror="this.style.display='none'"></div>
+            <div class="name">山海之間</div><div class="sub">24 首 · 海平面樂團</div>
+          </div>
+          <div class="pcard" data-go="detail">
+            <div class="cover"><img src="assets/cover-1.webp" alt="失重時刻" onerror="this.style.display='none'"></div>
+            <div class="name">失重時刻</div><div class="sub">12 首 · Echo Lab</div>
+          </div>
+        </div>
+
+        <div class="chips">
+          <div class="chip active">華語</div>
+          <div class="chip">獨立</div>
+          <div class="chip">電子</div>
+          <div class="chip">放鬆</div>
+        </div>
+
+        <div class="section-head">
+          <h2>熱門排行</h2>
+          <span class="more" data-go="detail">查看全部</span>
+        </div>
+        <div>
+          <div class="song-row" data-play="〈藍色信號〉">
+            <span class="num rank">1</span>
+            <span class="body"><span class="title">藍色信號</span><span class="artist">海平面樂團</span></span>
+            <span class="meta">03:12</span><span class="play" data-play="〈藍色信號〉">&#9654;</span>
+          </div>
+          <div class="song-row" data-play="〈霓虹巷弄〉">
+            <span class="num rank">2</span>
+            <span class="body"><span class="title">霓虹巷弄</span><span class="artist">夜行列車</span></span>
+            <span class="meta">02:54</span><span class="play" data-play="〈霓虹巷弄〉">&#9654;</span>
+          </div>
+          <div class="song-row" data-play="〈候鳥地圖〉">
+            <span class="num rank">3</span>
+            <span class="body"><span class="title">候鳥地圖</span><span class="artist">Echo Lab</span></span>
+            <span class="meta">04:03</span><span class="play" data-play="〈候鳥地圖〉">&#9654;</span>
+          </div>
+          <div class="song-row" data-play="〈晚風練習曲〉">
+            <span class="num rank">4</span>
+            <span class="body"><span class="title">晚風練習曲</span><span class="artist">林知夏</span></span>
+            <span class="meta">02:47</span><span class="play" data-play="〈晚風練習曲〉">&#9654;</span>
+          </div>
+        </div>
+
+        <div class="section-label">核心功能</div>
+        <div>
+          <div class="feat-row">
+            <span class="fc">&#9834;</span>
+            <span class="fb"><span class="ft">無損音質串流</span><span class="fs">最高 24-bit / 192kHz Hi-Res 無損音質</span></span>
+          </div>
+          <div class="feat-row">
+            <span class="fc">&#9835;</span>
+            <span class="fb"><span class="ft">歌詞同步</span><span class="fs">逐字滾動歌詞，跟著節奏高亮</span></span>
+          </div>
+          <div class="feat-row">
+            <span class="fc">&#8595;</span>
+            <span class="fb"><span class="ft">離線下載</span><span class="fs">Plus 以上方案可下載歌曲離線聆聽</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- SEARCH -->
+    <section data-screen="search" class="screen" id="screen-search">
+      <div class="actionbar">
+        <span class="title">搜尋</span>
+        <span class="icons"><span class="ib" title="更多">&#8942;</span></span>
+      </div>
+      <div class="search-field">
+        <span class="ic">&#9906;</span>
+        <span class="ph">搜尋歌曲、藝人、歌單</span>
+      </div>
+      <div class="chips">
+        <div class="chip active">華語</div>
+        <div class="chip">獨立</div>
+        <div class="chip">電子</div>
+        <div class="chip">放鬆</div>
+      </div>
+
+      <div class="stagger">
+        <div class="section-label">Trending · 熱門歌曲</div>
+        <div>
+          <div class="song-row" data-play="〈藍色信號〉">
+            <span class="num">1</span>
+            <span class="body"><span class="title">藍色信號</span><span class="artist">海平面樂團</span></span>
+            <span class="meta">03:12</span>
+          </div>
+          <div class="song-row" data-play="〈霓虹巷弄〉">
+            <span class="num">2</span>
+            <span class="body"><span class="title">霓虹巷弄</span><span class="artist">夜行列車</span></span>
+            <span class="meta">02:54</span>
+          </div>
+          <div class="song-row" data-play="〈候鳥地圖〉">
+            <span class="num">3</span>
+            <span class="body"><span class="title">候鳥地圖</span><span class="artist">Echo Lab</span></span>
+            <span class="meta">04:03</span>
+          </div>
+          <div class="song-row" data-play="〈靜電〉">
+            <span class="num">4</span>
+            <span class="body"><span class="title">靜電</span><span class="artist">何遠</span></span>
+            <span class="meta">03:28</span>
+          </div>
+          <div class="song-row" data-play="〈晚風練習曲〉">
+            <span class="num">5</span>
+            <span class="body"><span class="title">晚風練習曲</span><span class="artist">林知夏</span></span>
+            <span class="meta">02:47</span>
+          </div>
+        </div>
+
+        <div class="section-label">Artists · 熱門藝人</div>
+        <div class="artist-rail">
+          <div class="artist" data-go="detail">
+            <div class="av"><img src="assets/cover-1.webp" alt="海平面樂團" onerror="this.style.display='none'"></div>
+            <div class="an">海平面樂團</div>
+          </div>
+          <div class="artist" data-go="detail">
+            <div class="av"><img src="assets/cover-3.webp" alt="林知夏" onerror="this.style.display='none'"></div>
+            <div class="an">林知夏</div>
+          </div>
+          <div class="artist" data-go="detail">
+            <div class="av"><img src="assets/cover-2.webp" alt="夜行列車" onerror="this.style.display='none'"></div>
+            <div class="an">夜行列車</div>
+          </div>
+          <div class="artist" data-go="detail">
+            <div class="av"><img src="assets/cover-5.webp" alt="Echo Lab" onerror="this.style.display='none'"></div>
+            <div class="an">Echo Lab</div>
+          </div>
+          <div class="artist" data-go="detail">
+            <div class="av"><img src="assets/cover-4.webp" alt="何遠" onerror="this.style.display='none'"></div>
+            <div class="an">何遠</div>
+          </div>
+        </div>
+
+        <div class="section-label">推薦歌單</div>
+        <div>
+          <div class="thumb-row" data-go="detail">
+            <div class="th"><img src="assets/cover-6.webp" alt="城市心跳" onerror="this.style.display='none'"></div>
+            <div class="tr-body"><div class="tr-title">城市心跳</div><div class="tr-sub">電子 · 20 首</div></div>
+            <span class="tr-end">&#8250;</span>
+          </div>
+          <div class="thumb-row" data-go="detail">
+            <div class="th"><img src="assets/cover-4.webp" alt="雨後散步" onerror="this.style.display='none'"></div>
+            <div class="tr-body"><div class="tr-title">雨後散步</div><div class="tr-sub">放鬆 · 14 首</div></div>
+            <span class="tr-end">&#8250;</span>
+          </div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- DETAIL -->
+    <section data-screen="detail" class="screen" id="screen-detail">
+      <div class="actionbar">
+        <span class="lead">
+          <span class="back" data-back title="返回">&#8249;</span>
+          <span class="title" style="font-size:17px;">島嶼晨光</span>
+        </span>
+        <span class="icons"><span class="ib" title="更多">&#8942;</span></span>
+      </div>
+
+      <div class="detail-hero stagger">
+        <div class="big-cover"><img src="assets/cover-3.webp" alt="島嶼晨光 專輯封面" onerror="this.style.display='none'"></div>
+        <div class="alb-name">島嶼晨光</div>
+        <div class="alb-artist">林知夏</div>
+        <div class="alb-meta">2026 · 9 首 · 總時長 28:42</div>
+      </div>
+      <div class="detail-actions">
+        <span class="btn primary" data-play="〈藍色信號〉">&#9654; 播放全部</span>
+        <span class="btn ghost" data-play="〈晚風練習曲〉">&#10199; 隨機播放</span>
+      </div>
+
+      <div class="section-label">曲目</div>
+      <div>
+        <div class="song-row" data-play="〈藍色信號〉">
+          <span class="num">1</span>
+          <span class="body"><span class="title">藍色信號</span><span class="artist">林知夏</span></span>
+          <span class="meta">03:12</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈霓虹巷弄〉">
+          <span class="num">2</span>
+          <span class="body"><span class="title">霓虹巷弄</span><span class="artist">林知夏</span></span>
+          <span class="meta">02:54</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈候鳥地圖〉">
+          <span class="num">3</span>
+          <span class="body"><span class="title">候鳥地圖</span><span class="artist">林知夏</span></span>
+          <span class="meta">04:03</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈靜電〉">
+          <span class="num">4</span>
+          <span class="body"><span class="title">靜電</span><span class="artist">林知夏</span></span>
+          <span class="meta">03:28</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈晚風練習曲〉">
+          <span class="num">5</span>
+          <span class="body"><span class="title">晚風練習曲</span><span class="artist">林知夏</span></span>
+          <span class="meta">02:47</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈無人車站〉">
+          <span class="num">6</span>
+          <span class="body"><span class="title">無人車站</span><span class="artist">林知夏</span></span>
+          <span class="meta">03:55</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈潮間帶〉">
+          <span class="num">7</span>
+          <span class="body"><span class="title">潮間帶</span><span class="artist">林知夏</span></span>
+          <span class="meta">03:01</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈第七個夏天〉">
+          <span class="num">8</span>
+          <span class="body"><span class="title">第七個夏天</span><span class="artist">林知夏</span></span>
+          <span class="meta">02:39</span><span class="more-ic">&#8942;</span>
+        </div>
+        <div class="song-row" data-play="〈月台九又四分之三〉">
+          <span class="num">9</span>
+          <span class="body"><span class="title">月台九又四分之三</span><span class="artist">林知夏</span></span>
+          <span class="meta">04:23</span><span class="more-ic">&#8942;</span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- PLAYER -->
+    <section data-screen="player" class="screen" id="screen-player">
+      <div class="actionbar">
+        <span class="lead">
+          <span class="back" data-back title="收合">&#8964;</span>
+        </span>
+        <span class="title" style="font-size:11px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--holo-label);">Now Playing</span>
+        <span class="icons"><span class="ib" title="更多">&#8942;</span></span>
+      </div>
+
+      <div class="now-playing">
+        <div class="art"><img src="assets/cover-3.webp" alt="晚風練習曲 封面" onerror="this.style.display='none'"></div>
+        <div class="track">晚風練習曲</div>
+        <div class="np-artist">林知夏</div>
+        <div class="np-album">島嶼晨光</div>
+      </div>
+
+      <div class="progress"><span class="fill"></span><span class="knob"></span></div>
+      <div class="times"><span>00:47</span><span>02:47</span></div>
+
+      <div class="controls">
+        <span class="ctl on" id="shuffleBtn" title="隨機">&#10199;</span>
+        <span class="ctl" title="上一首">&#9198;</span>
+        <span class="pp" id="playPause" title="播放/暫停">&#9654;</span>
+        <span class="ctl" title="下一首">&#9197;</span>
+        <span class="ctl" id="repeatBtn" title="循環">&#8635;</span>
+      </div>
+
+      <div class="np-info">
+        <span class="badge-hires">Hi-Res 無損</span>
+        <span class="lyr-lbl">歌詞同步</span>
+      </div>
+
+      <div class="lyrics">
+        <div class="line">街燈把影子拉得好長</div>
+        <div class="line active">晚風練習曲，吹過誰的窗</div>
+        <div class="line">而我把回聲，留在你身上</div>
+      </div>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section data-screen="library" class="screen" id="screen-library">
+      <div class="actionbar">
+        <span class="title">音樂庫</span>
+        <span class="icons">
+          <span class="ib" data-go="search" title="搜尋">&#9906;</span>
+          <span class="ib" title="更多">&#8942;</span>
+        </span>
+      </div>
+      <div class="tabline">
+        <div class="tab active">歌單</div>
+        <div class="tab">專輯</div>
+        <div class="tab">已下載</div>
+      </div>
+
+      <div class="stagger">
+        <div class="section-label">我的收藏歌單</div>
+        <div>
+          <div class="thumb-row" data-go="detail">
+            <div class="th"><img src="assets/cover-1.webp" alt="浪潮回聲" onerror="this.style.display='none'"></div>
+            <div class="tr-body"><div class="tr-title">浪潮回聲</div><div class="tr-sub">歌單 · 18 首</div></div>
+            <span class="tr-end">&#8942;</span>
+          </div>
+          <div class="thumb-row" data-go="detail">
+            <div class="th"><img src="assets/cover-6.webp" alt="山海之間" onerror="this.style.display='none'"></div>
+            <div class="tr-body"><div class="tr-title">山海之間</div><div class="tr-sub">歌單 · 24 首</div></div>
+            <span class="tr-end">&#8942;</span>
+          </div>
+          <div class="thumb-row" data-go="detail">
+            <div class="th"><img src="assets/cover-3.webp" alt="島嶼晨光" onerror="this.style.display='none'"></div>
+            <div class="tr-body"><div class="tr-title">島嶼晨光</div><div class="tr-sub">專輯 · 9 首</div></div>
+            <span class="tr-end">&#8942;</span>
+          </div>
+          <div class="thumb-row" data-go="detail">
+            <div class="th"><img src="assets/cover-2.webp" alt="失重時刻" onerror="this.style.display='none'"></div>
+            <div class="tr-body"><div class="tr-title">失重時刻</div><div class="tr-sub">歌單 · 12 首</div></div>
+            <span class="tr-end">&#8942;</span>
+          </div>
+        </div>
+
+        <div class="section-label">儲存與共享</div>
+        <div>
+          <div class="list-item">
+            <span class="li-ic">&#8595;</span>
+            <span class="li-body"><span class="li-title">離線下載</span><span class="li-sub">已下載 3 個歌單 · 約 412 MB</span></span>
+            <span class="li-end blue">管理</span>
+          </div>
+          <div class="list-item">
+            <span class="li-ic">&#9783;</span>
+            <span class="li-body"><span class="li-title">共享音樂庫</span><span class="li-sub">與家庭方案成員共用</span></span>
+            <span class="li-end">&#8250;</span>
+          </div>
+          <div class="list-item">
+            <span class="li-ic">&#9834;</span>
+            <span class="li-body"><span class="li-title">最近播放</span><span class="li-sub">晚風練習曲 · 林知夏</span></span>
+            <span class="li-end">&#8250;</span>
+          </div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section data-screen="profile" class="screen" id="screen-profile">
+      <div class="actionbar">
+        <span class="title">我的</span>
+        <span class="icons"><span class="ib" title="設定">&#9881;</span></span>
+      </div>
+
+      <div class="stagger">
+        <div class="user-card">
+          <div class="ava">夏</div>
+          <div class="uc-body">
+            <div class="uc-name">知夏的播放清單</div>
+            <div class="uc-acct">resona.app · 迴聲 Resona</div>
+            <span class="uc-tier">Plus 會員</span>
+          </div>
+        </div>
+
+        <div class="section-label">播放偏好</div>
+        <div>
+          <div class="list-item" data-toggle>
+            <span class="li-ic">&#8644;</span>
+            <span class="li-body"><span class="li-title">跨裝置接續播放</span><span class="li-sub">手機 / 平板 / 車機無縫接力</span></span>
+            <span class="toggle on" aria-label="跨裝置接續播放開關"></span>
+          </div>
+          <div class="list-item" data-toggle>
+            <span class="li-ic">&#9834;</span>
+            <span class="li-body"><span class="li-title">無損音質串流</span><span class="li-sub">最高 24-bit / 192kHz Hi-Res</span></span>
+            <span class="toggle on" aria-label="無損音質串流開關"></span>
+          </div>
+          <div class="list-item" data-toggle>
+            <span class="li-ic">&#9835;</span>
+            <span class="li-body"><span class="li-title">歌詞同步</span><span class="li-sub">逐字滾動歌詞，跟著節奏高亮</span></span>
+            <span class="toggle" aria-label="歌詞同步開關"></span>
+          </div>
+        </div>
+
+        <div class="section-label">訂閱方案</div>
+        <div class="plans">
+          <div class="plan">
+            <div class="plan-top">
+              <span class="plan-name">免費</span>
+              <span class="plan-flag muted">目前方案</span>
+            </div>
+            <div class="plan-price">NT$ 0<span class="per">／月</span></div>
+            <div class="plan-perk">隨機播放、含廣告插播、標準音質</div>
+            <span class="plan-btn">目前方案</span>
+          </div>
+          <div class="plan featured">
+            <div class="plan-top">
+              <span class="plan-name">Plus</span>
+              <span class="plan-flag">推薦</span>
+            </div>
+            <div class="plan-price">NT$ 149<span class="per">／月</span></div>
+            <div class="plan-perk">無廣告、指定單曲播放、無損音質串流、離線下載</div>
+            <span class="plan-btn">選擇方案</span>
+          </div>
+          <div class="plan">
+            <div class="plan-top">
+              <span class="plan-name">Family</span>
+              <span class="plan-flag muted">6 帳號</span>
+            </div>
+            <div class="plan-price">NT$ 249<span class="per">／月</span></div>
+            <div class="plan-perk">6 個帳號、共享音樂庫、家長控制、涵蓋全部 Plus 權益</div>
+            <span class="plan-btn">選擇方案</span>
+          </div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </section>
+
+  </div><!-- /content -->
+
+  <!-- MINI PLAYER（常駐，player 屏隱藏） -->
+  <div class="miniplayer" id="miniplayer" data-go="player">
+    <div class="mini-art"><img src="assets/cover-3.webp" alt="正在播放封面" onerror="this.style.display='none'"></div>
+    <div class="mini-body">
+      <div class="mini-title">晚風練習曲</div>
+      <div class="mini-artist">林知夏 · 島嶼晨光</div>
+      <div class="mini-bar"><i></i></div>
+    </div>
+    <div class="mini-pp" id="miniPP" title="播放/暫停">&#9654;</div>
+  </div>
+
+  <!-- TAB BAR（永遠底） -->
+  <section data-screen="tab-bar" class="tabbar">
+    <div class="tab active" data-tab="home"><span class="ic">&#9750;</span><span>首頁</span></div>
+    <div class="tab" data-tab="search"><span class="ic">&#9906;</span><span>搜尋</span></div>
+    <div class="tab" data-tab="library"><span class="ic">&#9783;</span><span>音樂庫</span></div>
+    <div class="tab" data-tab="profile"><span class="ic">&#9678;</span><span>我的</span></div>
+  </section>
+
+</div><!-- /device -->
+
+<script>
+(function () {
+  "use strict";
+  var content = document.getElementById("content");
+  var screens = {
+    home: document.getElementById("screen-home"),
+    search: document.getElementById("screen-search"),
+    detail: document.getElementById("screen-detail"),
+    player: document.getElementById("screen-player"),
+    library: document.getElementById("screen-library"),
+    profile: document.getElementById("screen-profile")
+  };
+  var tabFor = { home: "home", search: "search", library: "library", profile: "profile" };
+  var mini = document.getElementById("miniplayer");
+  var tabbarTabs = document.querySelectorAll(".tabbar .tab");
+  var history = ["home"];
+
+  function setTab(name) {
+    tabbarTabs.forEach(function (t) {
+      t.classList.toggle("active", t.getAttribute("data-tab") === name);
+    });
+  }
+
+  function show(name, push) {
+    if (!screens[name]) return;
+    Object.keys(screens).forEach(function (k) {
+      screens[k].classList.toggle("active", k === name);
+    });
+    mini.classList.toggle("hidden", name === "player");
+    if (tabFor[name]) setTab(tabFor[name]);
+    if (push !== false && history[history.length - 1] !== name) history.push(name);
+    if (content) content.scrollTop = 0;
+  }
+
+  function goBack() {
+    if (history.length > 1) {
+      history.pop();
+      show(history[history.length - 1], false);
+    } else {
+      show("home", false);
+    }
+  }
+
+  tabbarTabs.forEach(function (t) {
+    t.addEventListener("click", function () {
+      var name = t.getAttribute("data-tab");
+      history = [name];
+      show(name, false);
+    });
+  });
+
+  document.addEventListener("click", function (e) {
+    var goEl = e.target.closest("[data-go]");
+    if (goEl) { e.stopPropagation(); show(goEl.getAttribute("data-go"), true); return; }
+    var backEl = e.target.closest("[data-back]");
+    if (backEl) { e.stopPropagation(); goBack(); return; }
+  });
+
+  document.querySelectorAll("[data-play]").forEach(function (el) {
+    el.addEventListener("click", function (e) { e.stopPropagation(); show("player", true); });
+  });
+
+  var miniPP = document.getElementById("miniPP");
+  if (miniPP) {
+    miniPP.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var playing = miniPP.getAttribute("data-playing") === "1";
+      miniPP.setAttribute("data-playing", playing ? "0" : "1");
+      miniPP.innerHTML = playing ? "&#9654;" : "&#9208;";
+    });
+  }
+
+  var pp = document.getElementById("playPause");
+  if (pp) {
+    pp.addEventListener("click", function () {
+      var playing = pp.getAttribute("data-playing") === "1";
+      pp.setAttribute("data-playing", playing ? "0" : "1");
+      pp.innerHTML = playing ? "&#9654;" : "&#9208;";
+    });
+  }
+
+  ["shuffleBtn", "repeatBtn"].forEach(function (id) {
+    var b = document.getElementById(id);
+    if (b) b.addEventListener("click", function () { b.classList.toggle("on"); });
+  });
+
+  document.querySelectorAll(".tabline").forEach(function (tl) {
+    tl.querySelectorAll(".tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        tl.querySelectorAll(".tab").forEach(function (x) { x.classList.remove("active"); });
+        tab.classList.add("active");
+      });
+    });
+  });
+
+  document.querySelectorAll(".chips").forEach(function (cs) {
+    cs.querySelectorAll(".chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        cs.querySelectorAll(".chip").forEach(function (x) { x.classList.remove("active"); });
+        chip.classList.add("active");
+      });
+    });
+  });
+
+  document.querySelectorAll("[data-toggle]").forEach(function (row) {
+    row.addEventListener("click", function () {
+      var tg = row.querySelector(".toggle");
+      if (tg) tg.classList.toggle("on");
+    });
+  });
+
+  document.querySelectorAll(".plan-btn, .btn").forEach(function (b) {
+    b.addEventListener("click", function (e) { e.stopPropagation(); });
+  });
+
+  show("home", false);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>迴聲 Resona — iOS6 擬物</title>
+<style>
+:root{
+  --screen-w:390px; --screen-h:844px;
+  --statusbar-h:44px; --tabbar-h:56px; --miniplayer-h:56px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --screen-radius:44px; --navbar-h:52px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
+  --content-pad:var(--sp-4); --section-gap:var(--sp-6);
+  --linen-base:#5b5650; --linen-dark:#4a463f; --linen-light:#6a655d;
+  --leather:#3a2c22; --leather-top:#4a382c; --leather-stitch:#c9a06a; --leather-ink:#f4e8d8;
+  --felt:#1f5135; --felt-top:#2a6845;
+  --metal-top:#c7ccd2; --metal-mid:#9aa2ab; --metal-bot:#767e89; --metal-line:#5d646e;
+  --card-top:#fbf8f2; --card-bot:#e7e1d6; --card-edge:#b7ad9c;
+  --row-top:#fcfaf5; --row-bot:#efe9dd;
+  --ink:#2b2a27; --ink-soft:#5a5750; --ink-on-metal:#2c3038;
+  --letterpress-up:rgba(255,255,255,.6); --letterpress-dn:rgba(0,0,0,.45);
+  /* linen 上近白金屬刻字色（修對比，達 AA） */
+  --on-linen:#f3eee4; --on-linen-soft:rgba(255,255,255,.65);
+  --on-linen-press:0 -1px 0 rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.08);
+  --glass-blue-top:#59a6ff; --glass-blue-bot:#0a64e0; --glass-blue-edge:#0a4aa8; --glass-blue-ink:#0a4aa8;
+  --link-on-linen:#bcd9ff;
+  --accent-red:#c0392b; --accent-green-top:#7bd06a; --accent-green-bot:#3f9c2e; --on-glass:#ffffff;
+  --radius-card:12px; --radius-btn:9px; --radius-row:8px; --radius-cover:8px; --radius-pill:999px;
+  --bevel-up:inset 0 1px 0 rgba(255,255,255,.55); --bevel-dn:inset 0 -1px 0 rgba(0,0,0,.35);
+  --drop:0 1px 2px rgba(0,0,0,.45); --drop-lg:0 3px 8px rgba(0,0,0,.45);
+  --card-shadow:0 1px 0 rgba(255,255,255,.5), 0 2px 5px rgba(0,0,0,.4);
+  --press-in:inset 0 2px 5px rgba(0,0,0,.5);
+  --gloss:linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 48%);
+  --font-ui:'Helvetica Neue','PingFang TC','Heiti TC',system-ui,sans-serif;
+  --font-num:'Helvetica Neue','Arial Narrow',sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--font-ui);
+  background:#2a2724;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.12) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 50% 30%, #3a3631, #1d1a18);
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:16px 0;
+}
+
+/* ── 手機殼 ── */
+.device{
+  position:relative;
+  width:var(--screen-w); height:var(--screen-h);
+  margin:0 auto; overflow:hidden;
+  border-radius:var(--screen-radius);
+  background:var(--linen-base);
+  box-shadow:0 8px 40px rgba(0,0,0,.55), inset 0 0 0 2px #15110d;
+  display:flex; flex-direction:column;
+  font-family:var(--font-ui);
+}
+
+/* ── 拉絲金屬列 ── */
+.statusbar,.navbar,.tabbar{
+  background:linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 55%, var(--metal-bot) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6), var(--drop);
+  color:var(--ink-on-metal);
+}
+.statusbar{
+  height:var(--statusbar-h); flex:0 0 auto; position:relative; z-index:60;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--sp-4); border-bottom:1px solid var(--metal-line);
+  font-family:var(--font-num); text-shadow:0 1px 0 var(--letterpress-up);
+}
+.statusbar .clock{font-size:15px; font-weight:600; letter-spacing:.3px;}
+.statusbar .sysicons{display:flex; align-items:center; gap:6px;}
+.signal{display:flex; align-items:flex-end; gap:2px; height:11px;}
+.signal i{width:3px; background:var(--ink-on-metal); border-radius:1px; box-shadow:0 1px 0 var(--letterpress-up);}
+.signal i:nth-child(1){height:4px;} .signal i:nth-child(2){height:6px;}
+.signal i:nth-child(3){height:8px;} .signal i:nth-child(4){height:10px;} .signal i:nth-child(5){height:11px; opacity:.4;}
+.wifi{width:15px; height:11px; position:relative;}
+.wifi::before{content:""; position:absolute; inset:0; border:2px solid var(--ink-on-metal); border-bottom:none;
+  border-radius:50% 50% 0 0; clip-path:polygon(0 0,100% 0,100% 60%,0 60%); opacity:.85;}
+.wifi::after{content:""; position:absolute; left:50%; bottom:0; width:3px; height:3px; border-radius:50%;
+  background:var(--ink-on-metal); transform:translateX(-50%);}
+.battery{display:flex; align-items:center; gap:1px;}
+.battery .body{width:22px; height:11px; border:1px solid var(--ink-on-metal); border-radius:2px; padding:1px; box-shadow:0 1px 0 var(--letterpress-up);}
+.battery .fill{height:100%; width:78%; background:var(--ink-on-metal); border-radius:1px;}
+.battery .cap{width:2px; height:5px; background:var(--ink-on-metal); border-radius:0 1px 1px 0;}
+
+/* ── navbar ── */
+.navbar{
+  height:var(--navbar-h); flex:0 0 auto; position:relative; z-index:50;
+  display:flex; align-items:center; gap:var(--sp-3);
+  padding:0 var(--sp-4); border-bottom:1px solid var(--metal-line);
+  margin:calc(-1 * var(--content-pad)) calc(-1 * var(--content-pad)) 0;
+}
+.navbar .title{font:700 20px/1.25 var(--font-ui); letter-spacing:.2px; text-shadow:0 1px 0 var(--letterpress-up); flex:1;}
+.navbar .brand{font:700 24px/1.2 var(--font-ui); text-shadow:0 1px 0 var(--letterpress-up); flex:1; letter-spacing:.3px;}
+.navbar .brand small{font:400 12px/1 var(--font-ui); display:block; color:var(--ink-on-metal); opacity:.78; letter-spacing:.4px; margin-top:2px;}
+.icon-btn{
+  width:34px; height:34px; flex:0 0 34px; border-radius:8px;
+  background:linear-gradient(180deg,#dfe3e8,#aeb5bd);
+  border:1px solid var(--metal-line); box-shadow:var(--bevel-up), var(--drop);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; color:var(--ink-on-metal); cursor:pointer; transition:transform 120ms ease-out;
+  text-shadow:0 1px 0 var(--letterpress-up);
+}
+.icon-btn:active{box-shadow:var(--press-in); transform:translateY(1px);}
+.nav-back{width:auto; padding:0 12px 0 8px; gap:2px; font:600 15px/1 var(--font-ui);}
+
+/* ── content / linen ── */
+.content{
+  flex:1; min-height:0; overflow-y:auto; position:relative;
+  padding:var(--content-pad);
+  padding-bottom:calc(var(--miniplayer-h) + var(--tabbar-h) + var(--safe-bottom) + var(--sp-2));
+  color:var(--ink); -webkit-overflow-scrolling:touch;
+  background:
+    repeating-linear-gradient(45deg, var(--linen-dark) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, var(--linen-light) 0 1px, transparent 1px 3px),
+    var(--linen-base);
+}
+
+/* ── 畫面切換：基礎隱藏，只有 is-active 顯示 ── */
+.screen{display:none;}
+.screen.is-active{display:block;}
+
+/* ── 區段標題（linen 上：近白金屬刻字，達 AA）── */
+.section-head{display:flex; align-items:baseline; justify-content:space-between; margin:var(--sp-5) 0 var(--sp-3); gap:var(--sp-2);}
+.section-head h2{font:700 20px/1.25 var(--font-ui); color:var(--on-linen); text-shadow:var(--on-linen-press); letter-spacing:.2px;}
+.section-head a{font:600 13px/1.2 var(--font-ui); color:var(--link-on-linen); cursor:pointer; text-shadow:var(--on-linen-press); flex:0 0 auto;}
+.section-head a:active{opacity:.7;}
+
+/* ── 卡片 ── */
+.card{background:linear-gradient(180deg, var(--card-top), var(--card-bot)); border:1px solid var(--card-edge);
+  border-radius:var(--radius-card); box-shadow:var(--card-shadow); padding:var(--sp-3);}
+.card--stitched{
+  background:linear-gradient(180deg, var(--leather-top), var(--leather));
+  border:2px dashed var(--leather-stitch); border-radius:var(--radius-card);
+  color:var(--leather-ink); padding:var(--sp-3);
+  text-shadow:0 -1px 0 var(--letterpress-dn);
+  box-shadow:var(--drop-lg), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.letterpress{color:var(--ink); text-shadow:0 1px 0 var(--letterpress-up);}
+
+/* ── 每日迴聲皮革橫幅 ── */
+.daily{display:flex; gap:var(--sp-3); align-items:center;}
+.daily .cover.thumb{width:84px; height:84px; flex:0 0 84px;}
+.daily .d-body{flex:1; min-width:0;}
+.daily .d-kicker{font:600 11px/1.3 var(--font-ui); letter-spacing:1px; color:#e7c896; text-transform:uppercase;}
+.daily .d-title{font:700 19px/1.25 var(--font-ui); color:var(--leather-ink); margin:2px 0 4px;}
+.daily .d-desc{font:400 12px/1.35 var(--font-ui); color:rgba(244,232,216,.85);
+  overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+.daily .d-cta{margin-top:var(--sp-2);}
+
+/* ── 方形封面 + 玻璃高光 + 縫線框 ── */
+.cover{
+  aspect-ratio:1; width:100%; border-radius:var(--radius-cover);
+  border:1px solid var(--card-edge); box-shadow:var(--card-shadow), inset 0 0 0 2px rgba(201,160,106,.35);
+  background:linear-gradient(135deg,#6b88a8,#2c3e50);
+  background-size:cover; position:relative; overflow:hidden; flex:0 0 auto;
+}
+.cover::after{content:""; position:absolute; inset:0; background:var(--gloss); pointer-events:none; border-radius:inherit;}
+.cover.thumb{width:48px; height:48px; flex:0 0 48px;}
+.c1{background-image:url('assets/cover-1.webp');}
+.c2{background-image:url('assets/cover-2.webp');}
+.c3{background-image:url('assets/cover-3.webp');}
+.c4{background-image:url('assets/cover-4.webp');}
+.c5{background-image:url('assets/cover-5.webp');}
+.c6{background-image:url('assets/cover-6.webp');}
+.c1,.c2,.c3,.c4,.c5,.c6{background-size:cover; background-position:center;}
+
+/* ── 歌單卡牆 ── */
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3);}
+.playlist-card{cursor:pointer; transition:transform 140ms ease-out, filter 140ms ease-out;}
+.playlist-card:hover{filter:brightness(1.04);}
+.playlist-card:active{transform:translateY(1px);}
+.playlist-card .name{margin-top:var(--sp-2); font:600 15px/1.3 var(--font-ui);
+  color:var(--on-linen); text-shadow:var(--on-linen-press);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.playlist-card .sub{font:400 11px/1.3 var(--font-ui); color:var(--on-linen-soft); text-shadow:var(--on-linen-press);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* ── 清單列 ── */
+.list-wrap{border-radius:var(--radius-card); overflow:hidden; border:1px solid var(--card-edge); box-shadow:var(--card-shadow);}
+.song-row{
+  display:flex; align-items:center; gap:var(--sp-3); padding:var(--sp-2) var(--sp-3);
+  background:linear-gradient(180deg, var(--row-top), var(--row-bot));
+  border-bottom:1px solid var(--card-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45);
+  cursor:pointer; transition:filter 140ms ease-out;
+}
+.song-row:last-child{border-bottom:none;}
+.song-row:hover{filter:brightness(1.03);}
+.song-row:active{box-shadow:var(--press-in);}
+.song-row .idx{width:24px; text-align:center; font-family:var(--font-num); font-size:15px; font-weight:600;
+  color:var(--ink-soft); text-shadow:0 1px 0 var(--letterpress-up); flex:0 0 24px;}
+.song-row .cover.thumb{width:46px; height:46px; flex:0 0 46px;}
+.song-row .meta{flex:1; min-width:0;}
+.song-row .title{font:600 15px/1.4 var(--font-ui); color:var(--ink);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.song-row .artist{font:400 13px/1.35 var(--font-ui); color:var(--ink-soft);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.song-row .right{display:flex; align-items:center; gap:var(--sp-2); flex:0 0 auto;}
+.song-row .dur{font-family:var(--font-num); font-size:12px; color:var(--ink-soft);}
+.song-row .chev{font-size:18px; color:var(--ink-soft); opacity:.6;}
+
+/* 行尾浮雕播放鍵 */
+.play-mini{
+  width:30px; height:30px; flex:0 0 30px; border-radius:50%; font-size:12px;
+  background:linear-gradient(180deg, var(--glass-blue-top), var(--glass-blue-bot));
+  border:1px solid var(--glass-blue-edge); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--bevel-up), var(--drop); cursor:pointer; transition:transform 120ms ease-out;
+}
+.play-mini:active{box-shadow:var(--press-in); transform:translateY(1px);}
+
+/* ── 功能小卡 ── */
+.feat-grid{display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3);}
+.feat .ft{font:600 15px/1.3 var(--font-ui); color:var(--ink); text-shadow:0 1px 0 var(--letterpress-up); margin-bottom:4px;}
+.feat .fd{font:400 12px/1.4 var(--font-ui); color:var(--ink-soft);}
+
+/* ── chip ── */
+.chips{display:flex; flex-wrap:wrap; gap:var(--sp-2); margin:var(--sp-2) 0;}
+.chip{
+  display:inline-block; padding:6px 16px; border-radius:var(--radius-pill);
+  background:linear-gradient(180deg,#f3eee4,#d9d1c2);
+  border:1px solid var(--card-edge); box-shadow:var(--bevel-up), var(--drop);
+  font:600 13px/1.2 var(--font-ui); color:var(--ink);
+  text-shadow:0 1px 0 var(--letterpress-up); cursor:pointer; transition:transform 120ms ease-out;
+}
+.chip:active{transform:translateY(1px);}
+.chip.active{color:var(--glass-blue-ink); box-shadow:var(--press-in); background:linear-gradient(180deg,#dce6f2,#bcc9da);}
+
+/* ── 凹槽搜尋框 ── */
+.search-slot{
+  display:flex; align-items:center; gap:var(--sp-2); margin-top:var(--sp-3);
+  padding:9px var(--sp-3); border-radius:var(--radius-pill);
+  background:linear-gradient(180deg,#3b3833,#56524b);
+  box-shadow:var(--press-in), inset 0 0 0 1px rgba(0,0,0,.3); cursor:text;
+}
+.search-slot .mag{font-size:15px; color:rgba(255,255,255,.7);}
+.search-slot input{
+  flex:1; background:transparent; border:none; outline:none;
+  font:400 15px/1.3 var(--font-ui); color:#f3eee4;
+}
+.search-slot input::placeholder{color:rgba(255,255,255,.55);}
+
+/* ── 玻璃浮雕鈕 ── */
+.btn-glass{
+  background:linear-gradient(180deg, var(--glass-blue-top), var(--glass-blue-bot));
+  border:1px solid var(--glass-blue-edge); border-radius:var(--radius-btn);
+  color:var(--on-glass); font:600 14px/1.2 var(--font-ui);
+  padding:9px 16px; box-shadow:var(--bevel-up), var(--bevel-dn), var(--drop);
+  position:relative; cursor:pointer; transition:transform 120ms ease-out;
+  display:inline-flex; align-items:center; gap:6px; text-shadow:0 -1px 0 rgba(0,0,0,.25);
+}
+.btn-glass::before{content:""; position:absolute; inset:1px 1px 50% 1px;
+  border-radius:8px 8px 50% 50% / 8px 8px 12px 12px; background:var(--gloss); pointer-events:none;}
+.btn-glass:active{box-shadow:var(--press-in); transform:translateY(1px);}
+.btn-glass.round{width:64px; height:64px; border-radius:50%; padding:0; font-size:24px; justify-content:center;}
+.btn-metal{
+  background:linear-gradient(180deg,#eceae5,#c8c2b6); border:1px solid var(--card-edge);
+  border-radius:var(--radius-btn); color:var(--ink); font:600 14px/1.2 var(--font-ui);
+  padding:9px 16px; box-shadow:var(--bevel-up), var(--drop); cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; text-shadow:0 1px 0 var(--letterpress-up);
+  transition:transform 120ms ease-out;
+}
+.btn-metal:active{box-shadow:var(--press-in); transform:translateY(1px);}
+
+/* ── 藝人圓頭像列 ── */
+.artist-row{display:flex; gap:var(--sp-3); overflow-x:auto; padding-bottom:var(--sp-2);}
+.artist-chip{flex:0 0 auto; text-align:center; cursor:pointer;}
+.artist-chip .av{width:64px; height:64px; border-radius:50%; margin:0 auto 6px;
+  border:2px solid var(--leather-stitch); box-shadow:var(--card-shadow); position:relative; overflow:hidden;}
+.artist-chip .av::after{content:""; position:absolute; inset:0; background:var(--gloss);}
+.artist-chip .an{font:600 12px/1.2 var(--font-ui); color:var(--on-linen); text-shadow:var(--on-linen-press); max-width:72px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* ── detail ── */
+.detail-cover{width:60%; margin:var(--sp-5) auto var(--sp-4); display:block;}
+.detail-info{text-align:center;}
+.detail-info .al-title{font:700 22px/1.25 var(--font-ui); color:var(--on-linen); text-shadow:var(--on-linen-press);}
+.detail-info .al-artist{font:400 14px/1.4 var(--font-ui); color:var(--on-linen-soft); text-shadow:var(--on-linen-press); margin-top:2px;}
+.detail-info .al-meta{font-family:var(--font-num); font-size:13px; color:var(--on-linen-soft); text-shadow:var(--on-linen-press); margin-top:4px;}
+.detail-actions{display:flex; gap:var(--sp-3); justify-content:center; margin:var(--sp-4) 0;}
+
+/* ── player（全屏覆蓋）── */
+.player-screen{
+  display:none; position:absolute; inset:0; z-index:80;
+  flex-direction:column; color:var(--leather-ink);
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.18) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, var(--leather-top), #281c14 70%, #1c130c);
+}
+.player-screen.is-active{display:flex;}
+.player-nav{
+  height:var(--navbar-h); flex:0 0 auto; display:flex; align-items:center; gap:var(--sp-3);
+  padding:6px var(--sp-4) 0; color:var(--leather-ink);
+  text-shadow:0 -1px 0 var(--letterpress-dn);
+}
+.player-nav .pn-title{flex:1; text-align:center; font:600 13px/1.2 var(--font-ui); letter-spacing:1px;}
+.player-nav .pn-sub{display:block; font:400 11px/1.2 var(--font-ui); opacity:.8; margin-top:2px;}
+.player-icon{width:34px; height:34px; flex:0 0 34px; border-radius:8px;
+  background:linear-gradient(180deg,#4c3a2e,#2e2017); border:1px solid #1c130c;
+  display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--leather-ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12), var(--drop); cursor:pointer; transition:transform 120ms ease-out;}
+.player-icon:active{box-shadow:var(--press-in); transform:translateY(1px);}
+.player-body{flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column;
+  padding:0 var(--sp-5) var(--sp-4); justify-content:flex-start; gap:var(--sp-3);}
+.player-cover{width:62%; margin:var(--sp-2) auto var(--sp-1); border:2px solid var(--leather-stitch);
+  box-shadow:var(--drop-lg), inset 0 0 0 1px rgba(0,0,0,.4);}
+.player-track{text-align:center;}
+.player-track .pt-name{font:700 24px/1.2 var(--font-ui); color:var(--leather-ink); text-shadow:0 -1px 0 rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.06);}
+.player-track .pt-artist{font:400 14px/1.4 var(--font-ui); color:rgba(244,232,216,.85); margin-top:3px;}
+.lyrics{text-align:center; padding:2px 0;}
+.lyric{font:400 14px/1.5 var(--font-ui); color:rgba(244,232,216,.62); transition:color 160ms ease-out, opacity 160ms ease-out; opacity:.7;}
+.lyric.active{color:#9fd0ff; opacity:1; font-weight:600; text-shadow:0 0 8px rgba(89,166,255,.4);}
+.scrub-wrap{margin-top:var(--sp-1);}
+.scrubber{height:8px; border-radius:999px; background:linear-gradient(180deg,#1c130c,#3a2c22);
+  box-shadow:var(--press-in); position:relative;}
+.scrubber .fill{position:absolute; inset:0 60% 0 0; border-radius:999px;
+  background:linear-gradient(180deg, var(--glass-blue-top), var(--glass-blue-bot));}
+.scrubber .knob{position:absolute; top:50%; left:40%; width:18px; height:18px; border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 35% 30%, #fff, #cfd6dd 60%, #9aa2ab);
+  box-shadow:0 1px 2px rgba(0,0,0,.6); transition:transform 120ms ease-out; cursor:pointer;}
+.scrubber .knob:hover{transform:translate(-50%,-50%) scale(1.12);}
+.scrub-times{display:flex; justify-content:space-between; font-family:var(--font-num); font-size:11px; color:rgba(244,232,216,.78); margin-top:5px;}
+.transport{display:flex; align-items:center; justify-content:center; gap:var(--sp-4); margin-top:var(--sp-2);}
+.t-btn{width:46px; height:46px; border-radius:50%; font-size:18px;
+  background:linear-gradient(180deg,#4c3a2e,#2e2017); border:1px solid #1c130c; color:var(--leather-ink);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12), var(--drop); cursor:pointer; transition:transform 120ms ease-out;}
+.t-btn:active{box-shadow:var(--press-in); transform:translateY(1px);}
+.player-foot{display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3); margin-top:auto;}
+.hires-badge{display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:6px;
+  font:700 11px/1.2 var(--font-ui); color:#2e2017; letter-spacing:.5px;
+  background:linear-gradient(180deg,#e9d8a8,#c9a06a); border:1px solid #8a6d3f;
+  box-shadow:var(--bevel-up), var(--drop); text-shadow:0 1px 0 rgba(255,255,255,.3);}
+.vol{display:flex; align-items:center; gap:var(--sp-2); flex:1; max-width:160px;}
+.vol .vbar{flex:1; height:6px; border-radius:999px; background:linear-gradient(180deg,#1c130c,#3a2c22); box-shadow:var(--press-in); position:relative;}
+.vol .vbar::after{content:""; position:absolute; inset:0 45% 0 0; border-radius:999px; background:linear-gradient(180deg,#cfd6dd,#9aa2ab);}
+.vol span{font-size:13px; color:rgba(244,232,216,.78);}
+
+/* ── library segmented ── */
+.segmented{display:flex; border-radius:var(--radius-btn); overflow:hidden; border:1px solid var(--card-edge);
+  box-shadow:var(--drop); margin:var(--sp-3) 0;}
+.seg{flex:1; text-align:center; padding:8px 0; font:600 13px/1.2 var(--font-ui); color:var(--ink);
+  background:linear-gradient(180deg,#eceae5,#c8c2b6); border-right:1px solid var(--card-edge);
+  text-shadow:0 1px 0 var(--letterpress-up); cursor:pointer; transition:filter 120ms ease-out;}
+.seg:last-child{border-right:none;}
+.seg.active{color:var(--glass-blue-ink); box-shadow:var(--press-in); background:linear-gradient(180deg,#dce6f2,#bcc9da);}
+.dl-card{display:flex; align-items:center; gap:var(--sp-3); margin-top:var(--sp-3);}
+.dl-card .dl-ico{width:42px; height:42px; flex:0 0 42px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+  font-size:20px; background:linear-gradient(180deg,#eceae5,#c8c2b6); border:1px solid var(--card-edge); box-shadow:var(--bevel-up), var(--drop); color:var(--glass-blue-ink);}
+.dl-card .dl-b{flex:1; min-width:0;}
+.dl-card .dl-t{font:600 15px/1.3 var(--font-ui); color:var(--ink); text-shadow:0 1px 0 var(--letterpress-up);}
+.dl-card .dl-d{font:400 12px/1.35 var(--font-ui); color:var(--ink-soft); display:block;}
+.badge-count{display:inline-block; padding:2px 9px; border-radius:999px; font:600 11px/1.3 var(--font-ui); color:#fff;
+  background:linear-gradient(180deg, var(--accent-green-top), var(--accent-green-bot)); box-shadow:var(--drop); flex:0 0 auto;}
+
+/* ── profile ── */
+.user-card{display:flex; align-items:center; gap:var(--sp-3); margin-top:var(--sp-2);}
+.user-card .av{width:60px; height:60px; flex:0 0 60px; border-radius:50%; border:2px solid var(--leather-stitch);
+  background:var(--gloss), radial-gradient(circle at 35% 30%,#d8c4a8,#7a5d40); box-shadow:var(--card-shadow); position:relative; overflow:hidden;}
+.user-card .u-name{font:700 18px/1.25 var(--font-ui); color:var(--leather-ink); text-shadow:0 -1px 0 var(--letterpress-dn); display:block;}
+.user-card .u-stat{font:400 12px/1.35 var(--font-ui); color:rgba(244,232,216,.85); display:block;}
+.pref-h,.plans-h{font:600 13px/1.2 var(--font-ui); color:var(--on-linen-soft); text-shadow:var(--on-linen-press);
+  letter-spacing:.5px; margin:var(--sp-5) 0 var(--sp-2);}
+.toggle-row{display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--card-edge);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-row .tr-t{font:400 15px/1.3 var(--font-ui); color:var(--ink);}
+.tog{width:48px; height:28px; border-radius:999px; position:relative; cursor:pointer; flex:0 0 48px;
+  background:linear-gradient(180deg, var(--accent-green-top), var(--accent-green-bot));
+  box-shadow:var(--press-in), inset 0 1px 0 rgba(255,255,255,.3); border:1px solid #2c6b1f; transition:background 140ms;}
+.tog::after{content:""; position:absolute; top:2px; left:22px; width:22px; height:22px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,#dfe3e8); box-shadow:0 1px 2px rgba(0,0,0,.5); transition:transform 140ms ease-out;}
+.tog.off{background:linear-gradient(180deg,#c8c2b6,#9a948a); border-color:#7a746a;}
+.tog.off::after{transform:translateX(-20px);}
+
+.plan{margin-bottom:var(--sp-3);}
+.plan.recommended{border:2px solid var(--glass-blue-edge); box-shadow:var(--drop-lg);}
+.plan .p-head{display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); margin-bottom:4px;}
+.plan .p-name{font:700 17px/1.25 var(--font-ui); color:var(--ink); text-shadow:0 1px 0 var(--letterpress-up);}
+.plan .price{font:700 22px/1.2 var(--font-num); color:var(--ink); text-shadow:0 1px 0 var(--letterpress-up);}
+.plan .price small{font:400 12px/1 var(--font-ui); color:var(--ink-soft);}
+.plan .p-perk{font:400 13px/1.45 var(--font-ui); color:var(--ink-soft); margin:6px 0;}
+.badge{display:inline-block; padding:2px 10px; border-radius:999px; font:600 11px/1.3 var(--font-ui); color:#fff;
+  background:linear-gradient(180deg, var(--glass-blue-top), var(--glass-blue-bot)); box-shadow:var(--drop);}
+.badge.current{background:linear-gradient(180deg, var(--accent-green-top), var(--accent-green-bot));}
+
+/* ── mini-player ── */
+.miniplayer{
+  flex:0 0 auto; height:var(--miniplayer-h); position:relative; z-index:40;
+  display:flex; align-items:center; gap:var(--sp-3); padding:0 var(--sp-3);
+  background:linear-gradient(180deg, var(--leather-top), var(--leather));
+  border-top:1px solid #1c130c;
+  box-shadow:0 -2px 6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12);
+  color:var(--leather-ink); cursor:pointer;
+}
+.miniplayer .cover.thumb{width:40px; height:40px; flex:0 0 40px;}
+.miniplayer .mp-meta{flex:1; min-width:0;}
+.miniplayer .mp-title{font:600 14px/1.2 var(--font-ui); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.miniplayer .mp-artist{font:400 12px/1.2 var(--font-ui); opacity:.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.miniplayer .mp-play{width:36px; height:36px; flex:0 0 36px; border-radius:50%; font-size:14px;
+  background:linear-gradient(180deg,#4c3a2e,#2e2017); border:1px solid #1c130c; color:var(--leather-ink);
+  display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.12), var(--drop);
+  cursor:pointer; transition:transform 120ms ease-out;}
+.miniplayer .mp-play:active{box-shadow:var(--press-in); transform:translateY(1px);}
+/* player 全屏時隱藏 dock（mini-player + tab-bar） */
+.device.player-on .miniplayer,
+.device.player-on .tabbar{display:none;}
+
+/* ── tab-bar ── */
+.tabbar{
+  flex:0 0 auto; height:calc(var(--tabbar-h) + var(--safe-bottom)); position:relative; z-index:40;
+  padding-bottom:var(--safe-bottom); border-top:1px solid var(--metal-line); display:flex;
+}
+.tab{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  font:400 11px/1.3 var(--font-ui); color:var(--ink-on-metal); text-shadow:0 1px 0 var(--letterpress-up); cursor:pointer;
+  margin:4px 3px; border-radius:8px; transition:filter 120ms ease-out;}
+.tab .ti{font-size:19px; line-height:1;}
+.tab.active{color:var(--glass-blue-ink); box-shadow:var(--press-in); background:linear-gradient(180deg,rgba(10,74,168,.08),rgba(10,74,168,.16));}
+
+@media (max-width:430px){
+  body{padding:0;}
+  .device{width:100vw; height:100vh; min-height:100vh; border-radius:0; box-shadow:none;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important; animation:none !important;}
+}
+</style>
+</head>
+<body data-viewport="mobile">
+
+<div class="device" id="device" data-active="home">
+
+  <!-- 1. STATUS BAR -->
+  <section data-screen="status-bar" class="statusbar">
+    <span class="clock">9:41</span>
+    <span class="sysicons">
+      <span class="signal" aria-label="訊號"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="wifi" aria-label="Wi-Fi"></span>
+      <span class="battery" aria-label="電量"><span class="body"><span class="fill"></span></span><span class="cap"></span></span>
+    </span>
+  </section>
+
+  <div class="content" id="content">
+
+    <!-- 2. HOME -->
+    <section data-screen="home" class="screen is-active" id="screen-home">
+      <div class="navbar">
+        <span class="brand">迴聲 Resona<small>讓每首歌，回到你身上</small></span>
+        <button class="icon-btn" aria-label="設定">⚙</button>
+      </div>
+
+      <!-- 每日迴聲 皮革橫幅 -->
+      <div class="card--stitched daily" style="margin-top:var(--sp-4);" data-go="detail" role="button" tabindex="0">
+        <div class="cover thumb c1" style="width:84px;height:84px;flex:0 0 84px;"></div>
+        <div class="d-body">
+          <div class="d-kicker">個人化每日推薦</div>
+          <div class="d-title">每日迴聲</div>
+          <div class="d-desc">依你的聆聽習慣，每天 06:00 為你重新編排專屬歌單。</div>
+          <button class="btn-glass d-cta" data-go="player">▶ 立即播放</button>
+        </div>
+      </div>
+
+      <!-- 為你精選歌單 -->
+      <div class="section-head">
+        <h2>為你精選歌單</h2><a data-go="detail">查看全部 ›</a>
+      </div>
+      <div class="grid-2">
+        <div class="playlist-card" data-go="detail"><div class="cover c1"></div><div class="name">晨間通勤</div><div class="sub">28 首・浪潮回聲</div></div>
+        <div class="playlist-card" data-go="detail"><div class="cover c2"></div><div class="name">深夜電台</div><div class="sub">42 首・深夜公路</div></div>
+        <div class="playlist-card" data-go="detail"><div class="cover c3"></div><div class="name">海邊散步</div><div class="sub">19 首・島嶼晨光</div></div>
+        <div class="playlist-card" data-go="detail"><div class="cover c4"></div><div class="name">專注編碼</div><div class="sub">36 首・雨後散步</div></div>
+        <div class="playlist-card" data-go="detail"><div class="cover c5"></div><div class="name">雨天咖啡館</div><div class="sub">24 首・城市心跳</div></div>
+        <div class="playlist-card" data-go="detail"><div class="cover c6"></div><div class="name">健身節拍</div><div class="sub">31 首・山海之間</div></div>
+        <div class="playlist-card" data-go="detail"><div class="cover c2"></div><div class="name">週末派對</div><div class="sub">40 首・失重時刻</div></div>
+      </div>
+
+      <!-- 分類 chip -->
+      <div class="section-head"><h2>探索分類</h2></div>
+      <div class="chips">
+        <span class="chip active">華語</span>
+        <span class="chip">獨立</span>
+        <span class="chip">電子</span>
+        <span class="chip">放鬆</span>
+      </div>
+
+      <!-- 最近播放 -->
+      <div class="section-head"><h2>最近播放</h2><a data-go="detail">查看全部 ›</a></div>
+      <div class="list-wrap">
+        <div class="song-row" data-go="player"><div class="cover thumb c1"></div><div class="meta"><div class="title">藍色信號</div><div class="artist">海平面樂團</div></div><div class="right"><span class="dur">03:21</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><div class="cover thumb c2"></div><div class="meta"><div class="title">霓虹巷弄</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">02:58</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><div class="cover thumb c3"></div><div class="meta"><div class="title">候鳥地圖</div><div class="artist">夜行列車</div></div><div class="right"><span class="dur">04:05</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><div class="cover thumb c4"></div><div class="meta"><div class="title">靜電</div><div class="artist">Echo Lab</div></div><div class="right"><span class="dur">03:12</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><div class="cover thumb c5"></div><div class="meta"><div class="title">晚風練習曲</div><div class="artist">何遠</div></div><div class="right"><span class="dur">02:47</span><button class="play-mini" data-go="player">▶</button></div></div>
+      </div>
+
+      <!-- 核心功能小卡 -->
+      <div class="section-head"><h2>迴聲特色</h2></div>
+      <div class="feat-grid">
+        <div class="card feat"><div class="ft">無損音質串流</div><div class="fd">最高 24-bit／192kHz Hi-Res 無損音質。</div></div>
+        <div class="card feat"><div class="ft">歌詞同步</div><div class="fd">逐字滾動歌詞，跟著節奏高亮。</div></div>
+      </div>
+    </section>
+
+    <!-- 3. SEARCH -->
+    <section data-screen="search" class="screen" id="screen-search">
+      <div class="navbar"><span class="title">搜尋</span></div>
+      <div class="search-slot">
+        <span class="mag">⌕</span>
+        <input type="text" placeholder="搜尋歌曲、藝人、專輯" aria-label="搜尋">
+      </div>
+      <div class="chips" style="margin-top:var(--sp-3);">
+        <span class="chip active">華語</span>
+        <span class="chip">獨立</span>
+        <span class="chip">電子</span>
+        <span class="chip">放鬆</span>
+      </div>
+
+      <div class="section-head"><h2>熱門歌曲</h2></div>
+      <div class="list-wrap">
+        <div class="song-row" data-go="player"><span class="idx">1</span><div class="meta"><div class="title">藍色信號</div><div class="artist">海平面樂團</div></div><div class="right"><span class="dur">03:21</span></div></div>
+        <div class="song-row" data-go="player"><span class="idx">2</span><div class="meta"><div class="title">霓虹巷弄</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">02:58</span></div></div>
+        <div class="song-row" data-go="player"><span class="idx">3</span><div class="meta"><div class="title">候鳥地圖</div><div class="artist">夜行列車</div></div><div class="right"><span class="dur">04:05</span></div></div>
+        <div class="song-row" data-go="player"><span class="idx">4</span><div class="meta"><div class="title">靜電</div><div class="artist">Echo Lab</div></div><div class="right"><span class="dur">03:12</span></div></div>
+        <div class="song-row" data-go="player"><span class="idx">5</span><div class="meta"><div class="title">晚風練習曲</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">02:47</span></div></div>
+        <div class="song-row" data-go="player"><span class="idx">6</span><div class="meta"><div class="title">無人車站</div><div class="artist">何遠</div></div><div class="right"><span class="dur">03:44</span></div></div>
+      </div>
+
+      <div class="section-head"><h2>熱門藝人</h2></div>
+      <div class="artist-row">
+        <div class="artist-chip" data-go="detail"><div class="av c1"></div><div class="an">海平面樂團</div></div>
+        <div class="artist-chip" data-go="detail"><div class="av c2"></div><div class="an">林知夏</div></div>
+        <div class="artist-chip" data-go="detail"><div class="av c3"></div><div class="an">夜行列車</div></div>
+        <div class="artist-chip" data-go="detail"><div class="av c4"></div><div class="an">Echo Lab</div></div>
+        <div class="artist-chip" data-go="detail"><div class="av c5"></div><div class="an">何遠</div></div>
+      </div>
+    </section>
+
+    <!-- 4. DETAIL -->
+    <section data-screen="detail" class="screen" id="screen-detail">
+      <div class="navbar">
+        <button class="icon-btn nav-back" data-go="back">‹ 返回</button>
+        <span class="title" style="flex:1;text-align:center;">專輯</span>
+        <button class="icon-btn" aria-label="更多">⋯</button>
+      </div>
+
+      <div class="cover c1 detail-cover"></div>
+      <div class="detail-info">
+        <div class="al-title">島嶼晨光</div>
+        <div class="al-artist">林知夏</div>
+        <div class="al-meta">2024 · 9 首 · 38 分鐘</div>
+      </div>
+      <div class="detail-actions">
+        <button class="btn-glass" data-go="player">▶ 播放全部</button>
+        <button class="btn-metal" data-go="player">🔀 隨機播放</button>
+      </div>
+
+      <div class="list-wrap">
+        <div class="song-row" data-go="player"><span class="idx">1</span><div class="meta"><div class="title">藍色信號</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">03:21</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">2</span><div class="meta"><div class="title">霓虹巷弄</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">02:58</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">3</span><div class="meta"><div class="title">候鳥地圖</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">04:05</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">4</span><div class="meta"><div class="title">靜電</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">03:12</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">5</span><div class="meta"><div class="title">晚風練習曲</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">02:47</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">6</span><div class="meta"><div class="title">無人車站</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">03:44</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">7</span><div class="meta"><div class="title">潮間帶</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">04:18</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">8</span><div class="meta"><div class="title">第七個夏天</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">03:56</span><button class="play-mini" data-go="player">▶</button></div></div>
+        <div class="song-row" data-go="player"><span class="idx">9</span><div class="meta"><div class="title">月台九又四分之三</div><div class="artist">林知夏</div></div><div class="right"><span class="dur">05:02</span><button class="play-mini" data-go="player">▶</button></div></div>
+      </div>
+    </section>
+
+    <!-- 6. LIBRARY -->
+    <section data-screen="library" class="screen" id="screen-library">
+      <div class="navbar"><span class="title">音樂庫</span></div>
+      <div class="segmented">
+        <span class="seg active">歌單</span>
+        <span class="seg">專輯</span>
+        <span class="seg">已下載</span>
+      </div>
+      <div class="list-wrap">
+        <div class="song-row" data-go="detail"><div class="cover thumb c1"></div><div class="meta"><div class="title">晨間通勤</div><div class="artist">28 首・浪潮回聲</div></div><div class="right"><span class="chev">›</span></div></div>
+        <div class="song-row" data-go="detail"><div class="cover thumb c2"></div><div class="meta"><div class="title">深夜電台</div><div class="artist">42 首・深夜公路</div></div><div class="right"><span class="chev">›</span></div></div>
+        <div class="song-row" data-go="detail"><div class="cover thumb c3"></div><div class="meta"><div class="title">海邊散步</div><div class="artist">19 首・島嶼晨光</div></div><div class="right"><span class="chev">›</span></div></div>
+        <div class="song-row" data-go="detail"><div class="cover thumb c4"></div><div class="meta"><div class="title">專注編碼</div><div class="artist">36 首・雨後散步</div></div><div class="right"><span class="chev">›</span></div></div>
+        <div class="song-row" data-go="detail"><div class="cover thumb c5"></div><div class="meta"><div class="title">雨天咖啡館</div><div class="artist">24 首・城市心跳</div></div><div class="right"><span class="chev">›</span></div></div>
+      </div>
+
+      <div class="card dl-card">
+        <span class="dl-ico">⤓</span>
+        <span class="dl-b"><span class="dl-t">離線下載</span><span class="dl-d">Plus 以上方案可下載歌曲離線聆聽</span></span>
+        <span class="badge-count">已下載 12 首</span>
+      </div>
+      <div class="card--stitched dl-card" style="margin-top:var(--sp-3);">
+        <span class="dl-ico" style="background:linear-gradient(180deg,#4c3a2e,#2e2017);border-color:#1c130c;color:var(--leather-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),var(--drop);">⌂</span>
+        <span class="dl-b"><span class="dl-t" style="color:var(--leather-ink);text-shadow:0 -1px 0 var(--letterpress-dn);">共享音樂庫</span><span class="dl-d" style="color:rgba(244,232,216,.85);">Family 方案最多 6 人共建一座音樂庫</span></span>
+      </div>
+    </section>
+
+    <!-- 7. PROFILE -->
+    <section data-screen="profile" class="screen" id="screen-profile">
+      <div class="navbar"><span class="title">我的</span></div>
+      <div class="card--stitched user-card">
+        <span class="av"></span>
+        <span class="dl-b"><span class="u-name">陳聲遠</span><span class="u-stat">迴聲 Resona Plus 會員 · resona.app</span></span>
+      </div>
+
+      <div class="pref-h">播放偏好</div>
+      <div class="card">
+        <div class="toggle-row"><span class="tr-t">跨裝置接續播放</span><span class="tog" role="switch" aria-checked="true"></span></div>
+        <div class="toggle-row"><span class="tr-t">無損音質串流</span><span class="tog" role="switch" aria-checked="true"></span></div>
+        <div class="toggle-row"><span class="tr-t">新歌通知</span><span class="tog off" role="switch" aria-checked="false"></span></div>
+      </div>
+
+      <div class="plans-h">訂閱方案</div>
+      <div class="card plan">
+        <div class="p-head"><span class="p-name">免費</span><span class="badge current">目前方案</span></div>
+        <div class="price">NT$ 0 <small>／月</small></div>
+        <div class="p-perk">隨機播放、含廣告插播、標準音質。</div>
+        <button class="btn-metal">使用中</button>
+      </div>
+      <div class="card plan recommended">
+        <div class="p-head"><span class="p-name">Plus</span><span class="badge">推薦</span></div>
+        <div class="price">NT$ 149 <small>／月</small></div>
+        <div class="p-perk">無廣告、指定單曲播放、無損音質、離線下載。</div>
+        <button class="btn-glass">升級 Plus</button>
+      </div>
+      <div class="card plan">
+        <div class="p-head"><span class="p-name">Family</span></div>
+        <div class="price">NT$ 249 <small>／月</small></div>
+        <div class="p-perk">6 個帳號、共享音樂庫、家長控制、涵蓋全部 Plus 權益。</div>
+        <button class="btn-glass">選擇 Family</button>
+      </div>
+    </section>
+
+  </div><!-- /.content -->
+
+  <!-- 5. PLAYER（全屏覆蓋）-->
+  <section data-screen="player" class="player-screen" id="screen-player">
+    <div class="player-nav">
+      <button class="player-icon" data-go="back">⌄</button>
+      <span class="pn-title">正在播放<span class="pn-sub">島嶼晨光</span></span>
+      <button class="player-icon" aria-label="選單">⋯</button>
+    </div>
+    <div class="player-body">
+      <div class="cover c1 player-cover"></div>
+      <div class="player-track">
+        <div class="pt-name">晚風練習曲</div>
+        <div class="pt-artist">林知夏 · 島嶼晨光</div>
+      </div>
+      <div class="lyrics">
+        <div class="lyric">霓虹熄滅後 街角剩風</div>
+        <div class="lyric active">把今天的疲憊 都交給晚風</div>
+        <div class="lyric">候鳥沿著地圖 飛回胸口</div>
+      </div>
+      <div class="scrub-wrap">
+        <div class="scrubber"><div class="fill"></div><div class="knob"></div></div>
+        <div class="scrub-times"><span>01:12</span><span>02:47</span></div>
+      </div>
+      <div class="transport">
+        <button class="t-btn" aria-label="隨機">🔀</button>
+        <button class="t-btn" aria-label="上一首">⏮</button>
+        <button class="btn-glass round" id="bigPlay" aria-label="播放暫停">⏸</button>
+        <button class="t-btn" aria-label="下一首">⏭</button>
+        <button class="t-btn" aria-label="循環">🔁</button>
+      </div>
+      <div class="player-foot">
+        <span class="hires-badge">⬡ 無損音質</span>
+        <span class="vol"><span>🔈</span><span class="vbar"></span><span>🔊</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- mini-player -->
+  <div class="miniplayer" id="miniplayer" data-go="player">
+    <div class="cover thumb c1"></div>
+    <div class="mp-meta"><div class="mp-title">晚風練習曲</div><div class="mp-artist">林知夏 · 島嶼晨光</div></div>
+    <button class="mp-play" id="miniPlay" aria-label="播放暫停">⏸</button>
+  </div>
+
+  <!-- 8. TAB BAR -->
+  <section data-screen="tab-bar" class="tabbar">
+    <div class="tab active" data-tab="home"><span class="ti">⌂</span><span>首頁</span></div>
+    <div class="tab" data-tab="search"><span class="ti">⌕</span><span>搜尋</span></div>
+    <div class="tab" data-tab="library"><span class="ti">♫</span><span>音樂庫</span></div>
+    <div class="tab" data-tab="profile"><span class="ti">☺</span><span>我的</span></div>
+  </section>
+
+</div><!-- /.device -->
+
+<script>
+(function(){
+  var device = document.getElementById('device');
+  var content = document.getElementById('content');
+  var screens = {
+    home: document.getElementById('screen-home'),
+    search: document.getElementById('screen-search'),
+    detail: document.getElementById('screen-detail'),
+    library: document.getElementById('screen-library'),
+    profile: document.getElementById('screen-profile')
+  };
+  var playerScreen = document.getElementById('screen-player');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var tabFor = { home:'home', search:'search', library:'library', profile:'profile' };
+  var history = ['home'];
+
+  function showContentScreen(id){
+    Object.keys(screens).forEach(function(k){
+      screens[k].classList.toggle('is-active', k === id);
+    });
+  }
+  function syncTabs(id){
+    tabs.forEach(function(t){
+      t.classList.toggle('active', t.getAttribute('data-tab') === id);
+    });
+  }
+
+  function go(target){
+    if(target === 'back'){
+      history.pop();
+      target = history[history.length-1] || 'home';
+    } else {
+      if(history[history.length-1] !== target) history.push(target);
+    }
+    if(history.length > 30) history = history.slice(-15);
+
+    if(target === 'player'){
+      device.classList.add('player-on');
+      playerScreen.classList.add('is-active');
+      device.setAttribute('data-active','player');
+    } else {
+      device.classList.remove('player-on');
+      playerScreen.classList.remove('is-active');
+      showContentScreen(target);
+      device.setAttribute('data-active', target);
+      if(content) content.scrollTop = 0;
+      var tabId = tabFor[target];
+      if(tabId) syncTabs(tabId);
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-go]');
+    if(el){
+      e.preventDefault();
+      e.stopPropagation();
+      go(el.getAttribute('data-go'));
+    }
+  });
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      var id = t.getAttribute('data-tab');
+      history = [id];
+      go(id);
+      syncTabs(id);
+    });
+  });
+
+  document.querySelectorAll('.chips').forEach(function(group){
+    group.querySelectorAll('.chip').forEach(function(c){
+      c.addEventListener('click', function(){
+        group.querySelectorAll('.chip').forEach(function(x){x.classList.remove('active');});
+        c.classList.add('active');
+      });
+    });
+  });
+  document.querySelectorAll('.segmented').forEach(function(group){
+    group.querySelectorAll('.seg').forEach(function(s){
+      s.addEventListener('click', function(){
+        group.querySelectorAll('.seg').forEach(function(x){x.classList.remove('active');});
+        s.classList.add('active');
+      });
+    });
+  });
+  document.querySelectorAll('.tog').forEach(function(t){
+    t.addEventListener('click', function(){
+      t.classList.toggle('off');
+      t.setAttribute('aria-checked', t.classList.contains('off') ? 'false':'true');
+    });
+  });
+
+  function togglePlay(btn){
+    var playing = btn.textContent.trim() === '⏸';
+    var sym = playing ? '▶' : '⏸';
+    var big = document.getElementById('bigPlay');
+    var mini = document.getElementById('miniPlay');
+    if(big) big.textContent = sym;
+    if(mini) mini.textContent = sym;
+  }
+  ['bigPlay','miniPlay'].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b) b.addEventListener('click', function(e){ e.stopPropagation(); togglePlay(b); });
+  });
+
+  document.querySelectorAll('[data-go][tabindex]').forEach(function(el){
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(el.getAttribute('data-go')); }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
