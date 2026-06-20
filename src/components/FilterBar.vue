@@ -85,4 +85,25 @@ const allLabel = (key: Category | 'all') => (key === 'all' ? '全部' : category
 .chip.is-active .count {
   background: rgba(255, 255, 255, 0.18);
 }
+
+/* 手機：分類 chip 改單行水平捲動，避免換成多排把頂部撐高 */
+@media (max-width: 720px) {
+  .filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* 出血到內容左右邊，讓 chip 可貼邊捲動 */
+    margin: 0 -22px;
+    padding: 0 22px 2px;
+  }
+  .filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .chip {
+    flex: 0 0 auto;
+    padding: 6px 11px;
+    font-size: 12.5px;
+  }
+}
 </style>

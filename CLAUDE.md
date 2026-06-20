@@ -4,11 +4,11 @@
 
 ## 專案本質
 
-「**Claude Code Skill 設計風格圖鑑**」——示範規模化工作流：**主執行緒寫 Skill、SubAgent 透過 Skill 產出單檔網頁**。目前共 52 份，分三輪、兩種內容主題：
+「**Claude Code Skill 設計風格圖鑑**」——示範規模化工作流：**主執行緒寫 Skill、SubAgent 透過 Skill 產出單檔網頁**。目前共 57 份，分三輪、兩種內容主題：
 
 - **第一輪 25 份靜態**（`design-*` slug）——音樂節「島嶼共鳴 2026」
 - **第二輪 15 份動態**（`motion-*` slug），分 5 類 motionType：`parallax / scroll-driven / reveal / loop / pointer`——音樂節
-- **第三輪 12 份行動 App**（`app-*` slug）——虛構音樂串流 App「迴聲 Resona」，8 原生平台（`native-ui`）＋ 4 風格化（`stylized-mobile`）。內容主題改用 `app-brief.md`，畫面契約改用 8 個 `data-screen`（非音樂節 9 個 `data-block`），gallery 以手機外框 + iframe 呈現。
+- **第三輪 17 份行動 App**（`app-*` slug）——虛構音樂串流 App「迴聲 Resona」，8 原生平台（`native-ui`）＋ 9 風格化（`stylized-mobile`：玻璃擬態／新野獸派／Y2K／線框＋第二批卡帶未來主義／黏土擬態／8-bit 像素機／孟菲斯／孔版印刷）。內容主題改用 `app-brief.md`，畫面契約改用 8 個 `data-screen`（非音樂節 9 個 `data-block`），gallery 以手機外框 + iframe 呈現。
 
 > **兩套內容主題並存**：`design-*` / `motion-*` 用 `festival-brief.md`（音樂節）；`app-*` 用 `app-brief.md`（App）。verify 與 SubAgent 契約皆以 slug 前綴分流（`app-` / `motion-` / 其餘）。
 
@@ -36,7 +36,7 @@ src/
   main.ts                          # 掛載 + 條件式 initGA4() / loadAdSense()
   lib/analytics.ts                 # GA4 條件式 loader（VITE_GA_ID）
   lib/adsense.ts                   # AdSense 條件式 loader（VITE_ADSENSE_CLIENT）
-  data/works.ts                    # 52 份 metadata（slug / 分類 / round / motionType / viewport / status）
+  data/works.ts                    # 57 份 metadata（slug / 分類 / round / motionType / viewport / status）
   data/skill-content.ts            # import.meta.glob 讀 SKILL.md 給 drawer
   components/
     WorkCard.vue                   # 縮圖卡（hover WebM lazy-load；app 用直式手機外框縮圖）

@@ -73,7 +73,7 @@ function onRoundChange(r: Round | 'all') {
         <p class="hero-sub">
           以虛構獨立音樂節「<strong>島嶼共鳴 2026</strong>」與虛構音樂串流 App「<strong>迴聲 Resona</strong>」為共同主題，
           每一份作品都先由 Claude Code 撰寫成一個可下載的 Skill，再交給 SubAgent 透過該 Skill 完成單檔網頁。
-          涵蓋 25 種靜態設計語言、視差／滾動／入場／循環／指標 5 類共 15 種動態效果，以及 iOS HIG、Material You 到新野獸派等 12 種行動 App 介面風格。
+          涵蓋 25 種靜態設計語言、視差／滾動／入場／循環／指標 5 類共 15 種動態效果，以及 iOS HIG、Material You 到卡帶未來主義等 17 種行動 App 介面風格。
         </p>
         <ul class="hero-stats">
           <li><strong>{{ works.length }}</strong><span>設計風格</span></li>
@@ -312,6 +312,14 @@ function onRoundChange(r: Round | 'all') {
   }
   .content {
     padding: 24px 22px 60px;
+  }
+  /* 手機：壓低頂部輪次／篩選區的存在感，讓作品卡更早出現 */
+  .round-section {
+    padding: 6px 0 4px;
+  }
+  .filter-section {
+    padding: 10px 0;
+    margin-bottom: 6px;
   }
   .footer-inner {
     grid-template-columns: 1fr;

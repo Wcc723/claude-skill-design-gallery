@@ -581,6 +581,58 @@ export const works: Work[] = [
     brief: '線框 lo-fi：灰階方框、佔位斜線與手寫註記的原型稿風格。',
     status: 'shipped',
   },
+
+  // 風格化行動 stylized-mobile · 第二批（5）— 大膽實驗版型
+  {
+    slug: 'app-cassette-futurism',
+    name: { zh: '卡帶未來主義', en: 'Cassette Futurism' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['cassette', 'analog-hifi', 'vu-meter'],
+    brief: '卡帶未來主義：刷紋金屬機殼、轉動的卡帶盤、VU 表與七段 LCD，把 Resona 變成一台類比隨身聽。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-claymorphism',
+    name: { zh: '黏土擬態', en: 'Claymorphism' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['clay', 'soft-3d', 'pastel'],
+    brief: '黏土擬態：澎潤的軟陶造型、糖果色與雙層內外陰影，可愛又有觸感的播放器。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-pixel-arcade',
+    name: { zh: '8-bit 像素機', en: 'Pixel Arcade' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['8-bit', 'pixel', 'retro-game'],
+    brief: '8-bit 像素機：點陣邊框、抖色填充與掌機 CRT 螢幕感，把聽歌做成一台 chiptune 掌上遊戲機。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-memphis',
+    name: { zh: '孟菲斯', en: 'Memphis' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['memphis', '80s', 'postmodern'],
+    brief: '孟菲斯：撞色幾何、波浪鋸齒與彩屑點點的 80 年代後現代狂歡，最跳的探索式音樂介面。',
+    status: 'shipped',
+  },
+  {
+    slug: 'app-riso',
+    name: { zh: '孔版印刷', en: 'Risograph' },
+    category: 'stylized-mobile',
+    round: 3,
+    viewport: 'mobile',
+    tags: ['risograph', 'spot-color', 'halftone'],
+    brief: '孔版印刷：螢光雙色疊印、網點半色調與紙質顆粒、輕微套印錯位，獨立廠牌的手感 zine 風。',
+    status: 'shipped',
+  },
 ];
 
 export const totalCount = works.length;

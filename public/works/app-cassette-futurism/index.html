@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>迴聲 Resona — 卡帶未來主義</title>
+<style>
+:root{
+  --screen-w:390px; --screen-h:844px; --statusbar-h:44px; --tabbar-h:64px;
+  --miniplayer-h:58px; --safe-bottom:30px; --content-pad:18px; --device-radius:30px;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-8:32px;
+  --case-1:#23262b; --case-2:#1a1c20; --case-3:#2c3036; --case-edge-hi:#3a3f47; --case-edge-lo:#101216;
+  --brush-a:#d8dadd; --brush-b:#aeb2b7; --brush-deep-a:#5b6068; --brush-deep-b:#41454c;
+  --lcd-bg:#14180f; --lcd-bg-2:#0d1009; --lcd-amber:#ffb12e; --lcd-amber-dim:#7a5418;
+  --lcd-scanline:rgba(0,0,0,0.22); --lcd-glow:rgba(255,177,46,0.55);
+  --text-1:#ece6d4; --text-2:#b7b2a2; --text-3:#8a8675; --label-ink:#6f6a5c;
+  --label-ink-strong:#2a2823; --teal:#23d3c4; --teal-dim:#14756d; --rec:#ff4438;
+  --cream-label:#ece6d4; --sticker-1:#ff7a3d; --sticker-2:#23d3c4; --sticker-3:#ffb12e; --sticker-4:#c46cff;
+  --radius-panel:12px; --radius-panel-sm:8px; --radius-lcd:6px; --radius-key:10px; --radius-knob:50%;
+  --radius-sticker:4px; --radius-pill:999px;
+  --bevel-up:inset 0 1px 0 rgba(255,255,255,0.18),inset 0 -2px 3px rgba(0,0,0,0.55),0 3px 5px rgba(0,0,0,0.45),0 1px 0 rgba(0,0,0,0.6);
+  --bevel-down:inset 0 2px 4px rgba(0,0,0,0.6),inset 0 -1px 0 rgba(255,255,255,0.08),0 1px 1px rgba(0,0,0,0.4);
+  --inset-window:inset 0 2px 5px rgba(0,0,0,0.85),inset 0 -1px 0 rgba(255,255,255,0.05);
+  --inset-trough:inset 0 2px 4px rgba(0,0,0,0.55),inset 0 -1px 0 rgba(255,255,255,0.06);
+  --metal-hi:inset 0 1px 0 rgba(255,255,255,0.25); --shadow-float:0 18px 50px rgba(0,0,0,0.55);
+  --font-label:'Helvetica Neue','Arial Narrow','PingFang TC',system-ui,sans-serif;
+  --font-ui:'PingFang TC','Noto Sans TC',system-ui,-apple-system,sans-serif;
+  --font-lcd:'DSEG7','Courier New',ui-monospace,'SF Mono',Menlo,monospace;
+  --ease:cubic-bezier(0.34,0.02,0.2,1); --dur-fast:90ms; --dur:180ms; --spin-dur:4s;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:radial-gradient(circle at 50% 0%,#33373d,#15171b 70%);
+  min-height:100vh; display:grid; place-items:center; padding:0;
+  font-family:var(--font-ui); color:var(--text-1);
+}
+.device{
+  position:relative; width:var(--screen-w); height:var(--screen-h); margin:0 auto;
+  overflow:hidden; border-radius:var(--device-radius); display:flex; flex-direction:column;
+  background:
+    repeating-linear-gradient(90deg,var(--brush-deep-a) 0,var(--brush-deep-b) 1px,var(--brush-deep-a) 2px),
+    linear-gradient(180deg,var(--case-3),var(--case-1) 12%,var(--case-1) 88%,var(--case-2));
+  box-shadow:inset 0 1px 0 var(--case-edge-hi),inset 0 -2px 0 var(--case-edge-lo),inset 1px 0 0 rgba(255,255,255,0.05),var(--shadow-float);
+}
+.device::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;border-radius:var(--device-radius);box-shadow:inset 0 0 0 2px rgba(0,0,0,0.4),inset 0 0 0 3px rgba(255,255,255,0.04)}
+.screw{position:absolute;width:13px;height:13px;border-radius:50%;z-index:7;
+  background:radial-gradient(circle at 35% 30%,#4a4f57,#1a1c20 70%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.25),0 1px 1px rgba(0,0,0,0.5)}
+.screw::before,.screw::after{content:"";position:absolute;inset:0;margin:auto;background:rgba(0,0,0,0.55)}
+.screw::before{width:8px;height:1.5px}.screw::after{width:1.5px;height:8px}
+.screw.tl{top:7px;left:7px}.screw.tr{top:7px;right:7px}.screw.bl{bottom:7px;left:7px}.screw.br{bottom:7px;right:7px}
+
+/* status-bar */
+.statusbar{position:relative;z-index:5;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  height:var(--statusbar-h);padding:0 18px;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,var(--lcd-scanline) 3px),linear-gradient(180deg,var(--lcd-bg),var(--lcd-bg-2));
+  box-shadow:var(--inset-window)}
+.statusbar .stencil{font-family:var(--font-label);font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--lcd-amber-dim);position:absolute;left:18px;top:6px}
+.statusbar .clock{font-family:var(--font-lcd);font-size:22px;letter-spacing:2px;font-variant-numeric:tabular-nums;color:var(--lcd-amber);text-shadow:0 0 6px var(--lcd-glow);margin-top:8px}
+.sb-right{display:flex;align-items:center;gap:8px;margin-top:8px}
+.sig{display:flex;align-items:flex-end;gap:1.5px;height:11px}
+.sig i{width:2.5px;background:var(--lcd-amber);box-shadow:0 0 4px var(--lcd-glow);border-radius:1px}
+.sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6px}.sig i:nth-child(3){height:8px}.sig i:nth-child(4){height:11px}
+.wifi{font-family:var(--font-lcd);font-size:11px;color:var(--lcd-amber);text-shadow:0 0 4px var(--lcd-glow);letter-spacing:0}
+.bat{display:flex;align-items:center;gap:2px}
+.bat .body{width:20px;height:11px;border:1.5px solid var(--lcd-amber);border-radius:2px;padding:1.5px;box-shadow:0 0 4px var(--lcd-glow)}
+.bat .body i{display:block;height:100%;width:72%;background:var(--lcd-amber);box-shadow:0 0 4px var(--lcd-glow)}
+.bat .cap{width:2px;height:5px;background:var(--lcd-amber);border-radius:0 1px 1px 0;box-shadow:0 0 4px var(--lcd-glow)}
+
+/* viewport + screens */
+.viewport{position:relative;z-index:1;flex:1 1 auto;min-height:0}
+.screen{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:var(--space-4) var(--content-pad) calc(var(--miniplayer-h) + var(--tabbar-h) + var(--space-4))}
+.screen.is-active{display:flex;flex-direction:column}
+.screen::-webkit-scrollbar{width:0}
+
+/* typography helpers */
+.stencil-cap{font-family:var(--font-label);font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--label-ink)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-3);margin-top:var(--space-6)}
+.sec-head:first-of-type{margin-top:0}
+.sec-title{font-family:var(--font-label);font-size:19px;font-weight:700;letter-spacing:0.8px;color:var(--text-1)}
+.see-all{font-family:var(--font-label);font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--teal);cursor:pointer}
+.see-all:hover{filter:brightness(1.2)}
+
+/* LCD window */
+.lcd{position:relative;display:inline-flex;align-items:center;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,var(--lcd-scanline) 3px),linear-gradient(180deg,var(--lcd-bg),var(--lcd-bg-2));
+  border-radius:var(--radius-lcd);box-shadow:var(--inset-window);padding:var(--space-1) var(--space-2)}
+.digits{font-family:var(--font-lcd);font-variant-numeric:tabular-nums;letter-spacing:1.5px;color:var(--lcd-amber);text-shadow:0 0 6px var(--lcd-glow);font-size:13px}
+.digits.lg{font-size:22px;letter-spacing:2px}
+
+/* keys */
+.key{font-family:var(--font-label);text-transform:uppercase;letter-spacing:0.6px;color:var(--text-1);
+  background:linear-gradient(180deg,var(--case-3),var(--case-1));border:1px solid var(--case-edge-lo);
+  border-radius:var(--radius-key);box-shadow:var(--bevel-up);cursor:pointer;
+  transition:box-shadow var(--dur-fast) var(--ease),transform var(--dur-fast) var(--ease)}
+.key:hover{background:linear-gradient(180deg,#33373e,var(--case-1))}
+.key:active{box-shadow:var(--bevel-down);transform:translateY(1px)}
+.play-key{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--teal);
+  background:radial-gradient(circle at 38% 32%,var(--case-3),var(--case-1) 75%);border:2px solid var(--teal-dim);
+  box-shadow:var(--bevel-up),0 0 10px rgba(35,211,196,0.25);cursor:pointer;font-size:16px;
+  transition:box-shadow var(--dur-fast),transform var(--dur-fast)}
+.play-key:hover{filter:brightness(1.12)}
+.play-key:active{box-shadow:var(--bevel-down);transform:translateY(1px)}
+.play-key.sm{width:36px;height:36px;font-size:12px;border-width:1.5px}
+.round-key{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--text-1);
+  background:radial-gradient(circle at 38% 32%,var(--case-3),var(--case-1) 78%);border:1px solid var(--case-edge-lo);
+  box-shadow:var(--bevel-up);cursor:pointer;font-size:20px;transition:box-shadow var(--dur-fast),transform var(--dur-fast)}
+.round-key:hover{background:radial-gradient(circle at 38% 32%,#33373e,var(--case-1) 78%)}
+.round-key:active{box-shadow:var(--bevel-down);transform:translateY(1px)}
+
+/* panel */
+.panel{background:linear-gradient(180deg,var(--case-3),var(--case-1));border:1px solid var(--case-edge-lo);
+  border-radius:var(--radius-panel);box-shadow:var(--metal-hi),0 2px 6px rgba(0,0,0,0.4);padding:var(--space-4)}
+.trough{background:linear-gradient(180deg,var(--case-2),#141619);border-radius:var(--radius-panel);box-shadow:var(--inset-trough);padding:var(--space-4)}
+.metal-panel{background:repeating-linear-gradient(90deg,var(--brush-a) 0,var(--brush-b) 1px,var(--brush-a) 2px);
+  border-radius:var(--radius-panel);box-shadow:var(--metal-hi),0 2px 4px rgba(0,0,0,0.4)}
+
+/* cassette covers */
+.cassette,.cassette-mini{position:relative;border-radius:var(--radius-panel);overflow:hidden;
+  background:repeating-linear-gradient(90deg,#34373d 0,#2a2d33 1px,#34373d 2px),linear-gradient(180deg,#3a3e45,#23262b);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.12),0 3px 8px rgba(0,0,0,0.5)}
+.cassette{aspect-ratio:8/5}
+.cassette-mini{aspect-ratio:8/5;width:100%}
+.cassette .label,.cassette-mini .label{position:absolute;left:8%;right:8%;top:9%;height:40%;
+  background:linear-gradient(180deg,#f3eedd,var(--cream-label));border-radius:var(--radius-sticker);
+  color:var(--label-ink-strong);font-family:var(--font-label);text-transform:uppercase;letter-spacing:0.6px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;padding:0 4px;text-align:center;overflow:hidden}
+.cassette .label{font-size:12px;font-weight:700}
+.cassette-mini .label{font-size:9px;font-weight:700;line-height:1.05}
+.s1 .label{background:linear-gradient(180deg,#ffd9c2,#ff7a3d)}
+.s2 .label{background:linear-gradient(180deg,#bdf2ee,#23d3c4)}
+.s3 .label{background:linear-gradient(180deg,#ffe9bf,#ffb12e)}
+.s4 .label{background:linear-gradient(180deg,#e7cdff,#c46cff)}
+.reel{position:absolute;bottom:11%;width:25%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,#14180f 22%,transparent 23%),
+    conic-gradient(#5b6068 0 8deg,#2a2d33 8deg 45deg,#5b6068 45deg 53deg,#2a2d33 53deg 90deg,#5b6068 90deg 98deg,#2a2d33 98deg 135deg,#5b6068 135deg 143deg,#2a2d33 143deg 180deg,#5b6068 180deg 188deg,#2a2d33 188deg 225deg,#5b6068 225deg 233deg,#2a2d33 233deg 270deg,#5b6068 270deg 278deg,#2a2d33 278deg 315deg,#5b6068 315deg 323deg,#2a2d33 323deg 360deg);
+  box-shadow:inset 0 0 0 2px #1a1c20,inset 0 1px 2px rgba(255,255,255,0.15);
+  animation:spin var(--spin-dur) linear infinite}
+.reel.left{left:14%}.reel.right{right:14%}
+.is-paused .reel{animation-play-state:paused}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* VU meter */
+.vu{display:flex;align-items:flex-end;gap:2px;height:22px}
+.vu-bar{width:3px;height:100%;transform-origin:bottom;border-radius:1px;
+  background:linear-gradient(180deg,var(--rec),var(--lcd-amber) 45%,var(--teal));box-shadow:0 0 4px var(--lcd-glow);
+  animation:vu 0.8s ease-in-out infinite alternate}
+.vu-bar:nth-child(2){animation-duration:0.62s}
+.vu-bar:nth-child(3){animation-duration:1.05s}
+.vu-bar:nth-child(4){animation-duration:0.74s}
+.vu-bar:nth-child(5){animation-duration:0.93s}
+.vu-bar:nth-child(6){animation-duration:0.68s}
+.vu-bar:nth-child(7){animation-duration:0.88s}
+@keyframes vu{from{transform:scaleY(0.25)}to{transform:scaleY(1)}}
+
+/* knob avatar */
+.knob{width:48px;height:48px;border-radius:50%;position:relative;cursor:pointer;flex:0 0 auto;
+  background:radial-gradient(circle at 42% 38%,#44484f,#1a1c20 72%),conic-gradient(from 0deg,#2a2d33 0 6deg,#4a4f57 6deg 12deg);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.2),0 3px 6px rgba(0,0,0,0.5)}
+.knob::after{content:"";position:absolute;top:5px;left:50%;width:4px;height:9px;transform:translateX(-50%);border-radius:2px;background:var(--teal);box-shadow:0 0 5px var(--teal)}
+.knob.lg{width:64px;height:64px}
+.knob.sm{width:40px;height:40px}
+
+/* fader */
+.fader{position:relative;height:10px;border-radius:var(--radius-pill);background:linear-gradient(180deg,var(--lcd-bg-2),#1f2128);box-shadow:var(--inset-window)}
+.fader>i{display:block;height:100%;border-radius:var(--radius-pill);background:linear-gradient(180deg,var(--teal),var(--teal-dim))}
+.fader .grip{position:absolute;top:50%;width:14px;height:20px;transform:translate(-50%,-50%);border-radius:3px;
+  background:linear-gradient(180deg,var(--case-3),var(--case-1));box-shadow:var(--bevel-up)}
+
+/* chips */
+.chips{display:flex;gap:var(--space-2);flex-wrap:wrap;padding:var(--space-1) 0}
+.chip{font-family:var(--font-label);text-transform:uppercase;letter-spacing:0.4px;font-size:12px;font-weight:700;color:var(--label-ink-strong);
+  padding:var(--space-1) var(--space-3);border-radius:var(--radius-sticker);background:var(--sticker-3);transform:rotate(-1.2deg);cursor:pointer;
+  box-shadow:0 1px 2px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.35);
+  transition:transform var(--dur-fast) var(--ease),filter var(--dur)}
+.chip:nth-child(2){background:var(--sticker-2);transform:rotate(0.8deg)}
+.chip:nth-child(3){background:var(--sticker-1);transform:rotate(-0.6deg)}
+.chip:nth-child(4){background:var(--sticker-4);transform:rotate(1deg)}
+.chip:active{transform:scale(0.96)}
+.chip[aria-selected="true"]{filter:brightness(1.12);box-shadow:0 3px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.45)}
+
+/* switch */
+.switch{width:46px;height:26px;border-radius:var(--radius-pill);flex:0 0 auto;
+  background:linear-gradient(180deg,var(--lcd-bg-2),#22252b);box-shadow:var(--inset-trough);position:relative;cursor:pointer}
+.switch .grip{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:4px;
+  background:linear-gradient(180deg,var(--case-3),var(--case-1));box-shadow:var(--bevel-up);transition:transform var(--dur) var(--ease)}
+.switch[aria-checked="true"]{box-shadow:var(--inset-trough),inset 0 0 8px rgba(35,211,196,0.4)}
+.switch[aria-checked="true"] .grip{transform:translateX(20px)}
+
+/* rows */
+.row{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid rgba(0,0,0,0.4);box-shadow:0 1px 0 rgba(255,255,255,0.04)}
+.row:last-child{border-bottom:none;box-shadow:none}
+.row .thumb{width:42px;height:30px;flex:0 0 auto}
+.row .meta{flex:1 1 auto;min-width:0}
+.row .title{font-family:var(--font-ui);font-size:16px;font-weight:600;letter-spacing:0.2px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .sub{font-family:var(--font-label);font-size:12px;font-weight:600;letter-spacing:0.4px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank{width:30px;flex:0 0 auto;text-align:center}
+.clickable{cursor:pointer}
+.clickable:hover .title{color:#fff}
+
+/* grid cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)}
+.pl-card{cursor:pointer;transition:transform var(--dur-fast) var(--ease)}
+.pl-card:active{transform:scale(0.97)}
+.pl-card .cap{display:flex;align-items:center;justify-content:space-between;margin-top:var(--space-2)}
+.pl-card .nm{font-family:var(--font-label);font-size:12px;font-weight:600;letter-spacing:0.4px;color:var(--text-1)}
+
+/* greeting */
+.greet{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3)}
+.brand{font-family:var(--font-label);font-size:26px;font-weight:800;letter-spacing:0.6px;color:var(--text-1);line-height:1.1}
+.slogan{font-family:var(--font-label);font-size:12px;font-weight:600;letter-spacing:0.6px;color:var(--text-2);margin-top:var(--space-2)}
+.daily{display:flex;align-items:center;gap:var(--space-3)}
+.daily .info{flex:1 1 auto;min-width:0}
+.daily .dt{font-family:var(--font-label);font-size:16px;font-weight:700;letter-spacing:0.6px;color:var(--text-1)}
+.daily .ds{font-size:12px;color:var(--text-2);margin-top:2px;letter-spacing:0.3px;font-family:var(--font-label);font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-label);font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--teal);
+  border:1px solid var(--teal-dim);border-radius:var(--radius-sticker);padding:2px 6px;box-shadow:inset 0 0 6px rgba(35,211,196,0.15)}
+.badge.rec{color:var(--rec);border-color:#7a221d;box-shadow:inset 0 0 6px rgba(255,68,56,0.18)}
+
+/* search box */
+.searchbox{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3);border-radius:var(--radius-lcd);
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,var(--lcd-scanline) 3px),linear-gradient(180deg,var(--lcd-bg),var(--lcd-bg-2));
+  box-shadow:var(--inset-window)}
+.searchbox .ph{font-family:var(--font-lcd);font-size:13px;letter-spacing:1px;color:var(--lcd-amber-dim);flex:1 1 auto}
+.searchbox .ico{color:var(--lcd-amber);text-shadow:0 0 6px var(--lcd-glow);font-size:15px}
+.cursor{width:2px;height:16px;background:var(--lcd-amber);box-shadow:0 0 6px var(--lcd-glow);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* artist capsules */
+.cap-row{display:flex;gap:var(--space-3);overflow-x:auto;padding-bottom:var(--space-2)}
+.cap-row::-webkit-scrollbar{height:0}
+.artist{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);flex:0 0 auto;width:64px;cursor:pointer}
+.artist .nm{font-family:var(--font-label);font-size:11px;font-weight:600;letter-spacing:0.3px;color:var(--text-2);text-align:center;line-height:1.2}
+
+/* detail */
+.detail-cover{margin:var(--space-4) auto;width:62%}
+.detail-info{text-align:center;margin-bottom:var(--space-4)}
+.detail-info .alb{font-family:var(--font-label);font-size:26px;font-weight:800;letter-spacing:0.6px;color:var(--text-1)}
+.detail-info .art{font-family:var(--font-label);font-size:14px;font-weight:600;letter-spacing:0.4px;color:var(--text-2);margin-top:var(--space-2)}
+.detail-stats{display:flex;justify-content:center;gap:var(--space-3);margin-top:var(--space-3);flex-wrap:wrap}
+.detail-stats .st{display:flex;flex-direction:column;align-items:center;gap:3px}
+.detail-stats .lab{font-family:var(--font-label);font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-3)}
+.act-row{display:flex;gap:var(--space-3);margin-bottom:var(--space-5)}
+.btn-lg{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--space-2);height:48px;font-size:14px;font-weight:700}
+.btn-teal{color:var(--teal);border-color:var(--teal-dim)!important;box-shadow:var(--bevel-up),0 0 10px rgba(35,211,196,0.2)}
+.btn-teal:active{box-shadow:var(--bevel-down);transform:translateY(1px)}
+
+/* player */
+.screen-player.is-active{padding:var(--space-3) var(--content-pad) var(--space-4)}
+.screen-player{justify-content:flex-start}
+.player-top{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
+.player-top .ttl{font-family:var(--font-label);font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--label-ink);text-align:center;flex:1}
+.deck{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-3);padding:var(--space-2) 0;overflow:hidden}
+.deck-frame{width:88%;padding:var(--space-4);border-radius:var(--radius-panel);
+  background:repeating-linear-gradient(90deg,var(--brush-a) 0,var(--brush-b) 1px,var(--brush-a) 2px);
+  box-shadow:var(--metal-hi),0 4px 10px rgba(0,0,0,0.5);position:relative}
+.big-cassette{position:relative;aspect-ratio:8/5;border-radius:var(--radius-panel-sm);overflow:hidden;
+  background:repeating-linear-gradient(90deg,#34373d 0,#2a2d33 1px,#34373d 2px),linear-gradient(180deg,#3a3e45,#23262b);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.12),0 3px 8px rgba(0,0,0,0.5)}
+.big-cassette .label{position:absolute;left:9%;right:9%;top:8%;height:40%;
+  background:linear-gradient(180deg,#ffe9bf,var(--sticker-3));border-radius:var(--radius-sticker);color:var(--label-ink-strong);
+  font-family:var(--font-label);text-transform:uppercase;letter-spacing:0.6px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,0.1);font-size:13px;font-weight:700;text-align:center;line-height:1.3}
+.big-cassette .reel{bottom:12%;width:24%}
+.now-info{text-align:center}
+.now-info .sng{font-family:var(--font-label);font-size:19px;font-weight:700;letter-spacing:0.6px;color:var(--text-1)}
+.now-info .art{font-family:var(--font-label);font-size:13px;font-weight:600;letter-spacing:0.4px;color:var(--text-2);margin-top:4px}
+.lyric{font-family:var(--font-label);font-size:13px;font-weight:600;letter-spacing:0.5px;text-align:center;color:var(--text-3)}
+.lyric b{color:var(--lcd-amber);text-shadow:0 0 6px var(--lcd-glow);font-weight:700}
+.controls{flex:0 0 auto;display:flex;flex-direction:column;gap:var(--space-3)}
+.prog{display:flex;align-items:center;gap:var(--space-2)}
+.prog .fader{flex:1}
+.ctrl-row{display:flex;align-items:center;justify-content:space-between}
+.ctrl-row .round-key.active{color:var(--teal);box-shadow:var(--bevel-up),inset 0 0 8px rgba(35,211,196,0.3)}
+.player-bottom{display:flex;align-items:center;justify-content:space-between}
+
+/* segmented */
+.seg{display:flex;gap:var(--space-2);padding:var(--space-2);border-radius:var(--radius-panel);background:linear-gradient(180deg,var(--case-2),#141619);box-shadow:var(--inset-trough);margin-bottom:var(--space-4)}
+.seg .key{flex:1;font-size:12px;padding:var(--space-2);text-align:center}
+.seg .key.active{color:var(--teal);box-shadow:var(--bevel-down),inset 0 0 8px rgba(35,211,196,0.25)}
+
+/* plans */
+.plan{margin-top:var(--space-3);position:relative}
+.plan .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2)}
+.plan .pname{font-family:var(--font-label);font-size:17px;font-weight:800;letter-spacing:0.6px;color:var(--text-1)}
+.plan .price{display:flex;align-items:baseline;gap:4px}
+.plan .perm{font-family:var(--font-label);font-size:11px;color:var(--text-2)}
+.plan .perks{list-style:none;display:flex;flex-direction:column;gap:4px}
+.plan .perks li{font-size:13px;color:var(--text-2);letter-spacing:0.2px;display:flex;align-items:center;gap:6px}
+.plan .perks li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 4px var(--teal);flex:0 0 auto}
+.plan.featured{background:repeating-linear-gradient(90deg,var(--brush-a) 0,var(--brush-b) 1px,var(--brush-a) 2px);box-shadow:var(--metal-hi),0 0 0 1.5px var(--teal-dim),0 2px 8px rgba(0,0,0,0.4)}
+.plan.featured .pname,.plan.featured .perks li{color:var(--label-ink-strong)}
+.plan.featured .perks li{font-weight:500}
+.plan.featured .perm{color:var(--label-ink)}
+.tag{font-family:var(--font-label);font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;padding:2px 7px;border-radius:var(--radius-sticker)}
+.tag.cur{color:var(--text-3);border:1px solid var(--case-edge-hi)}
+.tag.rec{color:#fff;background:var(--rec);box-shadow:0 0 8px rgba(255,68,56,0.4)}
+
+/* func cards */
+.func-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)}
+.func{padding:var(--space-3)}
+.func .ico{font-size:18px;color:var(--teal);margin-bottom:var(--space-2)}
+.func .nm{font-family:var(--font-label);font-size:13px;font-weight:700;letter-spacing:0.4px;color:var(--text-1)}
+.func .ds{font-size:11px;color:var(--text-2);margin-top:4px;line-height:1.45}
+
+/* mini player + tabbar dock */
+.miniplayer{position:absolute;left:0;right:0;bottom:var(--tabbar-h);z-index:4;height:var(--miniplayer-h);
+  display:flex;align-items:center;gap:var(--space-3);padding:0 var(--content-pad);cursor:pointer;
+  background:linear-gradient(180deg,var(--case-3),var(--case-1));box-shadow:var(--metal-hi),0 -2px 6px rgba(0,0,0,0.4)}
+.miniplayer .mini-cass{width:40px;height:26px;flex:0 0 auto}
+.miniplayer .mi{flex:1 1 auto;min-width:0}
+.miniplayer .mt{font-family:var(--font-ui);font-size:14px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.miniplayer .ms{font-family:var(--font-label);font-size:11px;font-weight:600;letter-spacing:0.3px;color:var(--text-2)}
+.miniplayer .mprog{position:absolute;left:0;bottom:0;right:0;height:2px;background:var(--lcd-bg-2)}
+.miniplayer .mprog i{display:block;height:100%;width:34%;background:linear-gradient(90deg,var(--teal-dim),var(--teal))}
+.mini-cass{position:relative;border-radius:4px;overflow:hidden;background:linear-gradient(180deg,#3a3e45,#23262b);box-shadow:inset 0 1px 0 rgba(255,255,255,0.1)}
+.mini-cass .mr{position:absolute;bottom:18%;width:26%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,#14180f 24%,transparent 25%),conic-gradient(#5b6068 0 12deg,#2a2d33 12deg 60deg,#5b6068 60deg 72deg,#2a2d33 72deg 120deg,#5b6068 120deg 132deg,#2a2d33 132deg 180deg,#5b6068 180deg 192deg,#2a2d33 192deg 240deg,#5b6068 240deg 252deg,#2a2d33 252deg 300deg,#5b6068 300deg 312deg,#2a2d33 312deg 360deg);
+  animation:spin var(--spin-dur) linear infinite}
+.mini-cass .mr.l{left:18%}.mini-cass .mr.r{right:18%}
+.is-paused .mini-cass .mr{animation-play-state:paused}
+
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;justify-content:space-around;align-items:flex-start;
+  height:var(--tabbar-h);padding:var(--space-2) 0 var(--safe-bottom);
+  background:linear-gradient(180deg,var(--case-1),var(--case-2));box-shadow:inset 0 1px 0 var(--case-edge-hi),var(--inset-trough)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--font-label);text-transform:uppercase;letter-spacing:0.4px;
+  font-size:11px;color:var(--text-3);cursor:pointer;padding:var(--space-1) var(--space-3) var(--space-2);border-radius:var(--radius-key);
+  box-shadow:var(--bevel-up);background:linear-gradient(180deg,var(--case-3),var(--case-1));border:1px solid var(--case-edge-lo);
+  transition:box-shadow var(--dur-fast),color var(--dur);min-width:62px}
+.tab .led{width:5px;height:5px;border-radius:50%;background:#15171b}
+.tab .ico{font-size:16px;line-height:1}
+.tab:hover{color:var(--text-2)}
+.tab:active{box-shadow:var(--bevel-down);transform:translateY(1px)}
+.tab[aria-current="page"]{color:var(--lcd-amber)}
+.tab[aria-current="page"] .led{background:var(--lcd-amber);box-shadow:0 0 6px var(--lcd-glow)}
+
+/* player active state: hide dock */
+.device.is-player .miniplayer,.device.is-player .tabbar{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reel,.mini-cass .mr{transform:none}
+  .vu-bar{transform:scaleY(0.6)}
+  .cursor{opacity:1}
+}
+</style>
+</head>
+<body data-viewport="mobile">
+<div class="device" id="device">
+  <span class="screw tl"></span><span class="screw tr"></span><span class="screw bl"></span><span class="screw br"></span>
+
+  <!-- STATUS BAR -->
+  <section class="statusbar" data-screen="status-bar">
+    <span class="stencil">RESONA DECK</span>
+    <span class="clock">9:41</span>
+    <span class="sb-right">
+      <span class="sig" aria-label="訊號"><i></i><i></i><i></i><i></i></span>
+      <span class="wifi">WIFI</span>
+      <span class="bat" aria-label="電量"><span class="body"><i></i></span><span class="cap"></span></span>
+    </span>
+  </section>
+
+  <div class="viewport">
+
+    <!-- HOME -->
+    <section class="screen is-active" data-screen="home" id="screen-home">
+      <div class="greet">
+        <div>
+          <div class="brand">迴聲 Resona</div>
+          <div class="slogan">讓每首歌，回到你身上</div>
+        </div>
+        <span class="knob" data-go="profile" title="我的"></span>
+      </div>
+
+      <div class="chips" role="tablist" aria-label="分類">
+        <span class="chip" role="tab" aria-selected="true">華語</span>
+        <span class="chip" role="tab" aria-selected="false">獨立</span>
+        <span class="chip" role="tab" aria-selected="false">電子</span>
+        <span class="chip" role="tab" aria-selected="false">放鬆</span>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">每日迴聲</span><span class="see-all" data-go="detail">查看全部</span></div>
+      <div class="trough daily" data-go="detail">
+        <span class="cassette-mini s3" style="width:64px;flex:0 0 auto">
+          <span class="label">每日迴聲</span><span class="reel left"></span><span class="reel right"></span>
+        </span>
+        <div class="info">
+          <div class="dt">個人化每日推薦</div>
+          <div class="ds">每天 06:00 為你重新混音</div>
+          <span class="badge" style="margin-top:8px">無損音質串流</span>
+        </div>
+        <span class="vu" aria-hidden="true"><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span></span>
+        <button class="play-key" data-go="player" aria-label="播放每日迴聲">▶</button>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">為你精選歌單</span><span class="see-all" data-go="detail">查看全部</span></div>
+      <div class="grid2">
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s2"><span class="label">浪潮回聲</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">浪潮回聲</span><span class="lcd"><span class="digits">18</span></span></div></div>
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s4"><span class="label">深夜公路</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">深夜公路</span><span class="lcd"><span class="digits">22</span></span></div></div>
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s3"><span class="label">島嶼晨光</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">島嶼晨光</span><span class="lcd"><span class="digits">09</span></span></div></div>
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s1"><span class="label">雨後散步</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">雨後散步</span><span class="lcd"><span class="digits">14</span></span></div></div>
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s2"><span class="label">城市心跳</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">城市心跳</span><span class="lcd"><span class="digits">26</span></span></div></div>
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s4"><span class="label">山海之間</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">山海之間</span><span class="lcd"><span class="digits">11</span></span></div></div>
+        <div class="pl-card" data-go="detail"><span class="cassette-mini s1"><span class="label">失重時刻</span><span class="reel left"></span><span class="reel right"></span></span><div class="cap"><span class="nm">失重時刻</span><span class="lcd"><span class="digits">17</span></span></div></div>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">熱門排行</span><span class="see-all" data-go="detail">查看全部</span></div>
+      <div class="trough" style="padding:var(--space-2) var(--space-4)">
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">01</span></span><span class="cassette-mini s2 thumb"><span class="label" style="font-size:6px">藍</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">藍色信號</div><div class="sub">海平面樂團</div></div><span class="lcd"><span class="digits">03:58</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">02</span></span><span class="cassette-mini s4 thumb"><span class="label" style="font-size:6px">霓</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">霓虹巷弄</div><div class="sub">夜行列車</div></div><span class="lcd"><span class="digits">04:12</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">03</span></span><span class="cassette-mini s3 thumb"><span class="label" style="font-size:6px">晚</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">晚風練習曲</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">02:47</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">04</span></span><span class="cassette-mini s2 thumb"><span class="label" style="font-size:6px">靜</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">靜電</div><div class="sub">Echo Lab</div></div><span class="lcd"><span class="digits">03:21</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">05</span></span><span class="cassette-mini s1 thumb"><span class="label" style="font-size:6px">無</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">無人車站</div><div class="sub">何遠</div></div><span class="lcd"><span class="digits">04:40</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">核心功能</span></div>
+      <div class="func-grid">
+        <div class="panel func"><div class="ico">◷</div><div class="nm">歌詞同步</div><div class="ds">逐字滾動歌詞，跟著節奏高亮</div></div>
+        <div class="panel func"><div class="ico">⇄</div><div class="nm">跨裝置接續播放</div><div class="ds">手機、平板、車機無縫接力</div></div>
+        <div class="panel func"><div class="ico">⤓</div><div class="nm">離線下載</div><div class="ds">Plus 以上方案可離線聆聽</div></div>
+        <div class="panel func"><div class="ico">⊞</div><div class="nm">共享音樂庫</div><div class="ds">Family 最多 6 人共建一座</div></div>
+      </div>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="screen" data-screen="search" id="screen-search">
+      <div class="sec-head" style="margin-top:0"><span class="sec-title">搜尋</span></div>
+      <div class="searchbox"><span class="ico">⌕</span><span class="ph">搜尋歌曲、藝人、歌單</span><span class="cursor"></span></div>
+
+      <div class="chips" role="tablist" aria-label="分類" style="margin-top:var(--space-3)">
+        <span class="chip" role="tab" aria-selected="true">華語</span>
+        <span class="chip" role="tab" aria-selected="false">獨立</span>
+        <span class="chip" role="tab" aria-selected="false">電子</span>
+        <span class="chip" role="tab" aria-selected="false">放鬆</span>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">熱門歌曲</span></div>
+      <div class="trough" style="padding:var(--space-2) var(--space-4)">
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">01</span></span><div class="meta"><div class="title">藍色信號</div><div class="sub">海平面樂團</div></div><span class="lcd"><span class="digits">03:58</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">02</span></span><div class="meta"><div class="title">晚風練習曲</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">02:47</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">03</span></span><div class="meta"><div class="title">霓虹巷弄</div><div class="sub">夜行列車</div></div><span class="lcd"><span class="digits">04:12</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">04</span></span><div class="meta"><div class="title">靜電</div><div class="sub">Echo Lab</div></div><span class="lcd"><span class="digits">03:21</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">05</span></span><div class="meta"><div class="title">無人車站</div><div class="sub">何遠</div></div><span class="lcd"><span class="digits">04:40</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">06</span></span><div class="meta"><div class="title">候鳥地圖</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">03:36</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">熱門藝人</span></div>
+      <div class="cap-row">
+        <span class="artist" data-go="detail"><span class="knob"></span><span class="nm">海平面樂團</span></span>
+        <span class="artist" data-go="detail"><span class="knob"></span><span class="nm">林知夏</span></span>
+        <span class="artist" data-go="detail"><span class="knob"></span><span class="nm">夜行列車</span></span>
+        <span class="artist" data-go="detail"><span class="knob"></span><span class="nm">Echo Lab</span></span>
+        <span class="artist" data-go="detail"><span class="knob"></span><span class="nm">何遠</span></span>
+      </div>
+    </section>
+
+    <!-- DETAIL -->
+    <section class="screen" data-screen="detail" id="screen-detail">
+      <div class="player-top">
+        <button class="round-key" data-go="back" aria-label="返回">‹</button>
+        <span class="stencil-cap">DECK ／ SIDE A</span>
+        <span style="width:40px"></span>
+      </div>
+
+      <div class="cassette s3 detail-cover">
+        <span class="label">島嶼晨光<br>SIDE A</span>
+        <span class="reel left"></span><span class="reel right"></span>
+        <span class="screw" style="top:6px;left:6px;width:8px;height:8px"></span>
+        <span class="screw" style="top:6px;right:6px;width:8px;height:8px"></span>
+      </div>
+
+      <div class="detail-info">
+        <div class="alb">島嶼晨光</div>
+        <div class="art">林知夏</div>
+        <div class="detail-stats">
+          <span class="st"><span class="lab">YEAR</span><span class="lcd"><span class="digits">2026</span></span></span>
+          <span class="st"><span class="lab">TRACKS</span><span class="lcd"><span class="digits">09</span></span></span>
+          <span class="st"><span class="lab">TOTAL</span><span class="lcd"><span class="digits">34:12</span></span></span>
+        </div>
+      </div>
+
+      <div class="act-row">
+        <button class="key btn-lg btn-teal" data-go="player">▶ 播放全部</button>
+        <button class="key btn-lg" data-go="player">⤮ 隨機播放</button>
+      </div>
+
+      <div class="trough" style="padding:var(--space-2) var(--space-4)">
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">01</span></span><div class="meta"><div class="title">藍色信號</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">03:58</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">02</span></span><div class="meta"><div class="title">霓虹巷弄</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">04:12</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">03</span></span><div class="meta"><div class="title">候鳥地圖</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">03:36</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">04</span></span><div class="meta"><div class="title">靜電</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">03:21</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">05</span></span><div class="meta"><div class="title">晚風練習曲</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">02:47</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">06</span></span><div class="meta"><div class="title">無人車站</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">04:40</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">07</span></span><div class="meta"><div class="title">潮間帶</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">03:50</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">08</span></span><div class="meta"><div class="title">第七個夏天</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">04:03</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+        <div class="row clickable" data-go="player"><span class="rank lcd"><span class="digits">09</span></span><div class="meta"><div class="title">月台九又四分之三</div><div class="sub">林知夏</div></div><span class="lcd"><span class="digits">05:25</span></span><button class="play-key sm" data-go="player" aria-label="播放">▶</button></div>
+      </div>
+    </section>
+
+    <!-- PLAYER -->
+    <section class="screen screen-player" data-screen="player" id="screen-player">
+      <div class="player-top">
+        <button class="round-key" data-go="back" aria-label="收合">⌄</button>
+        <span class="ttl">NOW PLAYING ／ DECK A</span>
+        <span style="width:40px"></span>
+      </div>
+
+      <div class="deck" id="deck">
+        <div class="deck-frame">
+          <div class="big-cassette" id="bigCassette">
+            <span class="label">島嶼晨光<br>A 面</span>
+            <span class="reel left"></span><span class="reel right"></span>
+          </div>
+        </div>
+        <div class="now-info">
+          <div class="sng">晚風練習曲</div>
+          <div class="art">林知夏 ・ 島嶼晨光</div>
+        </div>
+        <span class="vu" aria-hidden="true"><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span><span class="vu-bar"></span></span>
+        <div class="lyric">把白天摺好 <b>晚風會替我們記得</b> 那段路</div>
+      </div>
+
+      <div class="controls">
+        <div class="prog">
+          <span class="lcd"><span class="digits">01:12</span></span>
+          <span class="fader"><i style="width:36%"></i><span class="grip" style="left:36%"></span></span>
+          <span class="lcd"><span class="digits">03:24</span></span>
+        </div>
+        <div class="ctrl-row">
+          <button class="round-key" aria-label="隨機">⤮</button>
+          <button class="round-key" aria-label="上一首">⏮</button>
+          <button class="play-key" id="bigPlay" aria-label="播放／暫停">⏸</button>
+          <button class="round-key" aria-label="下一首">⏭</button>
+          <button class="round-key" aria-label="循環">⟳</button>
+        </div>
+        <div class="player-bottom">
+          <span class="badge">Hi-Res 無損音質</span>
+          <span class="stencil-cap">VOL</span>
+          <span class="knob sm" aria-label="音量旋鈕"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section class="screen" data-screen="library" id="screen-library">
+      <div class="sec-head" style="margin-top:0"><span class="sec-title">我的音樂庫</span></div>
+      <div class="seg">
+        <button class="key active">歌單</button>
+        <button class="key">專輯</button>
+        <button class="key">已下載</button>
+      </div>
+
+      <div class="trough" style="padding:var(--space-2) var(--space-4)">
+        <div class="row clickable" data-go="detail"><span class="cassette-mini s2 thumb"><span class="label" style="font-size:6px">浪</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">浪潮回聲</div><div class="sub">18 首 ・ 收藏歌單</div></div><span class="lcd"><span class="digits">18</span></span><span style="color:var(--text-3);font-size:18px">›</span></div>
+        <div class="row clickable" data-go="detail"><span class="cassette-mini s3 thumb"><span class="label" style="font-size:6px">島</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">島嶼晨光</div><div class="sub">9 首 ・ 林知夏</div></div><span class="lcd"><span class="digits">09</span></span><span style="color:var(--text-3);font-size:18px">›</span></div>
+        <div class="row clickable" data-go="detail"><span class="cassette-mini s4 thumb"><span class="label" style="font-size:6px">深</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">深夜公路</div><div class="sub">22 首 ・ 收藏歌單</div></div><span class="lcd"><span class="digits">22</span></span><span style="color:var(--text-3);font-size:18px">›</span></div>
+        <div class="row clickable" data-go="detail"><span class="cassette-mini s1 thumb"><span class="label" style="font-size:6px">城</span><span class="reel left"></span><span class="reel right"></span></span><div class="meta"><div class="title">城市心跳</div><div class="sub">26 首 ・ 收藏歌單</div></div><span class="lcd"><span class="digits">26</span></span><span style="color:var(--text-3);font-size:18px">›</span></div>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">音樂庫設定</span></div>
+      <div class="panel" style="padding:0 var(--space-4)">
+        <div class="row"><span style="font-size:18px;color:var(--teal);width:24px;text-align:center">⤓</span><div class="meta"><div class="title">離線下載</div><div class="sub">已下載 32 首 ・ 1.4 GB</div></div><span class="badge">已啟用</span></div>
+        <div class="row"><span style="font-size:18px;color:var(--teal);width:24px;text-align:center">⊞</span><div class="meta"><div class="title">共享音樂庫</div><div class="sub">Family 最多 6 人共建</div></div><span class="switch" role="switch" aria-checked="true" tabindex="0"><span class="grip"></span></span></div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="screen" data-screen="profile" id="screen-profile">
+      <div class="sec-head" style="margin-top:0"><span class="sec-title">我的</span></div>
+      <div class="panel" style="display:flex;align-items:center;gap:var(--space-4)">
+        <span class="knob lg"></span>
+        <div style="flex:1">
+          <div class="title" style="font-size:18px">迴聲聽眾</div>
+          <div class="sub" style="margin-top:4px">resona.app ・ v3.2.0</div>
+          <span class="lcd" style="margin-top:8px"><span class="digits" style="font-size:11px">PLUS 會員 ・ 至 2026/12</span></span>
+        </div>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">播放偏好</span></div>
+      <div class="panel" style="padding:0 var(--space-4)">
+        <div class="row"><span style="font-size:18px;color:var(--teal);width:24px;text-align:center">♬</span><div class="meta"><div class="title">無損音質串流</div><div class="sub">24-bit / 192kHz Hi-Res</div></div><span class="badge">已開啟</span></div>
+        <div class="row"><span style="font-size:18px;color:var(--teal);width:24px;text-align:center">⇄</span><div class="meta"><div class="title">跨裝置接續播放</div><div class="sub">手機、平板、車機無縫接力</div></div><span class="switch" role="switch" aria-checked="true" tabindex="0"><span class="grip"></span></span></div>
+      </div>
+
+      <div class="sec-head"><span class="sec-title">訂閱方案</span></div>
+
+      <div class="panel plan">
+        <div class="ph"><span class="pname">免費</span><span class="tag cur">目前方案</span></div>
+        <div class="price"><span class="lcd"><span class="digits lg">NT$ 0</span></span><span class="perm">／月</span></div>
+        <ul class="perks" style="margin-top:var(--space-3)"><li>含廣告插播</li><li>標準音質、隨機播放</li></ul>
+      </div>
+
+      <div class="panel plan featured">
+        <div class="ph"><span class="pname">Plus</span><span class="tag rec">推薦 REC</span></div>
+        <div class="price"><span class="lcd"><span class="digits lg">NT$ 149</span></span><span class="perm">／月</span></div>
+        <ul class="perks" style="margin-top:var(--space-3)"><li>無廣告、指定單曲播放</li><li>無損音質串流</li><li>離線下載</li></ul>
+      </div>
+
+      <div class="panel plan">
+        <div class="ph"><span class="pname">Family</span></div>
+        <div class="price"><span class="lcd"><span class="digits lg">NT$ 249</span></span><span class="perm">／月</span></div>
+        <ul class="perks" style="margin-top:var(--space-3)"><li>6 個帳號</li><li>共享音樂庫、家長控制</li><li>涵蓋全部 Plus 權益</li></ul>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MINI PLAYER -->
+  <div class="miniplayer" id="miniplayer" data-go="player">
+    <span class="mini-cass"><span class="mr l"></span><span class="mr r"></span></span>
+    <div class="mi"><div class="mt">晚風練習曲</div><div class="ms">林知夏</div></div>
+    <button class="play-key sm" id="miniPlay" aria-label="播放／暫停" data-stop>⏸</button>
+    <span class="mprog"><i></i></span>
+  </div>
+
+  <!-- TAB BAR -->
+  <section class="tabbar" data-screen="tab-bar">
+    <button class="tab" data-tab="home" aria-current="page"><span class="led"></span><span class="ico">⌂</span>首頁</button>
+    <button class="tab" data-tab="search"><span class="led"></span><span class="ico">⌕</span>搜尋</button>
+    <button class="tab" data-tab="library"><span class="led"></span><span class="ico">♫</span>音樂庫</button>
+    <button class="tab" data-tab="profile"><span class="led"></span><span class="ico">◉</span>我的</button>
+  </section>
+</div>
+
+<script>
+(function(){
+  var device=document.getElementById('device');
+  var screens={};
+  document.querySelectorAll('.screen').forEach(function(s){screens[s.id.replace('screen-','')]=s;});
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var TAB_OF={home:'home',search:'search',library:'library',profile:'profile'};
+  var hist=['home'];
+  var current='home';
+
+  function show(name){
+    if(!screens[name])return;
+    if(screens[current])screens[current].classList.remove('is-active');
+    screens[name].classList.add('is-active');
+    screens[name].scrollTop=0;
+    current=name;
+    device.classList.toggle('is-player',name==='player');
+    tabs.forEach(function(t){
+      t.setAttribute('aria-current',(TAB_OF[t.getAttribute('data-tab')]===name)?'page':'false');
+    });
+  }
+  function go(target){
+    if(target==='back'){
+      hist.pop();
+      var prev=hist.length?hist[hist.length-1]:'home';
+      show(prev);
+      return;
+    }
+    if(target===current)return;
+    hist.push(target);
+    show(target);
+  }
+
+  device.addEventListener('click',function(e){
+    var stop=e.target.closest('[data-stop]');
+    if(stop){togglePlay();e.stopPropagation();return;}
+    var sw=e.target.closest('[role="switch"]');
+    if(sw){sw.setAttribute('aria-checked',sw.getAttribute('aria-checked')==='true'?'false':'true');return;}
+    var chipParent=e.target.closest('[role="tablist"]');
+    if(chipParent&&e.target.closest('.chip')){
+      chipParent.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-selected','false');});
+      e.target.closest('.chip').setAttribute('aria-selected','true');
+      return;
+    }
+    var segBtn=e.target.closest('.seg .key');
+    if(segBtn){segBtn.parentNode.querySelectorAll('.key').forEach(function(k){k.classList.remove('active');});segBtn.classList.add('active');return;}
+    var tab=e.target.closest('.tab');
+    if(tab){var t=tab.getAttribute('data-tab');hist=[t];show(t);return;}
+    var nav=e.target.closest('[data-go]');
+    if(nav){go(nav.getAttribute('data-go'));}
+  });
+
+  // play/pause two-state
+  var paused=false;
+  function togglePlay(){
+    paused=!paused;
+    device.classList.toggle('is-paused',paused);
+    var sym=paused?'▶':'⏸';
+    var bp=document.getElementById('bigPlay');var mp=document.getElementById('miniPlay');
+    if(bp)bp.textContent=sym;if(mp)mp.textContent=sym;
+  }
+  var bp=document.getElementById('bigPlay');
+  if(bp)bp.addEventListener('click',function(e){togglePlay();e.stopPropagation();});
+})();
+</script>
+</body>
+</html>

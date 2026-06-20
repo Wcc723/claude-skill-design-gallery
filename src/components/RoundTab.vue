@@ -97,4 +97,21 @@ defineEmits<{
 .tab.is-active .tab-count {
   background: rgba(255, 255, 255, 0.18);
 }
+
+/* 手機：輪次切換縮小、必要時可水平捲動 */
+@media (max-width: 720px) {
+  .round-tab {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .round-tab::-webkit-scrollbar {
+    display: none;
+  }
+  .tab {
+    padding: 8px 13px;
+    font-size: 13px;
+    flex: 0 0 auto;
+  }
+}
 </style>
