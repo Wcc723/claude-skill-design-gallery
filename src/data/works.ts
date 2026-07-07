@@ -51,7 +51,7 @@ export const motionTypeLabels: Record<MotionType, string> = {
 
 export const works: Work[] = [
   // ========================================
-  // 第一輪 · 25 個靜態風格 (round: 1)
+  // 第一輪 · 26 個靜態風格 (round: 1)
   // ========================================
 
   // 主流 UI
@@ -210,6 +210,15 @@ export const works: Work[] = [
     round: 1,
     tags: ['print', 'serif', 'grid'],
     brief: '12 欄網格、粗襯線標題與圖文混排，像翻開《Monocle》音樂特輯。',
+    status: 'shipped',
+  },
+  {
+    slug: 'design-persona5',
+    name: { zh: '女神異聞錄 5', en: 'Persona 5' },
+    category: 'experimental',
+    round: 1,
+    tags: ['jrpg', 'acid-jazz', 'red-black'],
+    brief: '緋紅撞純黑、鋸齒撕裂切割與漫畫網點，像 JRPG 選單般帶勁的怪盜風格主視覺。',
     status: 'shipped',
   },
 

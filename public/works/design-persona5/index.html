@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>島嶼共鳴 2026 — Island Resonance｜怪盜宣言</title>
+<meta name="description" content="島嶼共鳴 2026 音樂節，2026 年 8 月 21 日至 23 日於台東都蘭灣海岸自然公園。12 組亞洲樂團、3 個舞台、3 日不停歇。">
+<style>
+:root{
+  /* ===== 三色鐵律 ===== */
+  --p5-red:#E4002B; --p5-red-ink:#B00020; --p5-red-deep:#8A0018;
+  --ink:#0B0B0B; --ink-soft:#191919; --paper:#F5F1E8; --paper-dim:#E8E2D4;
+  --white:#FFFFFF; --alert:#FFE100;
+
+  /* ===== 語意別名 ===== */
+  --color-bg:var(--ink); --color-surface:var(--paper);
+  --color-fg:var(--white); --color-fg-invert:var(--ink);
+  --color-accent:var(--p5-red); --color-link:var(--p5-red-ink);
+
+  --radius:0;
+  --stroke-hair:2px; --stroke:3px; --stroke-bold:5px; --stroke-color:var(--ink);
+  --ink-outline:2px 2px 0 var(--ink), -2px -2px 0 var(--ink);
+
+  --shadow-hard:6px 6px 0 var(--ink);
+  --shadow-red:6px 6px 0 var(--p5-red);
+  --shadow-pop:10px 10px 0 var(--ink);
+
+  --halftone-size:6px; --halftone-dot:1.6px;
+  --halftone-ink:rgba(11,11,11,.9); --halftone-red:rgba(228,0,43,.85);
+  --halftone-opacity:.14;
+
+  --tilt-sm:-2deg; --tilt:-4deg; --tilt-lg:-7deg;
+  --skew:-8deg; --skew-title:-6deg; --skew-hard:-12deg;
+
+  --ease-snap:cubic-bezier(.2,.9,.2,1); --dur:.18s;
+
+  --maxw:1200px; --gap:clamp(16px,3vw,32px); --pad-block:clamp(56px,9vw,128px);
+
+  --font-display:'Arial Black','Helvetica Neue','Impact','PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;
+  --font-cond:'Arial Narrow','Helvetica Neue Condensed','PingFang TC','Noto Sans TC',sans-serif;
+  --font-body:'PingFang TC','Noto Sans TC','Hiragino Sans','Microsoft JhengHei','Helvetica Neue',sans-serif;
+  --font-num:'DIN Alternate','Roboto Mono','Courier New',monospace;
+
+  --z-halftone:0; --z-content:1; --z-callout:5;
+
+  --clip-tear:polygon(0 6%,9% 0,34% 5%,55% 0,78% 4%,100% 0,100% 92%,88% 100%,62% 95%,40% 100%,15% 96%,0 100%);
+  --clip-torn:polygon(0 0,100% 0,100% 86%,92% 100%,78% 88%,64% 99%,50% 87%,36% 100%,22% 88%,8% 99%,0 87%);
+  --clip-slant:polygon(0 0,100% 0,97% 100%,0 100%);
+  --clip-para:polygon(7% 0,100% 0,93% 100%,0 100%);
+  --clip-duo:polygon(0 0,100% 0,100% 92%,90% 100%,0 100%);
+  --clip-zig:polygon(0 0,100% 0,100% 55%,96% 100%,90% 55%,84% 100%,78% 55%,72% 100%,66% 55%,60% 100%,54% 55%,48% 100%,42% 55%,36% 100%,30% 55%,24% 100%,18% 55%,12% 100%,6% 55%,0 100%);
+  --clip-star:polygon(100% 50%,86.6% 56.7%,93.3% 66.9%,80.4% 69.1%,84.1% 81.6%,71.5% 78.2%,71.9% 91.3%,60.9% 84.1%,57.1% 96.6%,50% 85.4%,42.9% 96.6%,39.1% 84.1%,28.1% 91.3%,28.5% 78.2%,15.9% 81.6%,19.6% 69.1%,6.7% 66.9%,13.4% 56.7%,0 50%,13.4% 43.3%,6.7% 33.1%,19.6% 30.9%,15.9% 18.4%,28.5% 21.8%,28.1% 8.7%,39.1% 15.9%,42.9% 3.4%,50% 14.6%,57.1% 3.4%,60.9% 15.9%,71.9% 8.7%,71.5% 21.8%,84.1% 18.4%,80.4% 30.9%,93.3% 33.1%,86.6% 43.3%);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--color-bg); color:var(--color-fg);
+  font-family:var(--font-body); font-size:16px; line-height:1.7;
+  overflow-x:hidden; letter-spacing:.005em;
+}
+img{ max-width:100%; }
+a{ color:var(--color-link); }
+::selection{ background:var(--p5-red); color:var(--white); }
+
+.wrap{ max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(18px,5vw,48px); }
+section{ position:relative; }
+.eyebrow{
+  display:inline-block; font:800 12px/1 var(--font-cond); letter-spacing:.24em;
+  text-transform:uppercase; color:var(--white); background:var(--p5-red);
+  padding:8px 16px; transform:rotate(var(--tilt-sm)); clip-path:var(--clip-para); margin-bottom:1.1rem;
+}
+.eyebrow.on-paper{ background:var(--p5-red-ink); }
+
+h1,h2,h3{ margin:0; }
+.h1{
+  font-family:var(--font-display); font-weight:900; font-style:italic;
+  font-size:clamp(40px,6vw,72px); line-height:.9; letter-spacing:-.02em;
+  text-transform:uppercase; color:var(--white); transform:skewX(var(--skew-title));
+  display:inline-block;
+}
+.h1 em{ font-style:italic; color:var(--p5-red); }
+.h1.on-paper{ color:var(--ink); }
+.h1.on-paper em{ color:var(--p5-red-ink); }
+.sec-head{ margin-bottom:clamp(28px,5vw,52px); }
+.sec-head p{ max-width:52ch; margin:.9rem 0 0; }
+
+/* ===== Reference components ===== */
+.diag-split{ background:linear-gradient(115deg,var(--ink) 0 46%,var(--p5-red) 46% 54%,var(--ink) 54% 100%); }
+.diag-divider{ height:26px; background:var(--p5-red); clip-path:var(--clip-slant); }
+.p5-zigzag{ height:22px; background:var(--p5-red); border:0; margin:0; clip-path:var(--clip-zig); }
+
+.slash-title{
+  font-family:var(--font-display); font-weight:900; font-style:italic;
+  font-size:clamp(50px,11vw,150px); line-height:.82; letter-spacing:-.03em;
+  text-transform:uppercase; color:var(--white); margin:0;
+  transform:skewX(var(--skew-title)); -webkit-text-stroke:2px var(--ink);
+  paint-order:stroke fill; text-shadow:5px 5px 0 var(--p5-red);
+}
+.slash-title .cut{ display:inline-block; background:var(--p5-red); color:var(--ink);
+  padding:0 .12em; margin:0 .02em; -webkit-text-stroke:0; text-shadow:none; clip-path:var(--clip-para); }
+.slash-cjk{
+  font-family:var(--font-display); font-weight:900; letter-spacing:.02em;
+  font-size:clamp(44px,9vw,120px); line-height:.9; color:var(--white); margin:0 0 .1em;
+  transform:skewX(var(--skew-title)); text-shadow:4px 4px 0 var(--p5-red);
+}
+.slash-cjk b{ color:var(--p5-red); }
+
+.p5-tear{ position:relative; background:var(--p5-red); color:var(--white);
+  padding:2.4rem 3rem; clip-path:var(--clip-tear); box-shadow:var(--shadow-hard); }
+.p5-tear::before{ content:""; position:absolute; inset:0; z-index:-1;
+  background:var(--p5-red-deep); transform:translate(6px,6px); clip-path:inherit; }
+.p5-torn{ background:var(--ink); color:var(--white); padding:clamp(28px,5vw,64px); clip-path:var(--clip-torn); }
+.p5-torn.red{ background:var(--p5-red); } .p5-torn.paper{ background:var(--paper); color:var(--ink); }
+
+.p5-halftone{ position:relative; isolation:isolate; }
+.p5-halftone::before{ content:""; position:absolute; inset:0; z-index:var(--z-halftone);
+  pointer-events:none; opacity:var(--halftone-opacity);
+  background-image:radial-gradient(var(--halftone-ink) var(--halftone-dot),transparent calc(var(--halftone-dot) + .6px));
+  background-size:var(--halftone-size) var(--halftone-size); }
+.p5-halftone.on-red::before{ background-image:radial-gradient(rgba(11,11,11,.7) var(--halftone-dot),transparent calc(var(--halftone-dot) + .6px)); }
+.p5-halftone > *{ position:relative; z-index:var(--z-content); }
+
+.starburst{ display:grid; place-content:center; text-align:center; aspect-ratio:1;
+  width:clamp(120px,22vw,220px); background:var(--p5-red); color:var(--white);
+  font-family:var(--font-display); font-weight:900; font-style:italic; text-transform:uppercase;
+  line-height:1; transform:rotate(8deg); clip-path:var(--clip-star); box-shadow:var(--shadow-hard); }
+.starburst > *{ transform:rotate(-8deg); }
+
+.p5-tag{ display:inline-block; background:var(--p5-red); color:var(--white);
+  font:800 13px/1 var(--font-cond); letter-spacing:.22em; text-transform:uppercase;
+  padding:8px 16px; transform:rotate(var(--tilt-sm)); clip-path:var(--clip-para); }
+.p5-tag.on-paper{ background:var(--p5-red-ink); }
+
+.p5-menu{ list-style:none; margin:0; padding:0; }
+.p5-menu li{ position:relative; overflow:hidden; cursor:pointer; margin:.5rem 0; padding:.9rem 1.4rem;
+  background:var(--ink-soft); color:var(--paper);
+  transform:skewX(var(--skew)); clip-path:var(--clip-slant); transition:transform var(--dur) var(--ease-snap); }
+.p5-menu li > *{ position:relative; z-index:1; display:inline-block; transform:skewX(calc(-1 * var(--skew))); }
+.p5-menu li::before{ content:""; position:absolute; inset:0; z-index:0; background:var(--p5-red);
+  transform:translateX(-102%); transition:transform calc(var(--dur) + .02s) var(--ease-snap); }
+.p5-menu li:hover, .p5-menu li:focus-within, .p5-menu li[aria-current="true"]{ transform:skewX(var(--skew)) translateX(14px); }
+.p5-menu li:hover::before, .p5-menu li:focus-within::before, .p5-menu li[aria-current="true"]::before{ transform:translateX(0); }
+.p5-menu li:hover > *, .p5-menu li:focus-within > *{ color:var(--white); }
+
+.p5-roster{ display:flex; flex-direction:column; gap:.6rem; }
+.p5-roster .row{ align-self:flex-start; position:relative; display:flex; align-items:center; gap:1.2rem;
+  padding:.9rem 2.4rem .9rem 1.2rem; background:var(--ink); color:var(--white); max-width:100%;
+  border-left:6px solid var(--p5-red); transform:skewX(var(--skew-hard)); clip-path:polygon(0 0,100% 0,94% 100%,0 100%);
+  box-shadow:var(--shadow-hard); overflow:hidden; }
+.p5-roster .row::after{ content:""; position:absolute; top:0; right:0; width:34%; height:100%;
+  background:var(--p5-red); opacity:.14; clip-path:polygon(40% 0,100% 0,100% 100%,0 100%); pointer-events:none; }
+.p5-roster .row:nth-child(2){ margin-left:5%; } .p5-roster .row:nth-child(3){ margin-left:10%; }
+.p5-roster .row > *{ transform:skewX(calc(-1 * var(--skew-hard))); }
+.p5-roster .num{ font-family:var(--font-display); font-weight:900; font-style:italic; font-size:clamp(2rem,5vw,3rem);
+  color:var(--p5-red); -webkit-text-stroke:1.5px var(--white); paint-order:stroke fill; line-height:1; flex:0 0 auto; }
+
+.p5-btn{ display:inline-block; padding:15px 32px; background:var(--p5-red); color:var(--white);
+  font:800 16px/1 var(--font-cond); letter-spacing:.14em; text-transform:uppercase; text-decoration:none;
+  cursor:pointer; border:var(--stroke) solid var(--ink); box-shadow:var(--shadow-hard); transform:skewX(var(--skew)); }
+.p5-btn > span{ display:inline-block; transform:skewX(calc(-1 * var(--skew))); }
+.p5-btn.ghost{ background:var(--ink); }
+.p5-btn.on-paper{ border-color:var(--ink); box-shadow:6px 6px 0 var(--p5-red-deep); }
+.p5-btn:hover{ transform:skewX(var(--skew)) translate(-2px,-2px); box-shadow:9px 9px 0 var(--ink); }
+
+.p5-duotone{ position:relative; display:block; overflow:hidden; clip-path:var(--clip-duo); }
+.p5-duotone img{ display:block; width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.2) brightness(.95); }
+.p5-duotone::after{ content:""; position:absolute; inset:0; background:var(--p5-red); mix-blend-mode:multiply; opacity:.85; pointer-events:none; }
+
+.graffiti{ font-family:var(--font-display); font-weight:900; font-style:italic; color:var(--paper);
+  text-transform:uppercase; -webkit-text-stroke:3px var(--ink); paint-order:stroke fill;
+  text-shadow:3px 3px 0 var(--p5-red), 5px 5px 0 var(--ink); transform:rotate(-3deg); }
+
+/* ===== Top bar ===== */
+.topbar{ position:sticky; top:0; z-index:50; background:var(--ink);
+  border-bottom:var(--stroke-bold) solid var(--p5-red); }
+.topbar .row{ display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding-block:.7rem; }
+.topbar .mark{ font:900 italic clamp(19px,2.4vw,22px)/1 var(--font-display); letter-spacing:-.01em;
+  color:var(--white); text-transform:uppercase; transform:skewX(var(--skew-title)); }
+.topbar .mark b{ color:var(--p5-red); }
+.topnav{ display:flex; gap:clamp(8px,2vw,22px); align-items:center; }
+.topnav a{ color:var(--paper); text-decoration:none; font:800 12px/1 var(--font-cond);
+  letter-spacing:.16em; text-transform:uppercase; }
+.topnav a:hover{ color:var(--white); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--p5-red); text-decoration-thickness:2px; }
+.topnav .p5-btn{ padding:9px 18px; }
+@media (max-width:820px){ .topnav .lnk{ display:none; } }
+
+/* ===== HERO ===== */
+#hero{ position:relative; padding-block:clamp(48px,8vw,96px) clamp(40px,7vw,80px); overflow:hidden; }
+#hero .diag-split{ position:absolute; inset:0; z-index:0; opacity:.9; }
+#hero .wrap{ position:relative; z-index:2; }
+.hero-grid{ display:grid; grid-template-columns:1.35fr .65fr; gap:clamp(20px,4vw,44px); align-items:center; }
+.hero-lead{ min-width:0; }
+.hero-slogan{ font:800 clamp(17px,2.4vw,24px)/1.4 var(--font-body); color:var(--paper);
+  margin:1.3rem 0 .3rem; max-width:26ch; }
+.hero-slogan-en{ font:700 12px/1.4 var(--font-cond); letter-spacing:.18em; text-transform:uppercase; color:var(--paper); margin:0 0 1.6rem; }
+.hero-meta{ display:flex; flex-wrap:wrap; gap:.6rem 1.2rem; align-items:center; margin:0 0 1.7rem; }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:1rem; align-items:center; }
+.hero-info{ font:800 14px/1.5 var(--font-body); color:var(--paper); }
+.hero-info span{ color:var(--white); }
+.hero-art{ position:relative; align-self:stretch; min-height:clamp(320px,50vw,560px); }
+.hero-art .p5-duotone{ position:absolute; inset:0; height:100%; border:var(--stroke) solid var(--ink); box-shadow:var(--shadow-pop); }
+.hero-burst{ position:absolute; right:-4%; bottom:-4%; z-index:3;
+  width:clamp(120px,20vw,200px); }
+.hero-burst .starburst{ width:100%; }
+.hero-burst .d{ font-size:clamp(15px,2.6vw,24px); }
+.hero-burst .s{ font:800 10px/1.3 var(--font-cond); letter-spacing:.1em; display:block; margin-top:.3rem; }
+
+.keynums{ margin-top:clamp(28px,5vw,48px); display:grid;
+  grid-template-columns:repeat(6,1fr); gap:2px; background:var(--ink);
+  border:var(--stroke) solid var(--p5-red); }
+.keynums .kn{ background:var(--ink-soft); padding:14px 10px; text-align:center; }
+.keynums .n{ font-family:var(--font-num); font-variant-numeric:tabular-nums; font-weight:900;
+  font-size:clamp(22px,4vw,40px); color:var(--white); line-height:1; }
+.keynums .n em{ color:var(--p5-red); font-style:normal; }
+.keynums .l{ display:block; margin-top:.4rem; font:800 10px/1.2 var(--font-cond); letter-spacing:.14em; text-transform:uppercase; color:var(--paper-dim); }
+@media (max-width:720px){ .keynums{ grid-template-columns:repeat(3,1fr); } }
+
+/* ===== ABOUT ===== */
+#about{ padding-block:var(--pad-block); background:var(--ink); }
+.about-grid{ display:grid; grid-template-columns:1.2fr .8fr; gap:clamp(20px,4vw,44px); align-items:start; }
+.about-paper{ position:relative; }
+.about-paper .stamp{ position:absolute; top:-18px; right:8%; z-index:6; }
+.about-paper p{ color:var(--ink); font-size:clamp(15px,1.7vw,17px); }
+.about-paper p + p{ margin-top:1rem; }
+.about-paper h3{ font:900 italic clamp(22px,3vw,30px)/1 var(--font-display); color:var(--ink);
+  text-transform:uppercase; transform:skewX(var(--skew-title)); margin-bottom:1rem; letter-spacing:-.01em; }
+.about-paper strong{ color:var(--p5-red-ink); }
+.about-side{ display:flex; flex-direction:column; gap:1rem; }
+.about-fact{ background:var(--ink-soft); border-left:6px solid var(--p5-red); padding:1.1rem 1.3rem; }
+.about-fact b{ display:block; font:900 italic clamp(20px,3vw,26px)/1 var(--font-display); color:var(--p5-red); }
+.about-fact span{ font-size:14px; color:var(--paper); }
+
+/* ===== LINEUP ===== */
+#lineup{ padding-block:var(--pad-block); background:linear-gradient(180deg,var(--ink) 0%,#050505 100%); }
+.roster-label{ font:800 12px/1 var(--font-cond); letter-spacing:.3em; text-transform:uppercase; color:var(--paper); margin:0 0 1.2rem; }
+.p5-roster .name{ display:flex; flex-direction:column; min-width:0; }
+.p5-roster .zh{ font:900 italic clamp(20px,3.4vw,38px)/1 var(--font-display); text-transform:uppercase; letter-spacing:-.01em; white-space:nowrap; }
+.p5-roster .en{ font:700 11px/1.2 var(--font-cond); letter-spacing:.18em; text-transform:uppercase; color:var(--paper-dim); }
+.p5-roster .rmeta{ margin-left:auto; text-align:right; font:700 11px/1.5 var(--font-body); color:var(--paper-dim); white-space:nowrap; }
+.p5-roster .rmeta b{ color:var(--white); }
+
+.support-head{ margin:clamp(40px,7vw,72px) 0 1.4rem; }
+.support-head .roster-label{ margin:0; }
+.support-list li{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:.4rem 1rem; }
+.support-list .sname{ font:900 italic clamp(17px,2.4vw,26px)/1 var(--font-display); text-transform:uppercase; letter-spacing:-.01em; }
+.support-list .sname em{ font:700 10px/1 var(--font-cond); letter-spacing:.16em; color:var(--paper-dim); margin-left:.6rem; }
+.support-list li:hover .sname em, .support-list li:focus-within .sname em{ color:var(--white); }
+.support-list .smeta{ font:700 11px/1.4 var(--font-body); color:var(--paper-dim); }
+.support-list li:hover .smeta, .support-list li:focus-within .smeta{ color:var(--white); }
+
+/* ===== SCHEDULE ===== */
+#schedule{ padding-block:var(--pad-block); background:var(--ink); }
+.sch-days{ display:flex; flex-direction:column; gap:clamp(28px,5vw,48px); }
+.sch-day{ background:var(--paper); box-shadow:var(--shadow-hard); }
+.sch-day .day-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.6rem 1rem;
+  background:var(--p5-red); color:var(--white); padding:12px clamp(14px,3vw,24px); }
+.sch-day .day-head .d{ font:900 italic clamp(20px,3vw,30px)/1 var(--font-display); text-transform:uppercase; transform:skewX(var(--skew-title)); }
+.sch-day .day-head .dd{ font:800 12px/1 var(--font-cond); letter-spacing:.18em; text-transform:uppercase; opacity:.92; }
+.tbl-scroll{ overflow-x:auto; }
+table.sch{ width:100%; border-collapse:collapse; min-width:560px; }
+table.sch caption{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+table.sch th, table.sch td{ padding:11px clamp(10px,2vw,18px); text-align:left; color:var(--ink); vertical-align:middle; }
+table.sch thead th{ background:var(--ink); color:var(--white); font:800 12px/1.2 var(--font-cond);
+  letter-spacing:.14em; text-transform:uppercase; border-bottom:var(--stroke) solid var(--p5-red); }
+table.sch thead th.t-time{ text-align:right; }
+table.sch tbody td.t-time{ font-family:var(--font-num); font-variant-numeric:tabular-nums; text-align:right;
+  font-weight:800; white-space:nowrap; color:var(--ink); }
+table.sch tbody tr:nth-child(odd){ background:var(--paper); }
+table.sch tbody tr:nth-child(even){ background:var(--paper-dim); }
+table.sch tbody tr.headliner{ box-shadow:inset 6px 0 0 var(--p5-red); }
+table.sch tbody tr.headliner td{ font-weight:900; }
+table.sch tbody tr.headliner .band{ color:var(--p5-red-ink); }
+table.sch .tag-hl{ display:inline-block; font:800 9px/1 var(--font-cond); letter-spacing:.14em;
+  text-transform:uppercase; background:var(--p5-red-ink); color:var(--white); padding:3px 6px; margin-left:.5rem; vertical-align:middle; }
+table.sch td.empty{ color:#6a6558; }
+
+/* ===== VENUES ===== */
+#venues{ padding-block:var(--pad-block); background:linear-gradient(180deg,#050505,var(--ink)); }
+.venue-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,3vw,30px); }
+.venue-card{ position:relative; }
+.venue-card .frame{ position:relative; border:var(--stroke) solid var(--ink); box-shadow:var(--shadow-hard); }
+.venue-card .p5-duotone{ height:clamp(180px,26vw,260px); }
+.venue-card .cap{ position:absolute; left:-6px; bottom:14px; z-index:5; background:var(--paper); color:var(--ink);
+  padding:8px 16px 8px 18px; transform:rotate(var(--tilt-sm)); clip-path:var(--clip-para); box-shadow:var(--shadow-hard); }
+.venue-card .cap .zh{ font:900 italic clamp(16px,2.2vw,22px)/1 var(--font-display); text-transform:uppercase; letter-spacing:-.01em; }
+.venue-card .cap .en{ font:700 10px/1.2 var(--font-cond); letter-spacing:.14em; text-transform:uppercase; color:var(--p5-red-ink); }
+.venue-card .body{ padding:1.3rem .2rem 0; }
+.venue-card .num{ font-family:var(--font-num); font-variant-numeric:tabular-nums; font-weight:900; font-style:italic;
+  font-size:clamp(30px,6vw,54px); color:var(--p5-red); line-height:1; transform:skewX(var(--skew)); display:inline-block; }
+.venue-card .num small{ font-size:.4em; letter-spacing:.1em; color:var(--paper-dim); font-style:normal; margin-left:.3em; }
+.venue-card .desc{ font-size:14px; color:var(--paper); margin:.5rem 0 0; }
+
+/* ===== TICKETS ===== */
+#tickets{ padding-block:var(--pad-block); background:var(--ink); }
+.tick-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,3vw,28px); align-items:stretch; }
+.tick-card{ position:relative; background:var(--ink-soft); border:var(--stroke) solid var(--paper);
+  padding:2rem 1.6rem 1.6rem; display:flex; flex-direction:column; box-shadow:var(--shadow-hard); }
+.tick-card.vip{ background:var(--p5-red); border-color:var(--ink); color:var(--white); }
+.tick-card.vip::before{ content:""; position:absolute; inset:0; z-index:-1; background:var(--p5-red-deep);
+  transform:translate(7px,7px); }
+.tick-card .kind{ font:900 italic clamp(20px,2.6vw,28px)/1 var(--font-display); text-transform:uppercase;
+  transform:skewX(var(--skew-title)); display:inline-block; letter-spacing:-.01em; color:var(--white); }
+.tick-card.vip .kind{ color:var(--white); }
+.tick-card .price{ font-family:var(--font-num); font-variant-numeric:tabular-nums; font-weight:900;
+  font-size:clamp(30px,5.5vw,52px); line-height:1; color:var(--white); margin:1rem 0 .3rem; }
+.tick-card .price small{ font-size:.42em; font-weight:800; color:var(--paper-dim); letter-spacing:.06em; }
+.tick-card.vip .price small{ color:var(--white); }
+.tick-card .feat{ list-style:none; margin:1rem 0 1.4rem; padding:0; }
+.tick-card .feat li{ position:relative; padding-left:1.3rem; font-size:14px; color:var(--paper); margin:.5rem 0; }
+.tick-card.vip .feat li{ color:var(--white); }
+.tick-card .feat li::before{ content:""; position:absolute; left:0; top:.5em; width:12px; height:12px;
+  background:var(--p5-red); clip-path:var(--clip-star); }
+.tick-card.vip .feat li::before{ background:var(--white); }
+.tick-card .buy{ margin-top:auto; }
+.tick-card .starburst{ position:absolute; top:-26px; right:-14px; z-index:6; width:clamp(78px,12vw,104px); }
+.tick-card .starburst .b{ font-size:clamp(16px,2.4vw,22px); }
+.tick-extra{ margin-top:clamp(26px,4vw,42px); display:flex; flex-wrap:wrap; align-items:center; gap:1rem 1.6rem; }
+.tick-extra .p5-tag{ background:var(--alert); color:var(--ink); }
+.tick-extra .chan{ font-size:13px; color:var(--paper-dim); }
+.tick-extra .chan b{ color:var(--white); }
+.tick-extra .refund{ font-size:13px; color:var(--paper-dim); }
+
+/* ===== TRAVEL ===== */
+#travel{ padding-block:var(--pad-block); background:linear-gradient(180deg,var(--ink),#050505); }
+.travel-list li{ display:flex; align-items:flex-start; gap:1.2rem; padding:1.1rem 1.4rem; }
+.travel-list .seq{ font:900 italic clamp(28px,5vw,48px)/1 var(--font-display); color:var(--p5-red);
+  -webkit-text-stroke:1.5px var(--paper); paint-order:stroke fill; flex:0 0 auto; }
+.travel-list .tcol{ display:flex; flex-direction:column; }
+.travel-list .tt{ font:900 italic clamp(18px,2.4vw,26px)/1 var(--font-display); text-transform:uppercase; letter-spacing:-.01em; }
+.travel-list .td{ font-size:14px; color:var(--paper-dim); line-height:1.6; margin-top:.35rem; font-style:normal; text-transform:none; letter-spacing:normal; }
+.travel-list li:hover .td, .travel-list li:focus-within .td{ color:var(--white); }
+.travel-list .td b{ color:var(--white); font-family:var(--font-num); font-variant-numeric:tabular-nums; }
+.travel-list li:hover .td b, .travel-list li:focus-within .td b{ color:var(--white); }
+
+/* ===== SPONSORS ===== */
+#sponsors{ position:relative; padding-block:var(--pad-block); background:var(--ink); overflow:hidden; }
+#sponsors .energy{ position:absolute; inset:0; z-index:0; opacity:.16; }
+#sponsors .wrap{ position:relative; z-index:2; }
+.title-spon{ display:flex; justify-content:center; margin:0 0 clamp(28px,5vw,48px); }
+.title-spon .p5-tear{ text-align:center; }
+.title-spon .lab{ font:800 11px/1 var(--font-cond); letter-spacing:.28em; text-transform:uppercase; opacity:.9; }
+.title-spon .nm{ font:900 italic clamp(30px,6vw,62px)/1 var(--font-display); text-transform:uppercase; margin:.4rem 0 .2rem; letter-spacing:-.02em; }
+.title-spon .en{ font:700 12px/1 var(--font-cond); letter-spacing:.2em; text-transform:uppercase; opacity:.9; }
+.spon-tier{ margin-top:clamp(24px,4vw,40px); }
+.spon-tier .tl{ font:800 12px/1 var(--font-cond); letter-spacing:.26em; text-transform:uppercase; color:var(--paper); margin:0 0 1rem; }
+.chips{ display:flex; flex-wrap:wrap; gap:.9rem 1rem; }
+.chip{ background:var(--ink-soft); color:var(--white); border:var(--stroke-hair) solid var(--paper);
+  padding:.7rem 1.2rem; transform:skewX(var(--skew)); box-shadow:4px 4px 0 var(--p5-red); }
+.chip > *{ display:inline-block; transform:skewX(calc(-1 * var(--skew))); }
+.chip .zh{ font:900 italic clamp(15px,1.9vw,20px)/1 var(--font-display); text-transform:uppercase; letter-spacing:-.01em; }
+.chip .en{ font:700 10px/1 var(--font-cond); letter-spacing:.14em; text-transform:uppercase; color:var(--paper-dim); margin-left:.5rem; }
+.spon-tier.silver .chip{ box-shadow:4px 4px 0 var(--ink); border-color:var(--paper-dim); }
+.media{ margin-top:clamp(24px,4vw,40px); font-size:13px; color:var(--paper-dim); }
+.media b{ color:var(--white); font-family:var(--font-cond); letter-spacing:.06em; }
+
+/* ===== FOOTER-FAQ ===== */
+#footer-faq{ padding-block:var(--pad-block) 0; background:linear-gradient(180deg,#050505,var(--ink)); }
+.faq-list li{ padding:0; overflow:visible; }
+.faq-list details{ background:var(--ink-soft); }
+.faq-item{ margin:.55rem 0; }
+.faq-item details{ transform:skewX(var(--skew)); clip-path:var(--clip-slant); overflow:hidden; }
+.faq-item summary{ list-style:none; cursor:pointer; padding:.9rem 1.4rem; position:relative;
+  font:900 italic clamp(15px,2vw,22px)/1.2 var(--font-display); text-transform:none; color:var(--paper);
+  transition:background var(--dur) var(--ease-snap); }
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary > span{ display:inline-block; transform:skewX(calc(-1 * var(--skew))); }
+.faq-item summary::after{ content:"＋"; position:absolute; right:1.2rem; top:50%; transform:translateY(-50%) skewX(calc(-1 * var(--skew)));
+  font-family:var(--font-display); color:var(--p5-red); font-size:1.4em; }
+.faq-item details[open] summary{ background:var(--p5-red); color:var(--white); }
+.faq-item details[open] summary::after{ content:"－"; color:var(--white); }
+.faq-item .ans{ transform:skewX(calc(-1 * var(--skew))); padding:.4rem 1.6rem 1.2rem; }
+.faq-item .ans p{ margin:0; font-size:14px; color:var(--paper); line-height:1.7; font-style:normal; }
+.faq-outro{ margin-top:clamp(48px,8vw,88px); text-align:center; padding-block:clamp(40px,7vw,72px);
+  border-top:var(--stroke-bold) solid var(--p5-red); }
+.faq-outro .graffiti{ display:inline-block; font-size:clamp(30px,8vw,80px); }
+.faq-outro .hash{ margin-top:1.2rem; font:800 clamp(13px,2vw,18px)/1 var(--font-cond); letter-spacing:.2em;
+  text-transform:uppercase; color:var(--paper); }
+.faq-outro .foot-meta{ margin-top:1.6rem; font-size:12px; color:var(--paper-dim); line-height:1.8; }
+.faq-outro .foot-meta b{ color:var(--white); }
+.foot-bar{ background:var(--ink); border-top:var(--stroke-hair) solid var(--ink-soft); padding-block:1.2rem;
+  text-align:center; font-size:11px; color:#9a9589; letter-spacing:.08em; }
+
+/* ===== Responsive ===== */
+@media (max-width:960px){
+  .hero-grid{ grid-template-columns:1fr; }
+  .hero-art{ min-height:clamp(280px,60vw,420px); order:-1; }
+  .about-grid{ grid-template-columns:1fr; }
+  .venue-grid{ grid-template-columns:1fr 1fr; }
+  .tick-grid{ grid-template-columns:1fr; max-width:520px; margin-inline:auto; }
+}
+@media (max-width:640px){
+  body{ font-size:15px; }
+  .venue-grid{ grid-template-columns:1fr; }
+  .p5-roster .row{ transform:skewX(-8deg); padding-right:1.4rem; }
+  .p5-roster .rmeta{ display:none; }
+  .support-list .smeta{ flex-basis:100%; }
+  .keynums{ border-width:2px; }
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  .p5-menu li, .p5-menu li::before, .p5-btn, .faq-item summary{ transition:none; }
+  .p5-menu li:hover, .p5-menu li:focus-within, .p5-menu li[aria-current="true"]{ transform:skewX(var(--skew)); }
+  .p5-menu li:hover::before, .p5-menu li:focus-within::before{ transform:translateX(0); }
+  .p5-menu li:hover > *, .p5-menu li:focus-within > *{ color:var(--paper); }
+  .support-list li:hover .sname em, .support-list li:hover .smeta,
+  .support-list li:focus-within .sname em, .support-list li:focus-within .smeta{ color:var(--paper-dim); }
+  .p5-btn:hover{ transform:skewX(var(--skew)); box-shadow:var(--shadow-hard); }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap row">
+    <div class="mark">島嶼共鳴<b>2026</b></div>
+    <nav class="topnav" aria-label="主要導覽">
+      <a class="lnk" href="#lineup">陣容</a>
+      <a class="lnk" href="#schedule">時程</a>
+      <a class="lnk" href="#venues">舞台</a>
+      <a class="lnk" href="#travel">交通</a>
+      <a class="p5-btn" href="#tickets"><span>立即購票</span></a>
+    </nav>
+  </div>
+</header>
+
+<!-- ======================= HERO ======================= -->
+<section id="hero" data-block="hero" class="p5-halftone">
+  <div class="diag-split" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-lead">
+        <span class="p5-tag">Island Resonance · 第六屆怪盜宣言</span>
+        <p class="slash-cjk">島嶼<b>共鳴</b></p>
+        <h1 class="slash-title"><span class="cut">ISLAND</span> <span class="cut">RESO</span>NANCE <span class="cut">2026</span></h1>
+        <p class="hero-slogan">在島嶼盡頭，聽見彼此的迴聲。</p>
+        <p class="hero-slogan-en">At the edge of the island, we echo each other</p>
+        <div class="hero-meta">
+          <span class="p5-tag">2026 · 08 · 21 – 23</span>
+          <p class="hero-info">場地｜<span>台東都蘭灣海岸自然公園</span></p>
+        </div>
+        <p class="hero-info" style="margin:0 0 1.6rem;">主辦｜浪打文化 Wave Strike Culture</p>
+        <div class="hero-cta">
+          <a class="p5-btn" href="#tickets"><span>立即購票</span></a>
+          <a class="p5-btn ghost" href="#lineup"><span>查看陣容</span></a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="p5-duotone">
+          <img src="assets/hero-silhouette.webp" alt="躍動中的演出者高反差剪影" width="1000" height="1400" loading="eager">
+        </div>
+        <div class="hero-burst">
+          <div class="starburst">
+            <div>
+              <span class="d">08/21<br>–23</span>
+              <span class="s">3 Days<br>Non-Stop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <dl class="keynums" aria-label="關鍵數字">
+      <div class="kn"><dt class="n"><em>6</em></dt><dd class="l" style="margin:0">屆</dd></div>
+      <div class="kn"><dt class="n">3</dt><dd class="l" style="margin:0">日</dd></div>
+      <div class="kn"><dt class="n">3</dt><dd class="l" style="margin:0">舞台</dd></div>
+      <div class="kn"><dt class="n">12</dt><dd class="l" style="margin:0">組樂團</dd></div>
+      <div class="kn"><dt class="n">25,000</dt><dd class="l" style="margin:0">人次</dd></div>
+      <div class="kn"><dt class="n">9</dt><dd class="l" style="margin:0">地區</dd></div>
+    </dl>
+  </div>
+</section>
+
+<div class="p5-zigzag" aria-hidden="true"></div>
+
+<!-- ======================= ABOUT ======================= -->
+<section id="about" data-block="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">予告狀 · Manifesto</span>
+      <h2 class="h1">關於<em>島嶼共鳴</em></h2>
+    </div>
+    <div class="about-grid">
+      <article class="p5-torn paper about-paper p5-halftone">
+        <div class="stamp"><span class="p5-tag on-paper" style="transform:rotate(-6deg)">浪打文化 出品</span></div>
+        <h3>致 所有在島嶼盡頭的耳朵</h3>
+        <p>「島嶼共鳴」自 <strong>2021 年</strong>由<strong>浪打文化 Wave Strike Culture</strong>於台東創辦，2026 年邁入<strong>第六屆</strong>。這不只是一場音樂節，更是台灣獨立音樂與東部自然地景對話的場域。</p>
+        <p>三日之間，<strong>25,000 人次</strong>將在<strong>台東都蘭灣海岸自然公園</strong>相遇，聆聽 <strong>12 組亞洲樂團</strong>、走過 <strong>3 個與環境共生的舞台</strong>。面海背山的草坡、夕陽時的沙灘、木造倉庫裡的親密夜晚——聲音在此折返、疊合、共鳴。</p>
+        <p>我們堅持環境永續：全場飲料採用<strong>押金循環杯系統</strong>、拒絕一次性塑膠；並以「在地共創」精神，與都蘭部落及在地店家共組<strong>島嶼夥伴計畫</strong>，把祭典的能量留在土地上。</p>
+      </article>
+      <aside class="about-side">
+        <div class="about-fact"><b>2021</b><span>浪打文化於台東創辦首屆</span></div>
+        <div class="about-fact"><b>第 6 屆</b><span>2026 年盛大回歸，規模再擴張</span></div>
+        <div class="about-fact"><b>0 塑膠</b><span>押金循環杯 · 無一次性餐具</span></div>
+        <div class="about-fact"><b>島嶼夥伴計畫</b><span>與都蘭部落、在地店家共創</span></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div class="diag-divider" aria-hidden="true"></div>
+
+<!-- ======================= LINEUP ======================= -->
+<section id="lineup" data-block="lineup">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">All-Out Attack · 演出陣容</span>
+      <h2 class="h1">2026 <em>怪盜名單</em></h2>
+      <p>三組頭條全數登上共鳴山主舞台夜間壓軸，九組支援陣容橫掃三舞台三日。名單傾斜出擊，資料正立可掃。</p>
+    </div>
+
+    <p class="roster-label">// Headliner 01 – 03</p>
+    <div class="p5-roster">
+      <div class="row p5-halftone on-red">
+        <span class="num">01</span>
+        <span class="name">
+          <span class="zh">鯨向海</span>
+          <span class="en">Whale Bound</span>
+        </span>
+        <span class="rmeta">台灣 · 後搖滾 Post-Rock<br><b>Day 1 · 共鳴山主舞台 · 20:30–22:00</b></span>
+      </div>
+      <div class="row p5-halftone on-red">
+        <span class="num">02</span>
+        <span class="name">
+          <span class="zh">霧色公路</span>
+          <span class="en">Misty Highway</span>
+        </span>
+        <span class="rmeta">日本 · Dream Pop<br><b>Day 2 · 共鳴山主舞台 · 20:30–22:00</b></span>
+      </div>
+      <div class="row p5-halftone on-red">
+        <span class="num">03</span>
+        <span class="name">
+          <span class="zh">颱風口</span>
+          <span class="en">Eye of Typhoon</span>
+        </span>
+        <span class="rmeta">香港 · 噪音搖滾 Noise Rock<br><b>Day 3 · 共鳴山主舞台 · 20:30–22:00</b></span>
+      </div>
+    </div>
+
+    <div class="support-head">
+      <p class="roster-label">// Supporting Acts 04 – 12</p>
+    </div>
+    <ul class="p5-menu support-list">
+      <li tabindex="0">
+        <span class="sname">海岬鳥群<em>Cape Birds</em></span>
+        <span class="smeta">台灣 · Indie Folk · Day 1 · 海風舞台 · 18:00–19:00</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">浪打信號<em>Wave Signal</em></span>
+        <span class="smeta">台灣 · Electronic · Day 1 · 共鳴山主舞台 · 18:30–19:30</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">火車前進<em>Train Forward</em></span>
+        <span class="smeta">台灣 · Punk · Day 1 · 部落舞台 · 19:30–20:30</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">苔蘚紀年<em>Moss Chronicle</em></span>
+        <span class="smeta">韓國 · Ambient · Day 2 · 海風舞台 · 17:00–18:00</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">銀河郵差<em>Galaxy Postman</em></span>
+        <span class="smeta">台灣 · City Pop · Day 2 · 共鳴山主舞台 · 18:30–19:30</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">夜鷺夜談<em>Heron Night Talk</em></span>
+        <span class="smeta">台灣 · Jazz Fusion · Day 2 · 部落舞台 · 21:00–22:00</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">紙鳶失蹤<em>Kite Missing</em></span>
+        <span class="smeta">馬來西亞 · Shoegaze · Day 3 · 海風舞台 · 17:00–18:00</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">鏽色羅盤<em>Rusty Compass</em></span>
+        <span class="smeta">台灣 · Blues / Roots · Day 3 · 共鳴山主舞台 · 18:30–19:30</span>
+      </li>
+      <li tabindex="0">
+        <span class="sname">黎明號角<em>Dawn Horn</em></span>
+        <span class="smeta">越南 · World Music · Day 3 · 部落舞台 · 19:30–20:30</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<div class="p5-zigzag" aria-hidden="true"></div>
+
+<!-- ======================= SCHEDULE ======================= -->
+<section id="schedule" data-block="schedule">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">情報檔案 · Timetable</span>
+      <h2 class="h1">三日<em>作戰時程</em></h2>
+      <p>三舞台平行進行，時間走 tabular-nums 對齊；緋紅左框標記為當日壓軸 Headliner。</p>
+    </div>
+
+    <div class="sch-days">
+      <div class="sch-day">
+        <div class="day-head"><span class="d">Day 1</span><span class="dd">2026 / 08 / 21（五）</span></div>
+        <div class="tbl-scroll">
+          <table class="sch">
+            <caption>Day 1 節目時程</caption>
+            <thead>
+              <tr><th scope="col" class="t-time">時段</th><th scope="col">共鳴山主舞台</th><th scope="col">海風舞台</th><th scope="col">部落舞台</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="t-time">17:00–18:00</td><td>（DJ 暖場）</td><td class="empty">—</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">18:00–19:00</td><td class="empty">—</td><td>海岬鳥群 Cape Birds</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">18:30–19:30</td><td>浪打信號 Wave Signal</td><td class="empty">—</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">19:30–20:30</td><td class="empty">—</td><td class="empty">—</td><td>火車前進 Train Forward</td></tr>
+              <tr class="headliner"><td class="t-time">20:30–22:00</td><td class="band">鯨向海 Whale Bound<span class="tag-hl">Headliner</span></td><td class="empty">—</td><td class="empty">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sch-day">
+        <div class="day-head"><span class="d">Day 2</span><span class="dd">2026 / 08 / 22（六）</span></div>
+        <div class="tbl-scroll">
+          <table class="sch">
+            <caption>Day 2 節目時程</caption>
+            <thead>
+              <tr><th scope="col" class="t-time">時段</th><th scope="col">共鳴山主舞台</th><th scope="col">海風舞台</th><th scope="col">部落舞台</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="t-time">17:00–18:00</td><td class="empty">—</td><td>苔蘚紀年 Moss Chronicle</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">18:30–19:30</td><td>銀河郵差 Galaxy Postman</td><td class="empty">—</td><td class="empty">—</td></tr>
+              <tr class="headliner"><td class="t-time">20:30–22:00</td><td class="band">霧色公路 Misty Highway<span class="tag-hl">Headliner</span></td><td class="empty">—</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">21:00–22:00</td><td class="empty">—</td><td class="empty">—</td><td>夜鷺夜談 Heron Night Talk</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sch-day">
+        <div class="day-head"><span class="d">Day 3</span><span class="dd">2026 / 08 / 23（日）</span></div>
+        <div class="tbl-scroll">
+          <table class="sch">
+            <caption>Day 3 節目時程</caption>
+            <thead>
+              <tr><th scope="col" class="t-time">時段</th><th scope="col">共鳴山主舞台</th><th scope="col">海風舞台</th><th scope="col">部落舞台</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="t-time">17:00–18:00</td><td class="empty">—</td><td>紙鳶失蹤 Kite Missing</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">18:30–19:30</td><td>鏽色羅盤 Rusty Compass</td><td class="empty">—</td><td class="empty">—</td></tr>
+              <tr><td class="t-time">19:30–20:30</td><td class="empty">—</td><td class="empty">—</td><td>黎明號角 Dawn Horn</td></tr>
+              <tr class="headliner"><td class="t-time">20:30–22:00</td><td class="band">颱風口 Eye of Typhoon<span class="tag-hl">Headliner</span></td><td class="empty">—</td><td class="empty">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="diag-divider" aria-hidden="true"></div>
+
+<!-- ======================= VENUES ======================= -->
+<section id="venues" data-block="venues">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">戰場配置 · Stages</span>
+      <h2 class="h1">三個<em>共鳴舞台</em></h2>
+      <p>從面海背山的草坡、赤腳可入的沙灘，到木造倉庫的親密夜晚——三個與環境共生的舞台。</p>
+    </div>
+    <div class="venue-grid">
+      <article class="venue-card">
+        <div class="frame">
+          <div class="p5-duotone">
+            <img src="assets/stage-mountain.webp" alt="共鳴山主舞台草坡剪影" width="1000" height="800" loading="lazy">
+          </div>
+          <div class="cap">
+            <div class="zh">共鳴山主舞台</div>
+            <div class="en">Resonance Mountain Stage</div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="num">8,000<small>人</small></span>
+          <p class="desc">都蘭灣山坡草地，面海背山，360 度環繞音場。三日夜間壓軸全在此引爆。</p>
+        </div>
+      </article>
+      <article class="venue-card">
+        <div class="frame">
+          <div class="p5-duotone">
+            <img src="assets/stage-sea.webp" alt="海風舞台夕陽沙灘剪影" width="1000" height="800" loading="lazy">
+          </div>
+          <div class="cap">
+            <div class="zh">海風舞台</div>
+            <div class="en">Sea Breeze Stage</div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="num">3,000<small>人</small></span>
+          <p class="desc">沙灘搭建，夕陽時段最魔幻，赤腳可入場，海浪與音牆一同拍打。</p>
+        </div>
+      </article>
+      <article class="venue-card">
+        <div class="frame">
+          <div class="p5-duotone">
+            <img src="assets/stage-tribe.webp" alt="部落舞台木造倉庫剪影" width="1000" height="800" loading="lazy">
+          </div>
+          <div class="cap">
+            <div class="zh">部落舞台</div>
+            <div class="en">Tribe Stage</div>
+          </div>
+        </div>
+        <div class="body">
+          <span class="num">800<small>人</small></span>
+          <p class="desc">木造倉庫改建，親密 livehouse 氛圍，限量手環入場，最靠近舞台的心跳。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="p5-zigzag" aria-hidden="true"></div>
+
+<!-- ======================= TICKETS ======================= -->
+<section id="tickets" data-block="tickets">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">戰利品 · Tickets</span>
+      <h2 class="h1">選擇你的<em>入場方式</em></h2>
+      <p>價格超大正立可比，三選一。VIP 三日為最強配置，隨附紀念樂團 T。</p>
+    </div>
+    <div class="tick-grid">
+      <article class="tick-card">
+        <span class="kind">單日票</span>
+        <p class="price">NT$ 2,200<small> / 日</small></p>
+        <ul class="feat">
+          <li>任選一日入場</li>
+          <li>含現場飲水</li>
+          <li>可購買限定周邊</li>
+        </ul>
+        <div class="buy"><a class="p5-btn" href="#tickets"><span>購買單日票</span></a></div>
+      </article>
+      <article class="tick-card">
+        <span class="kind">三日通票</span>
+        <p class="price">NT$ 5,400<small> / 三日</small></p>
+        <ul class="feat">
+          <li>三日全程暢遊</li>
+          <li>含限量手環</li>
+          <li>可選一場部落舞台優先入場</li>
+        </ul>
+        <div class="buy"><a class="p5-btn" href="#tickets"><span>購買三日通票</span></a></div>
+      </article>
+      <article class="tick-card vip">
+        <div class="starburst"><div class="b">BEST</div></div>
+        <span class="kind">VIP 三日</span>
+        <p class="price">NT$ 12,800<small> / 三日</small></p>
+        <ul class="feat">
+          <li>三日全程 + 後台休息區</li>
+          <li>限定餐飲 + 專屬接駁</li>
+          <li>紀念樂團 T</li>
+        </ul>
+        <div class="buy"><a class="p5-btn ghost" href="#tickets"><span>購買 VIP 三日</span></a></div>
+      </article>
+    </div>
+    <div class="tick-extra">
+      <span class="p5-tag">早鳥 9 折｜NT$ 4,860</span>
+      <p class="chan"><b>售票通路：</b>官網售票 · KKTIX · ibon · tixCraft</p>
+      <p class="refund">早鳥限 2026/5/31 前購三日通票，售完為止。演出前 14 天前可全額退款，14 天內恕不退換票。</p>
+    </div>
+  </div>
+</section>
+
+<div class="diag-divider" aria-hidden="true"></div>
+
+<!-- ======================= TRAVEL ======================= -->
+<section id="travel" data-block="travel">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">潛入路線 · Access</span>
+      <h2 class="h1">如何<em>抵達現場</em></h2>
+      <p>三條潛入路線任你選。序號傾斜出擊，路線細節正立可讀。</p>
+    </div>
+    <ol class="p5-menu travel-list">
+      <li tabindex="0">
+        <span class="seq">01</span>
+        <span class="tcol">
+          <span class="tt">自行開車</span>
+          <span class="td">從台北經國道 5 號（雪山隧道）轉台 9 線南下，至都蘭灣海岸自然公園約 <b>4.5</b> 小時車程。場區設付費停車場（單日 <b>NT$ 200</b>、三日 <b>NT$ 500</b>），建議多人共乘以減少碳排。</span>
+        </span>
+      </li>
+      <li tabindex="0">
+        <span class="seq">02</span>
+        <span class="tcol">
+          <span class="tt">大眾運輸</span>
+          <span class="td">搭台鐵或高鐵 + 轉乘抵達台東車站後，主辦方提供<b>免費接駁巴士</b>：每日 09:00–12:00、13:00–17:00 兩班次窗口、每 30 分鐘一班，車程約 <b>25</b> 分鐘。</span>
+        </span>
+      </li>
+      <li tabindex="0">
+        <span class="seq">03</span>
+        <span class="tcol">
+          <span class="tt">住宿建議</span>
+          <span class="td">場區帳篷營位 <b>NT$ 800</b>／晚（含早餐券、淋浴間）；都蘭、東河沿線 12 家合作民宿（八折碼 ISLAND2026）；露營車租賃與「島嶼漫遊」合作，三日方案 <b>NT$ 9,800</b> 起。</span>
+        </span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<div class="p5-zigzag" aria-hidden="true"></div>
+
+<!-- ======================= SPONSORS ======================= -->
+<section id="sponsors" data-block="sponsors" class="p5-halftone">
+  <div class="p5-duotone energy" aria-hidden="true">
+    <img src="assets/crowd-burst.webp" alt="" width="1200" height="800" loading="lazy">
+  </div>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">共犯名單 · Partners</span>
+      <h2 class="h1">支持這場<em>怪盜行動</em></h2>
+    </div>
+
+    <div class="title-spon">
+      <div class="p5-tear">
+        <div class="lab">Title Sponsor · 冠名贊助</div>
+        <div class="nm">麥森啤酒</div>
+        <div class="en">Marsen Beer</div>
+      </div>
+    </div>
+
+    <div class="spon-tier gold">
+      <p class="tl">// Gold Sponsor</p>
+      <div class="chips">
+        <span class="chip"><span class="zh">山隈唱片</span><span class="en">Mountain Edge Records</span></span>
+        <span class="chip"><span class="zh">潮間帶咖啡</span><span class="en">Tideline Coffee</span></span>
+        <span class="chip"><span class="zh">雲擇科技</span><span class="en">Cloudpick Tech</span></span>
+      </div>
+    </div>
+
+    <div class="spon-tier silver">
+      <p class="tl">// Silver Sponsor</p>
+      <div class="chips">
+        <span class="chip"><span class="zh">海島襪品</span><span class="en">Island Socks</span></span>
+        <span class="chip"><span class="zh">長浪電池</span><span class="en">Longwave Battery</span></span>
+        <span class="chip"><span class="zh">青葉旅店</span><span class="en">Greenleaf Inn</span></span>
+        <span class="chip"><span class="zh">輕食工坊</span><span class="en">Lightfare Studio</span></span>
+        <span class="chip"><span class="zh">半島郵差</span><span class="en">Peninsula Postman</span></span>
+      </div>
+    </div>
+
+    <p class="media"><b>媒體夥伴｜</b>Blow 吹音樂 · StreetVoice · KKBOX · 大誌雜誌</p>
+  </div>
+</section>
+
+<div class="diag-divider" aria-hidden="true"></div>
+
+<!-- ======================= FOOTER-FAQ ======================= -->
+<section id="footer-faq" data-block="footer-faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">情報問答 · FAQ</span>
+      <h2 class="h1">出發前<em>先讀這些</em></h2>
+    </div>
+    <ul class="p5-menu faq-list" style="background:transparent">
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 雨天如何處理？</span></summary>
+          <div class="ans"><p>本活動為雨天照常舉行，僅在劇烈雷雨或主辦方判斷有安全疑慮時暫停演出；如完全取消，依退票政策辦理。</p></div>
+        </details>
+      </li>
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 可以攜帶寵物嗎？</span></summary>
+          <div class="ans"><p>為維護動物與觀眾安全，本活動全區禁止攜帶寵物；導盲犬、輔助犬請於入口出示證明。</p></div>
+        </details>
+      </li>
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 兒童入場規則？</span></summary>
+          <div class="ans"><p>12 歲以下兒童由父母陪同免票入場（每位購票者最多攜帶 2 名兒童），需配戴主辦方提供的螢光手環。</p></div>
+        </details>
+      </li>
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 可以自備食物或外食嗎？</span></summary>
+          <div class="ans"><p>可攜帶輕食與飲水（限玻璃以外容器），場內提供 30 家風味攤位，鼓勵支持在地餐飲。</p></div>
+        </details>
+      </li>
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 場內可以搭設帳篷嗎？</span></summary>
+          <div class="ans"><p>僅限購買「帳篷營位」方案者於指定營區搭設，請依現場標示，禁止占用一般草地。</p></div>
+        </details>
+      </li>
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 無障礙設施？</span></summary>
+          <div class="ans"><p>三舞台均設無障礙觀賞區與專用通道，輪椅租借請於官網表單預約，現場備有 20 台輪椅。</p></div>
+        </details>
+      </li>
+      <li class="faq-item" style="background:transparent;overflow:visible">
+        <details>
+          <summary><span>Q. 可以攝影錄影嗎？</span></summary>
+          <div class="ans"><p>歡迎個人手機與小型相機紀錄；商業攝影（含腳架、長焦、無人機）需另外申請媒體證。</p></div>
+        </details>
+      </li>
+    </ul>
+
+    <div class="faq-outro">
+      <span class="graffiti">島嶼共鳴 2026</span>
+      <p class="hash">#島嶼共鳴2026 · #IslandResonance2026</p>
+      <p class="foot-meta">
+        <b>島嶼共鳴 2026 Island Resonance</b>｜2026 年 8 月 21 日 – 8 月 23 日<br>
+        台東都蘭灣海岸自然公園｜主辦：浪打文化 Wave Strike Culture<br>
+        在島嶼盡頭，聽見彼此的迴聲。
+      </p>
+    </div>
+  </div>
+  <div class="foot-bar">© 2026 浪打文化 Wave Strike Culture · 島嶼共鳴 Island Resonance · All Rights Reserved</div>
+</section>
+
+</body>
+</html>

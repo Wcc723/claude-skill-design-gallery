@@ -1,0 +1,30 @@
+{
+  "style": "Persona 5",
+  "images": [
+    {
+      "filename": "hero-silhouette.webp",
+      "size": "1000x1400",
+      "prompt": "An original, high-contrast pure black-and-white silhouette poster of a single faceless musician performer captured mid-motion — leaping forward while holding an electric guitar, or raising a microphone — with an exaggerated dynamic diagonal pose like a comic action freeze-frame. 100% solid black silhouette on a clean white background, rim backlight, bold manga ink lines and coarse halftone dot shadows. Tall portrait poster aspect ratio, subject centered. No facial features, no text, no letters, no logo, no brand marks, not any existing character. High contrast so it can be recolored crimson via CSS."
+    },
+    {
+      "filename": "crowd-burst.webp",
+      "size": "1200x800",
+      "prompt": "An overhead high-contrast black-and-white silhouette of a music festival crowd with hands raised, composed with radial starburst speed-lines exploding outward from the center. Coarse halftone dots and heavy ink-print texture, dramatic manga action energy. Pure black shapes on white. No recognizable faces, no text, no logo, no characters. High contrast for CSS crimson duotone."
+    },
+    {
+      "filename": "stage-mountain.webp",
+      "size": "1000x800",
+      "prompt": "A high-contrast black-and-white ink woodcut-style silhouette of a large outdoor festival main stage on a grassy mountain slope facing the sea (evoking Taitung Dulan Bay: grass slope, distant sea horizon, surrounding lighting truss scaffolding). Heavy black shadows, white highlights, halftone mid-tones. No people faces, no text, no logo. High contrast for CSS crimson duotone overlay."
+    },
+    {
+      "filename": "stage-sea.webp",
+      "size": "1000x800",
+      "prompt": "A high-contrast black-and-white ink silhouette of a dusk beach stage by the shoreline, barefoot crowd silhouettes and a low sun backlight, sky rendered with a halftone dot gradient, bold manga ink lines. Pure black-and-white, no recognizable faces, no text, no logo. High contrast for CSS crimson duotone overlay."
+    },
+    {
+      "filename": "stage-tribe.webp",
+      "size": "1000x800",
+      "prompt": "A high-contrast black-and-white ink silhouette of an intimate wooden warehouse livehouse interior converted into a small stage, hanging lights, timber beams, dense atmosphere. Heavy black shadows and white highlights with halftone texture, print-poster feel. No faces, no text, no logo. High contrast for CSS crimson duotone overlay."
+    }
+  ]
+}
